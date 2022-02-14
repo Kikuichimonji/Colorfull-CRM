@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\TeamRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -23,7 +25,7 @@ class Team
     private $color;
 
     /**
-     * @ORM\Column(type="string", length=50)
+     * @ORM\Column(type="string", length=50, options={"default": "No Title"})
      */
     private $label;
 
@@ -33,9 +35,24 @@ class Team
     private $description;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", options={"default": 0})
      */
     private $is_private;
+
+    /**
+     * @ORM\OneToOne(targetEntity=User::class, inversedBy="relation", cascade={"persist", "remove"})
+     */
+    private $team_owner;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="teams")
+     */
+    private $users;
+
+    public function __construct()
+    {
+        $this->users = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -86,6 +103,42 @@ class Team
     public function setIsPrivate(bool $is_private): self
     {
         $this->is_private = $is_private;
+
+        return $this;
+    }
+
+    public function getTeamOwner(): ?User
+    {
+        return $this->team_owner;
+    }
+
+    public function setTeamOwner(?User $team_owner): self
+    {
+        $this->team_owner = $team_owner;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        $this->users->removeElement($user);
 
         return $this;
     }

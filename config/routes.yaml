@@ -1,11 +1,15 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
-index:
+login:
     path: /
     controller: App\Controller\LoginController::index
     methods: GET
-index:
+login-form:
+    path: /
+    controller: App\Controller\LoginController::submit
+    methods: post
+calendar-index:
     path: /calendar
     controller: App\Controller\HomeController::index
     methods: GET

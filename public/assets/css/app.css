@@ -1,0 +1,6 @@
+:root{
+    --bs-primary: #3CCE8B;
+}
+a{
+    color: var(--bs-primary)
+}

@@ -1,20 +1,34 @@
-{% extends 'base.html.twig' %}
+{% extends 'layouts/app.html.twig' %}
 
-{% block title %}Hello LoginController!{% endblock %}
+{% block title %}Login{% endblock %}
+{% block nav %}
 
-{% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/laragon/www/Projet_3/src/Controller/LoginController.php'|file_link(0) }}">src/Controller/LoginController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/laragon/www/Projet_3/templates/login/index.html.twig'|file_link(0) }}">templates/login/index.html.twig</a></code></li>
-    </ul>
+{% endblock %}
+{% block content %}
+<div id="login">
+    <h1>Baby First CRM</h1>
+    <h2>Veuillez vous connecter</h2>
+    <form action="{{path('login-form')}}" method="post">
+        <div class='mb-3'>
+            <label for="email" class="form-label">Mail</label>
+            <input type="text" name="email" id="email" ><br>
+        </div>
+        <div class='mb-3'>
+            <label for="password" class="form-label">Mot de passe</label>
+            <input type="password" name="password" id="password" ><br>
+            <button type="submit" class="btn btn-primary">Se connecter</button>
+        </div>
+    </form>
+    <a href="" class="link-primary">Mot de passe oublié? Cliquez ici</a>
 </div>
+{% endblock %}
+
+
+{% block style %}
+    {{parent()}}
+    <link href="{{asset('assets/css/login.css')}}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block script_body %}
+    {{parent()}}
 {% endblock %}

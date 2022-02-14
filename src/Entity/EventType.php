@@ -18,7 +18,7 @@ class EventType
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=50)
+     * @ORM\Column(type="string", length=50, options={"default": "No Title"})
      */
     private $label;
 
