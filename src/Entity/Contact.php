@@ -20,7 +20,7 @@ class Contact
     private $id;
 
     /**
-     * @ORM\Column(type="text", nullable=true, options={"default": "[]"})
+     * @ORM\Column(type="text", nullable=true)
      */
     private $type;
 

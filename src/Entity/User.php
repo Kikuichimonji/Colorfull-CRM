@@ -36,7 +36,7 @@ class User
     private $password;
 
     /**
-     * @ORM\Column(type="text", options={"default": "[]"})
+     * @ORM\Column(type="text")
      */
     private $roles;
 
