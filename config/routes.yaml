@@ -3,5 +3,9 @@
 #    controller: App\Controller\DefaultController::index
 index:
     path: /
+    controller: App\Controller\LoginController::index
+    methods: GET
+index:
+    path: /calendar
     controller: App\Controller\HomeController::index
     methods: GET
