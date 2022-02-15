@@ -28,23 +28,6 @@ class LoginController extends AbstractController
         ]);
     }
 
-    public function submit(Request $request,ManagerRegistry $doctrine): Response
-    {
-        
-        $session = $request->getSession();
-        $post = $request->request;
-        $user = $doctrine->getRepository(User::class)->findOneBy(['email' => $request->request->get("email")]);
-        if($user){
-            return $this->redirectToRoute('dashboard-index');
-        }else{
-            return $this->render('login/index.html.twig', [
-                'error' => 'Cet email n\'existe pas',
-            ]);
-        }
-        $session->set('user',$post);
-        
-    }
-
     public function showRegister(Request $request,UserPasswordHasherInterface $passwordHasher): Response
     {
         return $this->render('login/register.html.twig', [
@@ -63,17 +46,19 @@ class LoginController extends AbstractController
         $roles= [];
         switch ($request->request->get("roles")) {
             case "admin":
-                array_push($roles,"admin");
+                $roles = ["ROLE_ADMIN"];
+                break;
             case "manager":
-                array_push($roles,"manager");
+                $roles = ["ROLE_MANAGER"];
+                break;
             case "user":
-                array_push($roles,"user");
+                $roles = ["ROLE_USER"];
                 break;
         }
         $user->setLastName($request->request->get("lastName"));
         $user->setFirstName($request->request->get("firstName"));
         $user->setEmail($request->request->get("email"));
-        $user->setRoles(json_encode($roles));
+        $user->setRoles($roles);
         $user->setPhone($request->request->get("phone"));
         $user->setCreatedAt(new \DateTime('NOW'));
         $user->setPassword($hashedPassword);
@@ -81,5 +66,11 @@ class LoginController extends AbstractController
         $entityManager->persist($user);
         $entityManager->flush();
         return $this->redirectToRoute('dashboard-index');
+    }
+
+    public function admin()
+    {
+        $hasAccess = $this->isGranted('ROLE_ADMIN');
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
     }
 }

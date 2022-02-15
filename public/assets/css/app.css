@@ -1,6 +1,21 @@
 :root{
     --bs-primary: #3CCE8B;
+    --bs-primary-rgb: 60,206,139;
+}
+body{
+    display: flex;
 }
 a{
     color: var(--bs-primary)
+}
+nav{
+    width:20%;
+    height: 100vh;
+}
+.content{
+    width:80%;
+    height: 100vh;
+}
+.navbar>.container-fluid,ul.navbar-nav{
+    flex-direction: column !important;
 }

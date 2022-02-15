@@ -1,0 +1,57 @@
+{% extends 'layouts/app.html.twig' %}
+
+{% block title %}{% endblock %}
+{% block nav %}
+	<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+		<div class="container-fluid">
+            {% set img = "asset('assets/img/user.picture')" %}
+            <img src="{{asset('assets/img/' ~ user.picture )}}" alt="">
+			<a class="navbar-brand" href="#">{{user.firstName}} {{user.lastName}}</a>
+
+			<div class="collapse navbar-collapse" id="navbarColor01">
+				<ul class="navbar-nav me-auto">
+					<li class="nav-item">
+						<a class="nav-link active" href="#">Dashboard
+							<span class="visually-hidden">(current)</span>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">Planning</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">Contacts</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">Déconnection</a>
+					</li>
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+						<div class="dropdown-menu">
+							<a class="dropdown-item" href="#">Action</a>
+							<a class="dropdown-item" href="#">Another action</a>
+							<a class="dropdown-item" href="#">Something else here</a>
+							<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="#">Separated link</a>
+						</div>
+					</li>
+				</ul>
+				<form class="d-flex">
+					<input class="form-control me-sm-2" type="text" placeholder="Search">
+					<button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+				</form>
+			</div>
+		</div>
+	</nav>
+{% endblock %}
+{% block content %}
+	{{parent()}}
+{% endblock %}
+
+{% block style %}
+	{{parent()}}
+
+{% endblock %}
+
+{% block script_body %}
+	{{parent()}}
+{% endblock %}

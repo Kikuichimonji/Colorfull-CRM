@@ -2,22 +2,25 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Planning;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class DashboardController extends AbstractController
 {
-    public function index(Request $request): Response
+    public function index(ManagerRegistry $doctrine): Response
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $session = $request->getSession();
-        $user = $session->get('user');
-       
+        $this->denyAccessUnlessGranted('ROLE_USER');
+        $repository = $doctrine->getRepository(Planning::class);
+        $planning = $repository->findOneBy(["planning_owner" => $this->getUser()->getId()]);
+        $error = is_null($planning) ? "Votre planing n'a pas été généré correctement" : null ;
         return $this->render('dashboard/index.html.twig', [
-            'controller_name' => 'DashboardController',
-            'user' => $user->get("email"),
+            'user' => $this->getUser(),
+            'planning' => $planning,
+            'error' => $error,
         ]);
     }
 }

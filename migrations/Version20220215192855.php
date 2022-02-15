@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20220215133428 extends AbstractMigration
+final class Version20220215192855 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -28,7 +28,7 @@ final class Version20220215133428 extends AbstractMigration
         $this->addSql('CREATE TABLE planning (id INT AUTO_INCREMENT NOT NULL, planning_owner_id INT DEFAULT NULL, label VARCHAR(50) DEFAULT \'No Title\' NOT NULL, color VARCHAR(7) DEFAULT NULL, UNIQUE INDEX UNIQ_D499BFF649393754 (planning_owner_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE team (id INT AUTO_INCREMENT NOT NULL, team_owner_id INT DEFAULT NULL, color VARCHAR(7) DEFAULT NULL, label VARCHAR(50) DEFAULT \'No Title\' NOT NULL, description LONGTEXT DEFAULT NULL, is_private TINYINT(1) DEFAULT 0 NOT NULL, UNIQUE INDEX UNIQ_C4E0A61FC67EBD87 (team_owner_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE team_user (team_id INT NOT NULL, user_id INT NOT NULL, INDEX IDX_5C722232296CD8AE (team_id), INDEX IDX_5C722232A76ED395 (user_id), PRIMARY KEY(team_id, user_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE user (id INT AUTO_INCREMENT NOT NULL, last_name VARCHAR(70) NOT NULL, first_name VARCHAR(70) NOT NULL, email VARCHAR(180) NOT NULL, roles LONGTEXT NOT NULL, password VARCHAR(255) NOT NULL, phone VARCHAR(20) DEFAULT NULL, picture VARCHAR(200) DEFAULT NULL, created_at DATETIME DEFAULT NULL, UNIQUE INDEX UNIQ_8D93D649E7927C74 (email), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE user (id INT AUTO_INCREMENT NOT NULL, last_name VARCHAR(70) NOT NULL, first_name VARCHAR(70) NOT NULL, email VARCHAR(180) NOT NULL, roles JSON NOT NULL, password VARCHAR(255) NOT NULL, phone VARCHAR(20) DEFAULT NULL, picture VARCHAR(200) DEFAULT NULL, created_at DATETIME DEFAULT NULL, UNIQUE INDEX UNIQ_8D93D649E7927C74 (email), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE user_planning (user_id INT NOT NULL, planning_id INT NOT NULL, INDEX IDX_34145BF6A76ED395 (user_id), INDEX IDX_34145BF63D865311 (planning_id), PRIMARY KEY(user_id, planning_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE user_event (user_id INT NOT NULL, event_id INT NOT NULL, INDEX IDX_D96CF1FFA76ED395 (user_id), INDEX IDX_D96CF1FF71F7E88B (event_id), PRIMARY KEY(user_id, event_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('ALTER TABLE contact ADD CONSTRAINT FK_4C62E638EEFE5067 FOREIGN KEY (user_create_id) REFERENCES user (id)');

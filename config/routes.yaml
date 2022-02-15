@@ -12,6 +12,9 @@ login-register-form:
     path: /register
     controller: App\Controller\LoginController::register
     methods: POST
+app_logout:
+    path: /logout
+    methods: GET
 dashboard-index:
     path: /dashboard
     controller: App\Controller\DashboardController::index
