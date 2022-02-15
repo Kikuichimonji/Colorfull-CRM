@@ -4,11 +4,18 @@
 login:
     path: /
     controller: App\Controller\LoginController::index
+login-register:
+    path: /register
+    controller: App\Controller\LoginController::showRegister
     methods: GET
-login-form:
-    path: /
-    controller: App\Controller\LoginController::submit
-    methods: post
+login-register-form:
+    path: /register
+    controller: App\Controller\LoginController::register
+    methods: POST
+dashboard-index:
+    path: /dashboard
+    controller: App\Controller\DashboardController::index
+    methods: GET
 calendar-index:
     path: /calendar
     controller: App\Controller\HomeController::index

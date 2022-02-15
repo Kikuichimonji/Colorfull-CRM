@@ -88,6 +88,9 @@
     "laminas/laminas-code": {
         "version": "4.5.1"
     },
+    "mollie/polyfill-libsodium": {
+        "version": "v1.1.1"
+    },
     "monolog/monolog": {
         "version": "2.3.5"
     },

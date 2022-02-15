@@ -1,0 +1,70 @@
+{% extends 'layouts/app.html.twig' %}
+
+{% block title %}Login{% endblock %}
+{% block nav %}
+
+{% endblock %}
+{% block content %}
+<div id="login">
+    <h1>Baby First CRM</h1>
+    <h2>Nouvel utilisateur</h2>
+    <form action="{{path('login-register')}}" method="post">
+        <div class='mb-3 form-floating'>
+            <input type="text" name="email" id="email" class="form-control" placeholder="mail">
+            <label for="email" class="form-label">Mail</label>
+        </div>
+        <div class="form-group">
+            <div class='mb-3 form-floating'>
+                <input type="text" name="lastName" id="lastName" class="form-control" placeholder="name">
+                <label for="lastName" class="form-label">Nom</label>
+            </div>
+            <div class='mb-3 form-floating'>
+                <input type="text" name="firstName" id="firstName" class="form-control" placeholder="name">
+                <label for="firstName" class="form-label">Prénom</label>
+            </div>
+        </div>
+        <div class='mb-3 form-floating'>
+            <input type="text" name="phone" id="phone" class="form-control" placeholder="mail">
+            <label for="phone" class="form-label">Téléphone</label>
+        </div>
+        <div class='mb-3 form-floating'>
+            <input type="password" name="password" id="password"  class="form-control" placeholder="password">
+            <label for="password" class="form-label">Mot de passe</label>
+        </div>
+        <div class="form-group">
+            <legend class="mt-4">Roles</legend>
+            <div class="form-check">
+                <label class="form-check-label">
+                    <input type="radio" class="form-check-input" name="roles" id="role1" value="user" checked="">
+                    Utilisateur
+                </label>
+            </div>
+            <div class="form-check">
+                <label class="form-check-label">
+                    <input type="radio" class="form-check-input" name="roles" id="role2" value="manager">
+                    Manager
+                </label>
+            </div>
+            <div class="form-check">
+                <label class="form-check-label">
+                    <input type="radio" class="form-check-input" name="roles" id="role3" value="admin">
+                    Administrateur
+                    </label>
+            </div>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Ajouter l'utilisateur</button>
+    </form>
+    <a href="" class="link-primary">Mot de passe oublié? Cliquez ici</a>
+</div>
+{% endblock %}
+
+
+{% block style %}
+    {{parent()}}
+    <link href="{{asset('assets/css/login.css')}}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block script_body %}
+    {{parent()}}
+{% endblock %}

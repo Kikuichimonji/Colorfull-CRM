@@ -1,20 +1,33 @@
-{% extends 'base.html.twig' %}
+{% extends 'layouts/app.html.twig' %}
 
-{% block title %}Hello DashboardController!{% endblock %}
-
-{% block body %}
+{% block title %}Dashboard{% endblock %}
+{% block nav %}
+            
+            
+{% endblock %}
+{% block content %}
 <style>
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <h1>Hello {{ app.session.get('user').get('password') }}! ✅</h1>
 
-    This friendly message is coming from:
+    This friendly message is coming from base.html.twig:
     <ul>
-        <li>Your controller at <code><a href="{{ 'C:/laragon/www/Projet_3/src/Controller/DashboardController.php'|file_link(0) }}">src/Controller/DashboardController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/laragon/www/Projet_3/templates/dashboard/index.html.twig'|file_link(0) }}">templates/dashboard/index.html.twig</a></code></li>
+        <li>Your controller at <code><a href="{{ 'C:/laragon/www/Projet_3/src/Controller/HomeController.php'|file_link(0) }}">src/Controller/HomeController.php</a></code></li>
+        <li>Your template at <code><a href="{{ 'C:/laragon/www/Projet_3/templates/home/index.html.twig'|file_link(0) }}">templates/home/index.html.twig</a></code></li>
     </ul>
+    
 </div>
+{% endblock %}
+
+{% block style %}
+    {{parent()}}
+
+{% endblock %}
+
+{% block script_body %}
+    {{parent()}}
 {% endblock %}

@@ -60,11 +60,6 @@ class Contact
     private $events;
 
     /**
-     * @ORM\ManyToMany(targetEntity=ContactExtrafields::class)
-     */
-    private $contact_extrafields;
-
-    /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="contacts")
      */
     private $userCreate;
@@ -188,30 +183,6 @@ class Contact
         if ($this->events->removeElement($event)) {
             $event->removeContact($this);
         }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|ContactExtrafields[]
-     */
-    public function getContactExtrafields(): Collection
-    {
-        return $this->contact_extrafields;
-    }
-
-    public function addContactExtrafield(ContactExtrafields $contactExtrafield): self
-    {
-        if (!$this->contact_extrafields->contains($contactExtrafield)) {
-            $this->contact_extrafields[] = $contactExtrafield;
-        }
-
-        return $this;
-    }
-
-    public function removeContactExtrafield(ContactExtrafields $contactExtrafield): self
-    {
-        $this->contact_extrafields->removeElement($contactExtrafield);
 
         return $this;
     }

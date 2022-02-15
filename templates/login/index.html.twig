@@ -8,16 +8,21 @@
 <div id="login">
     <h1>Baby First CRM</h1>
     <h2>Veuillez vous connecter</h2>
-    <form action="{{path('login-form')}}" method="post">
+    {% if error %}
+        <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% endif %}
+    <form action="{{path('login')}}" method="post">
         <div class='mb-3'>
-            <label for="email" class="form-label">Mail</label>
-            <input type="text" name="email" id="email" ><br>
+            <label for="username" class="form-label">Mail</label>
+            <input type="text" name="_username" id="username" value="{{ last_username }}">
         </div>
         <div class='mb-3'>
             <label for="password" class="form-label">Mot de passe</label>
-            <input type="password" name="password" id="password" ><br>
+            <input type="password" name="_password" id="password" >
             <button type="submit" class="btn btn-primary">Se connecter</button>
         </div>
+        <input type="hidden" name="_target_path" value="/dashboard"/>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
     </form>
     <a href="" class="link-primary">Mot de passe oublié? Cliquez ici</a>
 </div>
