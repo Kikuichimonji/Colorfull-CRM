@@ -10,12 +10,28 @@ a{
 }
 nav{
     width:20%;
+    max-width: 200px;
     height: 100vh;
 }
 .content{
-    width:80%;
+    width:100%;
     height: 100vh;
 }
 .navbar>.container-fluid,ul.navbar-nav{
     flex-direction: column !important;
+}
+.navbar>.container-fluid{
+    height: 100%;
+}
+.navbar-brand{
+    margin-right: 0;
+}
+#navTop{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#navTop img{
+    height: 100px;
+    width: 100px;
 }
