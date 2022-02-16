@@ -62,10 +62,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $created_at;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Team::class, mappedBy="users")
-     */
-    private $teams;
 
     /**
      * @ORM\OneToOne(targetEntity=Planning::class, mappedBy="planning_owner", cascade={"persist", "remove"})
@@ -87,12 +83,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $contacts;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Team::class, inversedBy="users")
+     */
+    private $invitedTeams;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Team::class, mappedBy="user")
+     */
+    private $ownedTeams;
+
+
     public function __construct()
     {
         $this->teams = new ArrayCollection();
         $this->plannings = new ArrayCollection();
         $this->events = new ArrayCollection();
         $this->contacts = new ArrayCollection();
+        $this->ownedTeams = new ArrayCollection();
+        $this->invitedTeams = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -256,33 +265,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection|Team[]
-     */
-    public function getTeams(): Collection
-    {
-        return $this->teams;
-    }
-
-    public function addTeam(Team $team): self
-    {
-        if (!$this->teams->contains($team)) {
-            $this->teams[] = $team;
-            $team->addUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTeam(Team $team): self
-    {
-        if ($this->teams->removeElement($team)) {
-            $team->removeUser($this);
-        }
-
-        return $this;
-    }
-
     public function getPlanning(): ?Planning
     {
         return $this->planning;
@@ -382,4 +364,60 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    /**
+     * @return Collection|Team[]
+     */
+    public function getInvitedTeams(): Collection
+    {
+        return $this->invitedTeams;
+    }
+
+    public function addInvitedTeam(Team $invitedTeam): self
+    {
+        if (!$this->invitedTeams->contains($invitedTeam)) {
+            $this->invitedTeams[] = $invitedTeam;
+        }
+
+        return $this;
+    }
+
+    public function removeInvitedTeam(Team $invitedTeam): self
+    {
+        $this->invitedTeams->removeElement($invitedTeam);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Team[]
+     */
+    public function getOwnedTeams(): Collection
+    {
+        return $this->ownedTeams;
+    }
+
+    public function addOwnedTeam(Team $ownedTeam): self
+    {
+        if (!$this->ownedTeams->contains($ownedTeam)) {
+            $this->ownedTeams[] = $ownedTeam;
+            $ownedTeam->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOwnedTeam(Team $ownedTeam): self
+    {
+        if ($this->ownedTeams->removeElement($ownedTeam)) {
+            // set the owning side to null (unless already changed)
+            if ($ownedTeam->getUser() === $this) {
+                $ownedTeam->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+
 }

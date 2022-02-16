@@ -3,6 +3,13 @@
     --bs-primary-rgb: 60,206,139;
     box-sizing: border-box;
     --box-shadow : 0 2px 4px lightgray;
+    --clientColor: #5DFFE4;
+    --fournisseurColor: #5DBEFF;
+    --prestataireColor: #D55DFF;
+    --collaboColor: #FFB95D;
+    --bs-body-font-family: "Open Sans";
+    --borderColor: #707070;
+    --borderColor25: #70707025;
 }
 body{
     display: flex;
@@ -36,4 +43,20 @@ nav{
 #navTop img{
     height: 100px;
     width: 100px;
+}
+#sidePlanningContainer{
+    padding-bottom: 70%;
+}
+#sidePlanningContainer div{
+    height: 100px;
+    width: 100px;
+    color: black;
+    font-size: 16px;
+    border: 5px solid;
+    border-radius: 5px;
+    text-align: center;
+    background-color: #FFFFFF99;
+}
+#sidePlanningContainer div p{
+    margin-bottom: 0.5em;
 }

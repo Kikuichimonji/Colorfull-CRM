@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Contact;
 use App\Entity\Planning;
+use App\Entity\ContactType;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,9 +16,11 @@ class DashboardController extends AbstractController
     public function index(ManagerRegistry $doctrine): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
-        $repository = $doctrine->getRepository(Contact::class);
+        $contactRepository = $doctrine->getRepository(Contact::class);
+        $contactTypeRepository = $doctrine->getRepository(ContactType::class);
         //$planning = $repository->findOneBy(["planning_owner" => $this->getUser()->getId()]);
-        $contacts = $repository->findAll();
+        $contacts = $contactRepository->findAll();
+        $contactTypes = $contactTypeRepository->findAll();
         $planning = $this->getUser()->getPlanning();
         $error = is_null($planning) ? "Votre planing n'a pas été généré correctement" : null ;
         //dd($planning->getEvents());
@@ -26,6 +29,7 @@ class DashboardController extends AbstractController
             'planning' => $planning,
             'contacts' => $contacts,
             'error' => $error,
+            'contactTypes' => $contactTypes,
         ]);
     }
 }

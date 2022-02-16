@@ -50,23 +50,47 @@
             </div>
             <div id="blockContact">
                 <h2>contacts</h2>
-                <div class="dashBlock">
-                    {% for contact in contacts %}
-                        <div class='contactColorBlock'>
-                            {% set colorCount = 1 %}
-                            {% for type in contact.contactType %}
-                                <div class="color{{ colorCount }}" style="background-color:{{type.color}}"></div>
-                                {% set colorCount = colorCount + 1 %}
-                            {% endfor %}
-                        </div>
-                        <p>{{ contact.name }} {{contact.phone1 ?? contact.phone2 ?? "/"}} {{contact.email ?? "/"}}</p>
-                    {% endfor %}
+                <div class="dashBlockHeader">
+                    <div class="dashBlockHeaderChild">
+                        {% for contactType in contactTypes %}
+                            <div><span class='contactColorBlock' style="background-color:{{contactType.color}}"></span><p>{{contactType.label}}</p></div>
+                        {% endfor %}
+                    </div>
+                    <div class="dashBlock">
+                        {% for contact in contacts %}
+                            <div class="contactLine">
+                                <div class='contactColorBlock'>
+                                    {% set colorCount = 1 %}
+                                    {% for type in contact.contactType %}
+                                        <div class="color{{ colorCount }}" style="background-color:{{type.color}}"></div>
+                                        {% set colorCount = colorCount + 1 %}
+                                    {% endfor %}
+                                </div>
+                                <p>{{ contact.name }}</p> <p>{{contact.phone1 ?? contact.phone2 ?? "/"}}</p> <p>{{contact.email ?? "/"}}</p> <p>{{contact.isCompany ? "Société" : "Particulier"}}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>
         <div id="blockPlanning">
-            <h2>planning</h2>
-            <div class="dashBlock"></div>
+            <h2>plannings</h2>
+            <div class="dashBlock">
+                {% for team in user.ownedteams %}
+                <div class='teamBlock'>
+                    <h3>{{ team.label }}</h3>
+                    {% for user in team.users %}
+                        <div style="border-color:{{ team.color }}"> <p>{{ user.firstname}}</p> <p>{{ user.lastName}}</p></div>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+                <div class='invitedBlock'>
+                <h3>Invité</h3>
+                    {% for planning in user.plannings %}
+                        <div> <p>{{ planning.planningowner.firstname}}</p> <p>{{ planning.planningowner.lastName}}</p></div>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
     </div>
 </div>

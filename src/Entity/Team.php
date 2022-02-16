@@ -40,14 +40,14 @@ class Team
     private $is_private;
 
     /**
-     * @ORM\OneToOne(targetEntity=User::class, inversedBy="relation", cascade={"persist", "remove"})
-     */
-    private $team_owner;
-
-    /**
-     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="teams")
+     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="invitedTeams")
      */
     private $users;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="ownedTeams")
+     */
+    private $user;
 
     public function __construct()
     {
@@ -107,18 +107,6 @@ class Team
         return $this;
     }
 
-    public function getTeamOwner(): ?User
-    {
-        return $this->team_owner;
-    }
-
-    public function setTeamOwner(?User $team_owner): self
-    {
-        $this->team_owner = $team_owner;
-
-        return $this;
-    }
-
     /**
      * @return Collection|User[]
      */
@@ -131,6 +119,7 @@ class Team
     {
         if (!$this->users->contains($user)) {
             $this->users[] = $user;
+            $user->addInvitedTeam($this);
         }
 
         return $this;
@@ -138,8 +127,23 @@ class Team
 
     public function removeUser(User $user): self
     {
-        $this->users->removeElement($user);
+        if ($this->users->removeElement($user)) {
+            $user->removeInvitedTeam($this);
+        }
 
         return $this;
     }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
 }
