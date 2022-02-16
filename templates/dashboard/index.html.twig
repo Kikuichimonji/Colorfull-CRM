@@ -38,11 +38,11 @@
                         {% endif %}
                         <p><span style='color:{{ event.eventType.color }}'>{{ event.eventType.label }}</span> {{ event.label }} 
                             {% if later == 0 %} 
-                                {{ event.dateStart|date("h:i") }}
-                                {{ event.dateEnd|date("h:i") }}
+                                {{ event.dateStart|date("H:i") }}
+                                {{ event.dateEnd|date("H:i") }}
                             {% else %}
-                                {{ event.dateStart|date("d/m h:i") }}
-                                {{ event.dateEnd|date("d/m h:i") }}
+                                {{ event.dateStart|date("d/m H:i") }}
+                                {{ event.dateEnd|date("d/m H:i") }}
                             {% endif %} 
                         <p>
                     {% endfor %}
