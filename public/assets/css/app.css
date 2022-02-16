@@ -1,6 +1,8 @@
 :root{
     --bs-primary: #3CCE8B;
     --bs-primary-rgb: 60,206,139;
+    box-sizing: border-box;
+    --box-shadow : 0 2px 4px lightgray;
 }
 body{
     display: flex;

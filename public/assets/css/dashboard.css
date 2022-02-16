@@ -1,0 +1,66 @@
+.content{
+    width: 80%;
+    margin: 0 auto;
+}
+#fullBlock{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 100%;
+    max-height: 80%;
+}
+h1{
+    text-align: center;
+}
+#blockInfo{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+#blockEvent,#blockContact{
+    width: 45%;
+    
+}
+h2{
+    text-transform: capitalize;
+}
+.dashBlock{
+    width:100%;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    height: 40vh;
+    overflow-y: scroll;
+}
+#blockPlanning .dashBlock{
+    height: 20vh;
+}
+.contactColorBlock{
+    width:20px;
+    height: 20px;
+    position: relative;
+
+}
+[class*= "color"]{
+    width: 10px;
+    height: 10px;
+}
+.color1{
+    position: absolute;
+    top:0;
+    left: 0;
+}
+.color2{
+    position: absolute;
+    top:0;
+    right: 0;
+}
+.color3{
+    position: absolute;
+    bottom:0;
+    left: 0;
+}
+.color4{
+    position: absolute;
+    bottom:0;
+    right: 0;
+}

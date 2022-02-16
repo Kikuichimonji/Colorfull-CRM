@@ -20,11 +20,6 @@ class Contact
     private $id;
 
     /**
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $type;
-
-    /**
      * @ORM\Column(type="boolean", options={"default": 0})
      */
     private $is_company;
@@ -64,28 +59,28 @@ class Contact
      */
     private $userCreate;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=ContactType::class, inversedBy="contacts")
+     */
+    private $contactType;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ContactExtrafieldValue::class, mappedBy="contact", orphanRemoval=true)
+     */
+    private $contactExtrafieldValues;
+
     public function __construct()
     {
         $this->events = new ArrayCollection();
         $this->contact_extrafields = new ArrayCollection();
+        $this->contactType = new ArrayCollection();
+        $this->contactExtrafieldValues = new ArrayCollection();
     }
 
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getType(): ?string
-    {
-        return $this->type;
-    }
-
-    public function setType(?string $type): self
-    {
-        $this->type = $type;
-
-        return $this;
     }
 
     public function getIsCompany(): ?bool
@@ -195,6 +190,60 @@ class Contact
     public function setUserCreate(?User $userCreate): self
     {
         $this->userCreate = $userCreate;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ContactType[]
+     */
+    public function getContactType(): Collection
+    {
+        return $this->contactType;
+    }
+
+    public function addContactType(ContactType $contactType): self
+    {
+        if (!$this->contactType->contains($contactType)) {
+            $this->contactType[] = $contactType;
+        }
+
+        return $this;
+    }
+
+    public function removeContactType(ContactType $contactType): self
+    {
+        $this->contactType->removeElement($contactType);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ContactExtrafieldValue[]
+     */
+    public function getContactExtrafieldValues(): Collection
+    {
+        return $this->contactExtrafieldValues;
+    }
+
+    public function addContactExtrafieldValue(ContactExtrafieldValue $contactExtrafieldValue): self
+    {
+        if (!$this->contactExtrafieldValues->contains($contactExtrafieldValue)) {
+            $this->contactExtrafieldValues[] = $contactExtrafieldValue;
+            $contactExtrafieldValue->setContact($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContactExtrafieldValue(ContactExtrafieldValue $contactExtrafieldValue): self
+    {
+        if ($this->contactExtrafieldValues->removeElement($contactExtrafieldValue)) {
+            // set the owning side to null (unless already changed)
+            if ($contactExtrafieldValue->getContact() === $this) {
+                $contactExtrafieldValue->setContact(null);
+            }
+        }
 
         return $this;
     }

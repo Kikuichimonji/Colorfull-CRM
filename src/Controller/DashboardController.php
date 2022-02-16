@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Contact;
 use App\Entity\Planning;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,14 +15,16 @@ class DashboardController extends AbstractController
     public function index(ManagerRegistry $doctrine): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
-        $repository = $doctrine->getRepository(Planning::class);
+        $repository = $doctrine->getRepository(Contact::class);
         //$planning = $repository->findOneBy(["planning_owner" => $this->getUser()->getId()]);
+        $contacts = $repository->findAll();
         $planning = $this->getUser()->getPlanning();
         $error = is_null($planning) ? "Votre planing n'a pas été généré correctement" : null ;
         //dd($planning->getEvents());
         return $this->render('dashboard/index.html.twig', [
             'user' => $this->getUser(),
             'planning' => $planning,
+            'contacts' => $contacts,
             'error' => $error,
         ]);
     }

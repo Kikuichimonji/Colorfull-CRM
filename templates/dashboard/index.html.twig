@@ -13,18 +13,68 @@
     {% if error %}
         <div>{{ error }}</div>
     {% endif %}
-    <div id="blockEvent">
-    {% for event in planning.events|sort((a, b) => a.dateEnd <=> b.dateEnd) %}
-        <p> <span style='color:{{ event.eventType.color }}'>{{ event.eventType.label }}</span> {{ event.label }} {{ event.dateStart|date("h:i") }} {{ event.dateEnd|date("h:i") }} <p>
-    {% endfor %}
+    <div id="fullBlock">
+        <div id="blockInfo">
+            <div id="blockEvent">
+                <h2>évenements</h2>
+                <div class="dashBlock">
+                    {% set todayDate = "now"|date("d") %}
+                    {% set today = 0 %}
+                    {% set tommorow = 0 %}
+                    {% set later = 0 %}
+                    {% for event in planning.events|sort((a, b) => a.dateEnd <=> b.dateEnd) %}
+                        {% set eventDay = event.dateEnd|date("d") %}
+                        {% if eventDay == todayDate and today == 0 %}
+                            <h3>Aujourd'hui :</h3>
+                            {% set today = 1 %}
+                        {% endif %}
+                        {% if eventDay == todayDate + 1 and tommorow == 0 %}
+                            <h3>Demain :</h3>
+                            {% set tommorow = 1 %}
+                        {% endif %}
+                        {% if eventDay > todayDate + 1 and later == 0 %}
+                            <h3>Plus tard :</h3>
+                            {% set later = 1 %}
+                        {% endif %}
+                        <p><span style='color:{{ event.eventType.color }}'>{{ event.eventType.label }}</span> {{ event.label }} 
+                            {% if later == 0 %} 
+                                {{ event.dateStart|date("h:i") }}
+                                {{ event.dateEnd|date("h:i") }}
+                            {% else %}
+                                {{ event.dateStart|date("d/m h:i") }}
+                                {{ event.dateEnd|date("d/m h:i") }}
+                            {% endif %} 
+                        <p>
+                    {% endfor %}
+                </div>
+            </div>
+            <div id="blockContact">
+                <h2>contacts</h2>
+                <div class="dashBlock">
+                    {% for contact in contacts %}
+                        <div class='contactColorBlock'>
+                            {% set colorCount = 1 %}
+                            {% for type in contact.contactType %}
+                                <div class="color{{ colorCount }}" style="background-color:{{type.color}}"></div>
+                                {% set colorCount = colorCount + 1 %}
+                            {% endfor %}
+                        </div>
+                        <p>{{ contact.name }} {{contact.phone1 ?? contact.phone2 ?? "/"}} {{contact.email ?? "/"}}</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div id="blockPlanning">
+            <h2>planning</h2>
+            <div class="dashBlock"></div>
+        </div>
     </div>
-    <div id="blockContact"></div>
 </div>
 {% endblock %}
 
 {% block style %}
     {{parent()}}
-
+    <link href="{{asset('assets/css/dashboard.css')}}" rel="stylesheet" type="text/css">
 {% endblock %}
 
 {% block script_body %}
