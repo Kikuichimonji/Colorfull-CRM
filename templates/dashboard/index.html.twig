@@ -13,6 +13,12 @@
     {% if error %}
         <div>{{ error }}</div>
     {% endif %}
+    <div id="blockEvent">
+    {% for event in planning.events|sort((a, b) => a.dateEnd <=> b.dateEnd) %}
+        <p> <span style='color:{{ event.eventType.color }}'>{{ event.eventType.label }}</span> {{ event.label }} {{ event.dateStart|date("h:i") }} {{ event.dateEnd|date("h:i") }} <p>
+    {% endfor %}
+    </div>
+    <div id="blockContact"></div>
 </div>
 {% endblock %}
 

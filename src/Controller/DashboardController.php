@@ -15,8 +15,10 @@ class DashboardController extends AbstractController
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
         $repository = $doctrine->getRepository(Planning::class);
-        $planning = $repository->findOneBy(["planning_owner" => $this->getUser()->getId()]);
+        //$planning = $repository->findOneBy(["planning_owner" => $this->getUser()->getId()]);
+        $planning = $this->getUser()->getPlanning();
         $error = is_null($planning) ? "Votre planing n'a pas été généré correctement" : null ;
+        //dd($planning->getEvents());
         return $this->render('dashboard/index.html.twig', [
             'user' => $this->getUser(),
             'planning' => $planning,
