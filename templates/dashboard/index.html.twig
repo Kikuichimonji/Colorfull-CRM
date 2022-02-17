@@ -17,35 +17,78 @@
         <div id="blockInfo">
             <div id="blockEvent">
                 <h2>évenements</h2>
-                <div class="dashBlock">
-                    {% set todayDate = "now"|date("d") %}
-                    {% set today = 0 %}
-                    {% set tommorow = 0 %}
-                    {% set later = 0 %}
-                    {% for event in planning.events|sort((a, b) => a.dateEnd <=> b.dateEnd) %}
-                        {% set eventDay = event.dateEnd|date("d") %}
-                        {% if eventDay == todayDate and today == 0 %}
-                            <h3>Aujourd'hui :</h3>
-                            {% set today = 1 %}
-                        {% endif %}
-                        {% if eventDay == todayDate + 1 and tommorow == 0 %}
-                            <h3>Demain :</h3>
-                            {% set tommorow = 1 %}
-                        {% endif %}
-                        {% if eventDay > todayDate + 1 and later == 0 %}
-                            <h3>Plus tard :</h3>
-                            {% set later = 1 %}
-                        {% endif %}
-                        <p><span style='color:{{ event.eventType.color }}'>{{ event.eventType.label }}</span> {{ event.label }} 
-                            {% if later == 0 %} 
-                                {{ event.dateStart|date("H:i") }}
-                                {{ event.dateEnd|date("H:i") }}
+                <div class="dashBlockHeader">
+                    <div class="dashBlock">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col">Label</th>
+                            <th scope="col">Date début</th>
+                            <th scope="col">Date fin</th>
+                            <th scope="col">Type</th>
+                            </tr>
+                        </thead>
+                    <tbody>
+                        {% set todayDate = "now"|date("d") %}
+                        {% set todayHour = "now"|date("H") %}
+                        {% set today = 0 %}
+                        {% set tommorow = 0 %}
+                        {% set later = 0 %}
+                        
+                        {% for event in planning.events|sort((a, b) => a.dateEnd <=> b.dateEnd) %}
+                            {% set eventDay = event.dateEnd|date("d") %}
+                            {% set eventHour = event.dateEnd|date("H") %}
+                            {% if eventDay == todayDate %}
+                                {% if today == 0 %}
+                                    
+                                    <tr ><td colspan="6" class="tableDay"><h3 >Aujourd'hui :</h3></td></tr>
+                                    {% set today = 1 %}
+                                {% endif %}
+                                {% if todayHour + 1 == eventHour %}
+                                    <tr class="table-danger">
+                                {% else %}
+                                    <tr class="table-active">
+                                {% endif %}
+                            {% endif %}
+                            {% if eventDay == todayDate + 1 and tommorow == 0 %}
+                                <tr ><td colspan="6" class="tableDay"><h3 >Demain :</h3></td></tr>
+                                {% set tommorow = 1 %}
                             {% else %}
-                                {{ event.dateStart|date("d/m H:i") }}
-                                {{ event.dateEnd|date("d/m H:i") }}
-                            {% endif %} 
-                        <p>
-                    {% endfor %}
+                                {% if eventDay == todayDate + 1 %}
+                                    <tr class="">
+                                {% endif %}
+                            {% endif %}
+                            {% if eventDay > todayDate + 1 and later == 0 %}
+                                <tr><td colspan="6" class="tableDay"><h3 >Plus tard :</h3></td></tr>
+                                {% set later = 1 %}
+                            {% else %}
+                                {% if eventDay > todayDate + 1 %}
+                                    <tr class="">
+                                {% endif %}
+                            {% endif %}
+                            
+                            <td>{{ event.isImportant }}</td>
+                            <td>{{ event.isImportant }}</td>
+                            <td>{{ event.label }}</td>
+                            <td>{% if later == 0 %} 
+                                    {{ event.dateStart|date("H:i") }}
+                                {% else %}
+                                    {{ event.dateStart|date("d/m H:i") }}
+                                {% endif %} 
+                            </td>
+                            <td>{% if later == 0 %} 
+                                    {{ event.dateEnd|date("H:i") }}
+                                {% else %}
+                                    {{ event.dateEnd|date("d/m H:i") }}
+                                {% endif %} 
+                            </td>
+                            <td style="color:{{ event.eventType.color }}">{{ event.eventType.label }}</td></tr>
+                        {% endfor %}
+                        </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
             <div id="blockContact">

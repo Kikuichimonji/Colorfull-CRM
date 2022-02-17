@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', () => {
     var calendar = new FullCalendar.Calendar(calendarEl, {
         defaultView: 'dayGridMonth',
         editable: true,
-        plugins: [ 'bootstrap' ],
         themeSystem: 'bootstrap',
         eventSources: [
             {
@@ -23,8 +22,9 @@ document.addEventListener('DOMContentLoaded', () => {
             center: 'title',
             right: 'dayGridMonth,timeGridWeek,timeGridDay',
         },
-        plugins: [ 'interaction', 'dayGrid', 'timeGrid' ], // https://fullcalendar.io/docs/plugin-index
+        plugins: [ 'interaction', 'dayGrid', 'timeGrid', 'bootstrap' ], // https://fullcalendar.io/docs/plugin-index
         timeZone: 'UTC',
+        height: "auto",
     });
     calendar.render();
 });

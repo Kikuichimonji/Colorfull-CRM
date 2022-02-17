@@ -16,7 +16,7 @@ dashboard-index:
     path: /dashboard
     controller: App\Controller\DashboardController::index
     methods: GET
-calendar-index:
+planning-index:
     path: /calendar
-    controller: App\Controller\HomeController::index
+    controller: App\Controller\PlanningController::index
     methods: GET

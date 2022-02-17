@@ -20,6 +20,19 @@ h1{
 #blockEvent,#blockContact{
     width: 49%;
 }
+#blockEvent .dashBlock{
+    height: 100%;
+    padding-top: 0;
+}
+#blockEvent td:not(#blockEvent .tableDay){
+    border-right: 1px solid var(--borderColor50);
+}
+#blockEvent .tableDay{
+    border-bottom:1px solid var(--borderColor)
+
+}
+
+
 h2,h3{
     text-transform: capitalize;
     text-align: center;
@@ -69,6 +82,7 @@ h2,h3{
 }
 #blockPlanning .dashBlock{
     height: 20vh;
+    min-height: 200px;
 }
 #blockContact p{
     display: inline-block;

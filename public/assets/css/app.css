@@ -10,6 +10,8 @@
     --bs-body-font-family: "Open Sans";
     --borderColor: #707070;
     --borderColor25: #70707025;
+    --borderColor50: #70707050;
+    --borderColor75: #70707075;
 }
 body{
     display: flex;

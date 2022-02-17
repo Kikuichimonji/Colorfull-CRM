@@ -1,20 +1,32 @@
-{% extends 'base.html.twig' %}
+{% extends 'layouts/loggedin.html.twig' %}
 
-{% block title %}Hello PlanningController!{% endblock %}
+{% block title %}Calendrier{% endblock %}
+{% block nav %}
+    {{parent()}}
+{% endblock %}
+{% block content %}
+    <div id="mainPlanningBlock">
+        <h1>Calendrier</h1>
+        <div id="calendar-holder"></div>
+    </div>
 
-{% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+{% endblock %}
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+{% block style %}
+    {{parent()}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.4.2/main.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@4.4.2/main.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@4.4.2/main.min.css">
+    <link href="{{asset('assets/css/planning.css')}}" rel="stylesheet" type="text/css">
+    <link href='https://use.fontawesome.com/releases/v5.0.6/css/all.css' rel='stylesheet'>
+{% endblock %}
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/laragon/www/Projet_3/src/Controller/PlanningController.php'|file_link(0) }}">src/Controller/PlanningController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/laragon/www/Projet_3/templates/planning/index.html.twig'|file_link(0) }}">templates/planning/index.html.twig</a></code></li>
-    </ul>
-</div>
+{% block script_body %}
+    {{parent()}}
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.4.2/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@4.4.2/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@4.4.2/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@4.4.2/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/bootstrap@4.4.2/main.min.js"></script>
+    <script src="{{asset('assets/js/calendar.js')}}"></script>
 {% endblock %}

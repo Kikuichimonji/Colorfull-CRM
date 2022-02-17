@@ -10,8 +10,9 @@ class PlanningController extends AbstractController
 {
     public function index(): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
         return $this->render('planning/index.html.twig', [
-            'controller_name' => 'PlanningController',
+            "user" => $this->getUser(),
         ]);
     }
 }
