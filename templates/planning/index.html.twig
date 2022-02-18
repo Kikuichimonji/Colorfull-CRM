@@ -5,9 +5,20 @@
     {{parent()}}
 {% endblock %}
 {% block content %}
-    <div id="mainPlanningBlock">
+    <div id="mainPlanningBlock" data-id="{{ user.planning.id }}">
         <h1>Calendrier</h1>
-        <div id="calendar-holder"></div>
+        <div id="calendarBox">
+            <div id="externalEvents">
+                <h2>Events</h2>
+                {% for eventType in eventTypes %}
+                    <div class="fc-event" style="background-color:{{ eventType.color }}" data-id="{{ eventType.id }}">{{ eventType.label }}</div>
+                {% endfor %}
+            </div>
+            <div id="calendar-holder">
+                <div id='calendar'></div>
+            </div>
+        </div>
+        
     </div>
 
 {% endblock %}
@@ -27,6 +38,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@4.4.2/main.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@4.4.2/main.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@4.4.2/main.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/bootstrap@4.4.2/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/bootstrap@4.4.2/main.min.js" charset="utf-16"></script>
+    <script> events = {{ events | raw }} </script>
     <script src="{{asset('assets/js/calendar.js')}}"></script>
 {% endblock %}

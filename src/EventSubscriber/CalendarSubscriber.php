@@ -2,9 +2,12 @@
 
 namespace App\EventSubscriber;
 
-use CalendarBundle\CalendarEvents;
 use CalendarBundle\Entity\Event;
+use CalendarBundle\CalendarEvents;
 use CalendarBundle\Event\CalendarEvent;
+use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class CalendarSubscriber implements EventSubscriberInterface
@@ -16,24 +19,36 @@ class CalendarSubscriber implements EventSubscriberInterface
         ];
     }
 
-    public function onCalendarSetData(CalendarEvent $calendar)
+    public function onCalendarSetData(CalendarEvent $calendar, ManagerRegistry $doctrine,Security $security)
     {
-        /*$start = $calendar->getStart();
+        
+        /*$eventCollection = $security->getUser()->getPlanning()->getEvents();
+        dd($eventCollection);
+        foreach($eventCollection as $event){
+
+            $planningEvent = new Event(
+                $event->getLabel(),
+                $event->getDateStart()->format("Y-m-d H:i:s"),
+                $event->getDateEnd()->format("Y-m-d H:i:s")
+            );
+
+            $planningEvent->setOptions([
+                'backgroundColor' => '#3788d8',
+                'borderColor' => '#3788d8',
+            ]);
+            $planningEvent->addOption(
+                'url',
+                $this->router->generate('consult_show', [
+                    'id' => $event->getId(),
+                ])
+            );
+
+            $calendar->addEvent($planningEvent);
+        }
+            
+        $start = $calendar->getStart();
         $end = $calendar->getEnd();
-        $filters = $calendar->getFilters();
+        $filters = $calendar->getFilters();*/
 
-        // You may want to make a custom query from your database to fill the calendar
-
-        $calendar->addEvent(new Event(
-            'Event 1',
-            new \DateTime('Tuesday this week'),
-            new \DateTime('Wednesdays this week')
-        ));
-
-        // If the end date is null or not defined, it creates a all day event
-        $calendar->addEvent(new Event(
-            'All day event',
-            new \DateTime('Friday this week')
-        ));*/
     }
 }

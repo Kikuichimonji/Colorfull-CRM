@@ -20,3 +20,7 @@ planning-index:
     path: /calendar
     controller: App\Controller\PlanningController::index
     methods: GET
+event-save:
+    path: /calendar
+    controller: App\Controller\PlanningController::createEvent
+    methods: POST

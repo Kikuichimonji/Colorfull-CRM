@@ -1,6 +1,25 @@
 #mainPlanningBlock{
-    
+    height: 100vh;
 }
 #mainPlanningBlock h1{
     text-align: center;
+}
+#calendar-holder{
+    width: 80%;
+}
+#calendarBox{
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+#externalEvents{
+    box-shadow: var(--box-shadow);
+    width: 10%;
+    height: fit-content;
+    padding: 1em 1em;
+}
+.fc-event{
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
 }
