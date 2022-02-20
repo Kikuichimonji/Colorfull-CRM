@@ -31,8 +31,8 @@ class PlanningController extends AbstractController
                 "description" => $event->getDescription(),
                 "isImportant" => $event->getIsImportant(),
                 "customColor" => $event->getColor(),
-                "eventTypeId" => $event->getEventType()->getId(),
-                "planningId" => $event->getPlanning()->getId(),
+                "eventType" => $event->getEventType()->getId(),
+                "planning" => $event->getPlanning()->getId(),
             ]);
         }
         $this->denyAccessUnlessGranted('ROLE_USER');
@@ -75,19 +75,18 @@ class PlanningController extends AbstractController
     public function updateEvent(Request $request,ManagerRegistry $doctrine): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
+        $post = $request->request->all();
         $eventRepository = $doctrine->getRepository(Event::class);
-        $event = $eventRepository->find($id);
+        $event = $eventRepository->find($request->request->get("id"));
 
         $eventTypeRepository = $doctrine->getRepository(EventType::class);
         $planningRepository = $doctrine->getRepository(Planning::class);
         $manager = $doctrine->getManager();
-        $post = $request->request->all();
-        $event = new Event($post);
 
         foreach($post as $key => $value){
             $method = "set".ucfirst($key);
             if(method_exists($event,$method)){
-                if($method == "setDateStart" || $method == "setDateEnd"){
+                if($method == "setDateStart" || $method == "setDateEnd" && $value != "null"){
                     $value = new \DateTime($value);
                 }
                 if($method == "setEventType"){
@@ -99,8 +98,8 @@ class PlanningController extends AbstractController
                 $event->$method($value === "null" ? null : $value);
             }
         }
-        $manager->persist($event);
+
         $manager->flush();
-        return new JsonResponse($event->getEventType());
+        return new JsonResponse($event);
     }
 }

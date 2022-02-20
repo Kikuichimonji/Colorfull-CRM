@@ -24,3 +24,7 @@ event-save:
     path: /calendar
     controller: App\Controller\PlanningController::createEvent
     methods: POST
+event-update:
+    path: /calendar/save
+    controller: App\Controller\PlanningController::updateEvent
+    methods: POST

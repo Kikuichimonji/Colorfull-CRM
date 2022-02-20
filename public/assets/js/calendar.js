@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 title: eventEl.innerText,
                 color: eventEl.style.backgroundColor,
                 eventType : eventEl.hiddenId,
-                hexaColor : bcolor = eventEl.getAttribute("style").substr(-7),
+                hexaColor : bcolor,
                 isImportant : 0,
                 planning : planning.hiddenId,
             };
@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         eventDrop: function(info){
             //console.log(info.event.extendedProps)
-            //saveEvent(info,calendar)
+            updateEvent(info,calendar)
         },
         eventResize: function(info){
             //saveEvent(info,calendar)
@@ -86,6 +86,25 @@ function saveEvent(info,calendar)
     };
     link = "/calendar"
     //console.log(args)
+    goFetch(args,calendar,link);
+}
+
+function updateEvent(info,calendar) 
+{
+    //console.log(info.event.extendedProps)
+    args = {
+        "id" : info.event.id,
+        "label" : info.event.title,
+        "dateStart" : info.event.start.toISOString(),
+        "dateEnd" : info.event.end ? info.event.end.toISOString() : null,
+        "eventType" : info.event.extendedProps.eventType,
+        "planning" : info.event.extendedProps.planning,
+        "description" : info.event.extendedProps.description,
+        "color" : info.event.extendedProps.customColor,
+        "isImportant" : info.event.extendedProps.isImportant,
+    };
+    link = "/calendar/save"
+    console.log(args)
     goFetch(args,calendar,link);
 }
 
