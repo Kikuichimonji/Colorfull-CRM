@@ -69,23 +69,42 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         eventClick: function(info) {
             modal.style.display = "block";
-            console.log(info.event.extendedProps.isImportant)
+            //console.log(info.event)
             modal.querySelectorAll("#eventType option")[info.event.extendedProps.eventType -1].selected = true
             modal.querySelector("#label").value = info.event.title
             modal.querySelector("#dateStart").value = info.event.start?.toISOString().split('.')[0]  
             modal.querySelector("#dateEnd").value = info.event.end?.toISOString().split('.')[0] ;
             modal.querySelector("#description").value = info.event.extendedProps.description;
             modal.querySelector("#color").value = info.event.extendedProps.customColor ?? info.event.backgroundColor;
-            modal.querySelector("#color").checked = info.event.extendedProps.isImportant ? true : false;
-            /*alert('Event: ' + info.event.title);
-            alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
-            alert('View: ' + info.view.type);*/
-        
-            // change the border color just for fun
-            info.el.style.borderColor = 'red';
+            modal.querySelector("#isImportant").checked = info.event.extendedProps.isImportant ? true : false;
+            modal.hiddenId = info.event.id;
+
+            modalClickHandler = function (ev)
+            {
+                ev.stopImmediatePropagation();
+                ev.target.removeEventListener("click" , modalClickHandler);
+                //console.log(info.event.id)
+                args = {
+                    "id" : info.event.id,
+                    "label" : modal.querySelector("#label").value,
+                    "dateStart" : modal.querySelector("#dateStart").value,
+                    "dateEnd" : modal.querySelector("#dateEnd").value  == "" ? null : modal.querySelector("#dateEnd").value,
+                    "eventType" : modal.querySelector("#eventType").selectedIndex + 1,
+                    "planning" : planning.hiddenId,
+                    "description" : modal.querySelector("#description").value,
+                    "color" : modal.querySelector("#color").value,
+                    "isImportant" : modal.querySelector("#isImportant").checked,
+                };
+                updateEvent("",calendar,args)
+                modal.style.display = "none";
+                location.reload();
+            }
+            modal.querySelector(".btn-primary").addEventListener("click", modalClickHandler)
         }
     });
     calendar.render();
+
+    
 });
 
 
@@ -107,10 +126,10 @@ function saveEvent(info,calendar)
     goFetch(args,calendar,link);
 }
 
-function updateEvent(info,calendar) 
+function updateEvent(info,calendar,args = null) 
 {
     //console.log(info.event.extendedProps)
-    args = {
+    args = args ? args : {
         "id" : info.event.id,
         "label" : info.event.title,
         "dateStart" : info.event.start.toISOString(),
@@ -122,7 +141,7 @@ function updateEvent(info,calendar)
         "isImportant" : info.event.extendedProps.isImportant,
     };
     link = "/calendar/save"
-    console.log(args)
+    //console.log(args)
     goFetch(args,calendar,link);
 }
 
@@ -151,7 +170,7 @@ function goFetch(args,calendar,link)
             const isJson = response.headers.get('content-type')?.includes('application/json');
             const data = isJson ? response.json() : null;
             const xError = response.headers.get('X-debug-Exception');
-            console.log(decodeURI(xError))
+            xError ? console.log(decodeURI(xError)) : null;
     
             if (!response.ok) {
                 // get error message from body or default to response status
@@ -159,10 +178,18 @@ function goFetch(args,calendar,link)
                 return Promise.reject(error);
             }else{
                 console.log(response)
-                calendar.refetchEvents();
+                //calendar.refetchEvents();
+                
             }
         })
         .catch(error => {
             console.log('There was an error!', error);
         })
 }
+
+modal.querySelector(".btn-close").addEventListener("click", ev => {
+    modal.style.display = "none"
+})
+modal.querySelector(".btn-secondary").addEventListener("click", ev => {
+    modal.style.display = "none"
+})

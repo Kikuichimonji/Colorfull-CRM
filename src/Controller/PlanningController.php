@@ -54,7 +54,7 @@ class PlanningController extends AbstractController
         foreach($post as $key => $value){
             $method = "set".ucfirst($key);
             if(method_exists($event,$method)){
-                if($method == "setDateStart" || $method == "setDateEnd" && $value != "null"){
+                if(($method == "setDateStart" || $method == "setDateEnd") && $value != "null"){
                     $value = new \DateTime($value);
                 }
                 if($method == "setEventType"){
@@ -63,7 +63,10 @@ class PlanningController extends AbstractController
                 if($method == "setPlanning"){
                     $value = $planningRepository->findOneBy(["id" => "$value"]);
                 }
-                $event->$method($value === "null" ? null : $value);
+                $value = $value === "null" ? null : $value;
+                $value = $value === "undefined" ? null : $value;
+            
+                $event->$method($value);
             }
         }
         $manager->persist($event);
