@@ -1,10 +1,13 @@
+let menuLinks = document.querySelectorAll(".navbar-nav .nav-link")
+menuLinks[1].classList.add("active")
+
 let styles = window.getComputedStyle(document.querySelector('#mainPlanningBlock h1'));
 let margin = parseFloat(styles['marginTop']) + parseFloat(styles['marginBottom']);
 let marginBottom = 50;
 let calendarHeight = document.getElementById('mainPlanningBlock').offsetHeight - (document.querySelector('#mainPlanningBlock h1').offsetHeight + margin + marginBottom)
 let externalEvents = document.querySelectorAll("#externalEvents .fc-event");
 let planning = document.getElementById("mainPlanningBlock")
-
+let modal = document.querySelector(".modal");
 
 externalEvents.forEach( el => {
     el.hiddenId = el.getAttribute("data-id");
@@ -31,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 isImportant : 0,
                 planning : planning.hiddenId,
             };
-        }
+        },
     });
 
     let calendar = new FullCalendar.Calendar(calendarEl, {
@@ -56,16 +59,31 @@ document.addEventListener('DOMContentLoaded', () => {
         locale: 'fr',
         height: calendarHeight,
         eventReceive: function(info){
-           // console.log(info.draggedEl)
             saveEvent(info,calendar)
         },
         eventDrop: function(info){
-            //console.log(info.event.extendedProps)
             updateEvent(info,calendar)
         },
         eventResize: function(info){
-            //saveEvent(info,calendar)
+            updateEvent(info,calendar)
         },
+        eventClick: function(info) {
+            modal.style.display = "block";
+            console.log(info.event.extendedProps.isImportant)
+            modal.querySelectorAll("#eventType option")[info.event.extendedProps.eventType -1].selected = true
+            modal.querySelector("#label").value = info.event.title
+            modal.querySelector("#dateStart").value = info.event.start?.toISOString().split('.')[0]  
+            modal.querySelector("#dateEnd").value = info.event.end?.toISOString().split('.')[0] ;
+            modal.querySelector("#description").value = info.event.extendedProps.description;
+            modal.querySelector("#color").value = info.event.extendedProps.customColor ?? info.event.backgroundColor;
+            modal.querySelector("#color").checked = info.event.extendedProps.isImportant ? true : false;
+            /*alert('Event: ' + info.event.title);
+            alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
+            alert('View: ' + info.view.type);*/
+        
+            // change the border color just for fun
+            info.el.style.borderColor = 'red';
+        }
     });
     calendar.render();
 });

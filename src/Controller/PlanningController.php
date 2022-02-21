@@ -24,7 +24,7 @@ class PlanningController extends AbstractController
         foreach($eventCollection as $event){
             array_push($events, [
                 "id" => $event->getId(),
-                "backgroundColor" => $event->getEventType()->getColor(),
+                "backgroundColor" => $event->getColor() ?? $event->getEventType()->getColor(),
                 "start" => $event->getDateStart() ? $event->getDateStart()->format("Y-m-d H:i:s") : null,
                 "end" => $event->getDateEnd() ? $event->getDateEnd()->format("Y-m-d H:i:s") : null,
                 "title" => $event->getLabel(),
@@ -35,7 +35,6 @@ class PlanningController extends AbstractController
                 "planning" => $event->getPlanning()->getId(),
             ]);
         }
-        $this->denyAccessUnlessGranted('ROLE_USER');
         return $this->render('planning/index.html.twig', [
             "user" => $this->getUser(),
             "eventTypes" => $eventType,

@@ -20,7 +20,63 @@
         </div>
         
     </div>
-
+    <div class="modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modifier l'évenement</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="">
+                        <fieldset>
+                            <div class="form-group">
+                                <label for="eventType" class="form-label">Event Type</label>
+                                <select class="form-select" id="eventType">
+                                    {% for eventType in eventTypes %}
+                                        <option style="background-color:{{eventType.color}}50">{{ eventType.label }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group ">
+                                <label for="label" class="col-form-label">Titre</label>
+                                <input type="text" class="form-control" id="label" >
+                            </div>
+                            <div class="row">
+                                <div class="form-group">
+                                    <label for="dateStart" class="col-form-label">Date Start</label>
+                                    <input type="datetime-local" class="form-control" id="dateStart">
+                                </div>
+                                <div class="form-group">
+                                    <label for="dateEnd" class="col-form-label">Date End</label>
+                                    <input type="datetime-local" class="form-control" id="dateEnd">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea class="form-control" id="description" rows="3"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="color" class="form-label">Couleur personnalisée</label>
+                                <input type="color" class="form-control form-control-color" id="color" title="Choose your color">
+                            </div>
+                            <div class="form-check form-switch mt-4">
+                                <label class="form-check-label" for="isImportant">Is Important</label>
+                                <input class="form-check-input" type="checkbox" id="isImportant">
+                            </div>
+                            
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block style %}

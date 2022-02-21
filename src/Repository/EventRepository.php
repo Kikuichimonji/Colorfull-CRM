@@ -47,4 +47,18 @@ class EventRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function truc($price)
+    {
+        $entityManager = $this->getEntityManager();
+
+        $query = $entityManager->createQuery(
+            'Select p
+            FROM App\Entity\Product p
+            WHERE p.price > :price
+            ORDER BY p.price ASC'
+
+        )->setParameter("price",$price);
+
+        return $query->getResult();
+    }
 }
