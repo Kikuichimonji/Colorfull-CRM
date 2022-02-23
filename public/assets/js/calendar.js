@@ -79,10 +79,10 @@ document.addEventListener('DOMContentLoaded', () => {
             modal.querySelector("#isImportant").checked = info.event.extendedProps.isImportant ? true : false;
             modal.hiddenId = info.event.id;
 
-            modalClickHandler = function (ev)
+            modalUpdateEvent = function (ev)
             {
                 ev.stopImmediatePropagation();
-                ev.target.removeEventListener("click" , modalClickHandler);
+                ev.target.removeEventListener("click" , modalUpdateEvent);
                 //console.log(info.event.id)
                 args = {
                     "id" : info.event.id,
@@ -99,14 +99,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 modal.style.display = "none";
                 location.reload();
             }
-            modal.querySelector(".btn-primary").addEventListener("click", modalClickHandler)
+            modalDeleteEvent = function (ev)
+            {
+                ev.stopImmediatePropagation();
+                ev.target.removeEventListener("click" , modalDeleteEvent);
+                id = info.event.id;
+
+                deleteEvent(id,calendar)
+                modal.style.display = "none";
+                location.reload();
+            }
+            modal.querySelector(".btn-primary").addEventListener("click", modalUpdateEvent)
+            modal.querySelector(".btn-danger").addEventListener("click", modalDeleteEvent)
         }
     });
     calendar.render();
 
     
 });
-
 
 function saveEvent(info,calendar) 
 {
@@ -145,6 +155,18 @@ function updateEvent(info,calendar,args = null)
     goFetch(args,calendar,link);
 }
 
+function deleteEvent(id,calendar) 
+{
+
+    args = {
+        "id" : id,
+        "_token" : document.querySelector("#_token").value
+    };
+    link = "/calendar/delete"
+    //console.log(args)
+    goFetch(args,calendar,link);
+}
+
 function goFetch(args,calendar,link) 
 {
     let myHeaders = new Headers(); //If we want custom headers
@@ -177,7 +199,7 @@ function goFetch(args,calendar,link)
                 const error = (data && data.message) || response.status;
                 return Promise.reject(error);
             }else{
-                console.log(response)
+                data.then(value => { console.log(value)})
                 //calendar.refetchEvents();
                 
             }
@@ -190,6 +212,7 @@ function goFetch(args,calendar,link)
 modal.querySelector(".btn-close").addEventListener("click", ev => {
     modal.style.display = "none"
 })
-modal.querySelector(".btn-secondary").addEventListener("click", ev => {
+modal.querySelector(".btn-info").addEventListener("click", ev => {
     modal.style.display = "none"
 })
+

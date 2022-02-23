@@ -14,6 +14,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class PlanningController extends AbstractController
 {
+    /**
+     * Show Planning page
+     *
+     * @param ManagerRegistry $doctrine
+     * 
+     * @return Response
+     * 
+     */
     public function index(ManagerRegistry $doctrine): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
@@ -42,6 +50,15 @@ class PlanningController extends AbstractController
         ]);
     }
 
+    /**
+     * Create a new event
+     *
+     * @param Request $request
+     * @param ManagerRegistry $doctrine
+     * 
+     * @return Response
+     * 
+     */
     public function createEvent(Request $request,ManagerRegistry $doctrine): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
@@ -74,6 +91,15 @@ class PlanningController extends AbstractController
         return new JsonResponse($event->getEventType());
     }
 
+    /**
+     * Update an event with new datas
+     *
+     * @param Request $request
+     * @param ManagerRegistry $doctrine
+     * 
+     * @return Response
+     * 
+     */
     public function updateEvent(Request $request,ManagerRegistry $doctrine): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
@@ -103,5 +129,33 @@ class PlanningController extends AbstractController
 
         $manager->flush();
         return new JsonResponse($event);
+    }
+    /**
+     * Delete an event from database
+     *
+     * @param Request $request
+     * @param ManagerRegistry $doctrine
+     * 
+     * @return Response
+     * 
+     */
+    public function deleteEvent(Request $request,ManagerRegistry $doctrine): Response
+    {
+        if(!$this->isCsrfTokenValid("event_delete",$request->request->get("_token"))){
+            return new JsonResponse("Problem CSRF");
+        }
+
+        $entityManager = $doctrine->getManager();
+        $repository = $entityManager->getRepository(Event::class);
+        $event = $repository->find($request->request->get("id"));
+        if (!$event) {
+            return new JsonResponse("Pas d'évenement trouvé à cet id : ".$request->request->get("id"));    
+        }else{
+            $entityManager->remove($event);
+            $entityManager->flush();
+            return new JsonResponse("Event deleted");
+        }
+
+        
     }
 }

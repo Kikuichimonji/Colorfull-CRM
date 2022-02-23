@@ -14,6 +14,14 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 class LoginController extends AbstractController
 {
     
+    /**
+     * Show the login page
+     *
+     * @param AuthenticationUtils $authenticationUtils
+     * 
+     * @return Response
+     * 
+     */
     public function index(AuthenticationUtils $authenticationUtils): Response
     {
         // get the login error if there is one
@@ -28,13 +36,17 @@ class LoginController extends AbstractController
         ]);
     }
 
-    public function showRegister(Request $request,UserPasswordHasherInterface $passwordHasher): Response
-    {
-        return $this->render('login/register.html.twig', [
-            'controller_name' => 'LoginController',
-        ]);
-    }
 
+    /**
+     * Register a new user 
+     *
+     * @param Request $request 
+     * @param UserPasswordHasherInterface $passwordHasher
+     * @param ManagerRegistry $doctrine
+     * 
+     * @return Response
+     * 
+     */
     public function register(Request $request,UserPasswordHasherInterface $passwordHasher,ManagerRegistry $doctrine): Response
     {
         $user = new User();

@@ -1,20 +1,102 @@
-{% extends 'base.html.twig' %}
+{% extends 'layouts/loggedin.html.twig' %}
 
-{% block title %}Hello ContactController!{% endblock %}
-
-{% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/laragon/www/Projet_3/src/Controller/ContactController.php'|file_link(0) }}">src/Controller/ContactController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/laragon/www/Projet_3/templates/contact/index.html.twig'|file_link(0) }}">templates/contact/index.html.twig</a></code></li>
-    </ul>
-</div>
+{% block title %}Calendrier
+{% endblock %}
+{% block nav %}
+	{{parent()}}
+{% endblock %}
+{% block content %}
+	<div id="mainContactBlock">
+		<h1>Liste des contacts</h1>
+        <div id="tabSearch">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" data-bs-toggle="tab" href="#contacts">Contacts</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#collabo">Collaborateurs</a>
+                </li>
+            </ul>
+            <form class="input-group" id="searchInput" action="{{path('contact-index')}}">
+                <div>
+                    <input name='search' type="search" id="search" class="form-control" placeholder="Rechercher"/>
+                </div>
+                <button class="btn btn-primary">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+        </div>
+		<div id="contactTab" class="tab-content">
+			<div class="table-responsive tab-pane fade active show" id="contacts">
+				<div class="tableHeader">
+					{% for contactType in contactTypes %}
+						<div class='colorHeader'>
+							<span class='contactColorBlock' style="background-color:{{contactType.color}}"></span>
+							<p>{{contactType.label}}</p>
+						</div>
+					{% endfor %}
+					
+				</div>
+				<table class="table table-hover table-striped" id='tableContact'>
+					<thead>
+						<tr>
+							<th scope="col">Type</th>
+							<th scope="col">Nom</th>
+							<th scope="col">Téléphone</th>
+							<th scope="col">Email</th>
+							<th scope="col">Status</th>
+						</tr>
+					</thead>
+					<tbody>
+						{# {% for contact in contacts %}
+							<tr>
+								<td class='contactColorBlock'>
+									{% set colorCount = 1 %}
+									{% for type in contact.contactType %}
+										<div class="color{{ colorCount }}" style="background-color:{{type.color}}"></div>
+										{% set colorCount = colorCount + 1 %}
+									{% endfor %}
+								</td>
+								<td>{{ contact.name }}</td>
+								<td>{{ contact.phone1 ?? contact.phone2 ?? "/"}}</td>
+								<td>{{ contact.email ?? "/" }}</td>
+								<td>{{contact.isCompany ? "Société" : "Particulier"}}</td>
+							</tr>
+						{% endfor %} #}
+					</tbody>
+				</table>
+			</div>
+			<div class="table-responsive tab-pane fade" id="collabo">
+				<table class="table table-hover ">
+					<thead>
+						<tr>
+							<th scope="col">Type</th>
+							<th scope="col">Column heading</th>
+							<th scope="col">Column heading</th>
+							<th scope="col">Column heading</th>
+						</tr>
+					</thead>
+					<tbody>
+						{# {% for contact in contacts %}
+							<tr>
+								<td>Default</td>
+								<td>Column content</td>
+								<td>Column content</td>
+								<td>Column content</td>
+							</tr>
+						{% endfor %} #}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+{% block style %}
+	{{parent()}}
+	<link href="{{asset('assets/css/contact.css')}}" rel="stylesheet" type="text/css">
+    <link href='https://use.fontawesome.com/releases/v5.0.6/css/all.css' rel='stylesheet'>
+{% endblock %}
+{% block script_body %}
+	{{parent()}}
+	<script src="{{asset('assets/js/contact.js')}}"></script>
 {% endblock %}

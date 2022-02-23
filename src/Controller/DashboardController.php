@@ -13,6 +13,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class DashboardController extends AbstractController
 {
+    /**
+     * Show the dashboard
+     *
+     * @param ManagerRegistry $doctrine
+     * 
+     * @return Response
+     * 
+     */
     public function index(ManagerRegistry $doctrine): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');

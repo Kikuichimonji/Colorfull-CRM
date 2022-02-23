@@ -1,0 +1,87 @@
+:root{
+    
+}
+
+#mainContactBlock{
+    width: 80%;
+    margin: 0 auto;
+}
+h1{
+    text-align: center;
+}
+#mainContactBlock ul{
+    margin-bottom: 1em;
+}
+#mainContactBlock .nav-link.active{
+    border-color: var(--borderColor);
+    border-bottom: 1px solid white;
+}
+#mainContactBlock .nav-tabs{
+    border-color: var(--borderColor);
+    
+}
+#mainContactBlock .nav-tabs .nav-link:focus,#mainContactBlock .nav-tabs .nav-link:hover{
+    border-color: var(--borderColor);
+    border-bottom: 1px solid white;
+}
+.contactColorBlock{
+    min-width:20px;
+    height: 20px;
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    border: 1px solid var(--borderColor);
+}
+.color1{
+    position: absolute;
+    top:0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+.color2{
+    position: absolute;
+    top:0;
+    right: 0;
+    width: 50%;
+    height: 100%;
+}
+.color3{
+    position: absolute;
+    bottom:0;
+    left: 0;
+    width: 100%;
+    height: 50%;
+}
+.color4{
+    position: absolute;
+    bottom:0;
+    right: 0;
+    width: 50%;
+    height: 50%;
+}
+
+.colorHeader{
+    display: flex;
+}
+.colorHeader span{
+    margin-right: 0.5em;
+}
+.tableHeader{
+    display: flex;
+    justify-content: space-evenly;
+    width: 50%;
+    min-width: 500px;
+}
+#searchInput{
+    min-width: 200px;
+    flex-wrap: nowrap;
+    width: auto;
+    margin-left: auto;
+    position: absolute;
+    top:0;
+    right:0;
+}
+#tabSearch{
+    position: relative;
+}

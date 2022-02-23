@@ -19,10 +19,7 @@
 						<a class="nav-link" href="{{ path('planning-index') }}">Planning</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="#">Contacts</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="{{ path('app_logout') }}">Déconnection</a>
+						<a class="nav-link" href="{{ path('contact-index') }}">Contacts</a>
 					</li>
 				</ul>
 			</div>
@@ -32,6 +29,7 @@
 				<div style="border-color:{{ event.eventtype.color }}"><p>{{ event.eventtype.label }}</p><p>{{ event.datestart|date("H:i") }}</p><p>{{ event.dateend|date("H:i") }}</p></div>
 			</div>
 			
+			<a class="btn btn-light" id="loggoutLink" href="{{ path('app_logout') }}">Déconnection</a>
 		</div>
 	</nav>
 {% endblock %}

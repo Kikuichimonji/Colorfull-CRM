@@ -18,9 +18,13 @@
     width: 10%;
     height: fit-content;
     padding: 1em 1em;
+    border: 1px solid var(--borderColor75);
 }
 .fc-event{
     margin-top: 0.5em;
     margin-bottom: 0.5em;
     cursor: pointer;
+}
+.modal .btn-danger{
+    margin-right: auto;
 }

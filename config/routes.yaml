@@ -28,3 +28,19 @@ event-update:
     path: /calendar/save
     controller: App\Controller\PlanningController::updateEvent
     methods: POST
+event-delete:
+    path: /calendar/delete
+    controller: App\Controller\PlanningController::deleteEvent
+    methods: POST
+contact-index:
+    path: /contact
+    controller: App\Controller\ContactController::index
+    methods: GET
+contact-feed:
+    path: /contact/feed
+    controller: App\Controller\ContactController::eventDataFeed
+    methods: POST
+contact-feed-get:
+    path: /contact/feed
+    controller: App\Controller\ContactController::eventDataFeed
+    methods: GET

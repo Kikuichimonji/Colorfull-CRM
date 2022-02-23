@@ -12,6 +12,7 @@
     --borderColor25: #70707025;
     --borderColor50: #70707050;
     --borderColor75: #70707075;
+    --nav-tabs-link-hover-border-color: #123456;
 }
 body{
     display: flex;
@@ -47,7 +48,7 @@ nav{
     width: 100px;
 }
 #sidePlanningContainer{
-    padding-bottom: 70%;
+    
 }
 #sidePlanningContainer div{
     height: 100px;
@@ -60,5 +61,8 @@ nav{
     background-color: #FFFFFF99;
 }
 #sidePlanningContainer div p{
-    margin-bottom: 0.5em;
+    margin-bottom: 0.5em
+}
+#loggoutLink{
+    margin-bottom: 30%;
 }
