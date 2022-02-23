@@ -33,7 +33,7 @@ class ContactExtrafields
     private $for_company;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     private $extra;
 

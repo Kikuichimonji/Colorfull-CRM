@@ -1,6 +1,11 @@
 let menuLinks = document.querySelectorAll(".navbar-nav .nav-link")
 menuLinks[2].classList.add("active")
-
+let extrafieldsCompany = document.getElementById("extrafieldsCompany")
+let extrafieldsPerson = document.getElementById("extrafieldsPerson")
+extrafieldsCompany.style.display = "none"
+extrafieldsCompany.nextElementSibling.style.display ="none"
+extrafieldsPerson.style.display = "none"
+extrafieldsPerson.nextElementSibling.style.display ="none"
 
 
 function fetchContact(incArgs = null) 
@@ -117,13 +122,13 @@ document.getElementById("checkPhones").addEventListener("change", ev => {
 document.getElementById("checkEmails").addEventListener("change", ev => {
     fetchContact();
 });
-document.getElementById("isCompany").addEventListener("change", ev => {
+document.getElementById("checkisCompany").addEventListener("change", ev => {
     if(document.getElementById("checkCompany").checked == true){
         fetchContact();
     }
 });
 document.getElementById("checkCompany").addEventListener("change", ev => {
-    companySwitch = document.getElementById("isCompany");
+    companySwitch = document.getElementById("checkisCompany");
     companyLabel = document.getElementById("isCompanyLabel");
     companySwitch.style.display = companySwitch.style.display == "block" ? "none" : "block";
     companyLabel.style.display = companySwitch.style.display == "block" ? "block" : "none";
@@ -140,3 +145,38 @@ document.getElementById("search").addEventListener("search", ev => { //Trigger w
     fetchContact();
 });
 fetchContact();
+
+document.getElementById("company").addEventListener("change", ev => {
+
+    extrafieldsCompany.style.display = "block"
+    extrafieldsCompany.nextElementSibling.style.display ="block"
+    extrafieldsPerson.style.display = "none"
+    extrafieldsPerson.nextElementSibling.style.display ="none"
+});
+document.getElementById("person").addEventListener("change", ev => {
+    extrafieldsCompany.style.display = "none"
+    extrafieldsCompany.nextElementSibling.style.display ="none"
+    extrafieldsPerson.style.display = "block"
+    extrafieldsPerson.nextElementSibling.style.display ="block"
+});
+
+document.querySelector("#contactTab").addEventListener("click", ev =>{
+    if(ev.target.classList.contains("active")){
+        
+    }
+})
+
+function callback(mutationsList) {
+    mutationsList.forEach(mutation => {
+        if (mutation.attributeName === 'class') {
+            document.querySelector("#contactTab").classList.contains("active") ? document.querySelector("#searchInput").classList.add("show") : document.querySelector("#searchInput").classList.remove("show")
+        }
+    })
+}
+
+const mutationObserver = new MutationObserver(callback)
+
+mutationObserver.observe(
+    document.getElementById('contactTab'),
+    { attributes: true }
+)

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Contact;
+use App\Entity\ContactExtrafields;
 use App\Entity\ContactType;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Serializer\Serializer;
@@ -38,6 +39,9 @@ class ContactController extends AbstractController
         $contactTypeRepository = $entityManager->getRepository(ContactType::class);
         $contactTypes = $contactTypeRepository->findAll();
 
+        $extrafieldsRepository = $entityManager->getRepository(ContactExtrafields::class);
+        $extrafields = $extrafieldsRepository->findAll();
+
         $query = $contactRepository->createQueryBuilder("c");
 
         if(!is_null($request->get('search'))){
@@ -52,6 +56,7 @@ class ContactController extends AbstractController
         return $this->render('contact/index.html.twig', [
             "user" => $this->getUser(),
             "contactTypes" => $contactTypes,
+            "extrafields" => $extrafields,
         ]);
     }
 
@@ -95,8 +100,8 @@ class ContactController extends AbstractController
                 ->orWhere('c.email LIKE :query');
                 array_push($notNullQuerys,'c.email IS NOT NULL');
             }
-            if(!is_null($request->get('checkCompany'))){
-                $query->setParameter('isCompany',$request->get('isCompany') ? 1 : 0);
+            if(!is_null($request->get('checkisCompany'))){
+                $query->setParameter('isCompany',$request->get('checkisCompany') ? 1 : 0);
                 array_push($notNullQuerys,'c.is_company = :isCompany');
             }
             foreach ($notNullQuerys as $singleQuery) { //Putting all the AND requirement at the end, cause the query builder parenthesis are annoying
@@ -124,7 +129,7 @@ class ContactController extends AbstractController
             }
             if(!is_null($request->get('checkCompany'))){
                 $query->andWhere('c.is_company = :isCompany');
-                $query->setParameter('isCompany',$request->get('isCompany') ? 1 : 0);
+                $query->setParameter('isCompany',$request->get('checkisCompany') ? 1 : 0);
             }
         }
 
@@ -147,14 +152,38 @@ class ContactController extends AbstractController
         //dd($request->get('search'));
         $entityManager = $doctrine->getManager();
         $contactRepository = $entityManager->getRepository(Contact::class);
+
+        $contactTypeRepository = $entityManager->getRepository(ContactType::class);
+        $contactTypes = $contactTypeRepository->findAll();
+
         $manager = $doctrine->getManager();
-        $post = $request->request->all();
+        $post = $request->request;
         $contact = new Contact();
-        dd($post);
+        $contact->setUserCreate($this->getUser());
+        $contact->setName($post->get("name"));
+        $contact->setIsCompany($post->get("isCompany") == "company");
+        $contact->setPhone1($post->get("phone1"));
+        $contact->setPhone2($post->get("phone2"));
+        $contact->setEmail($post->get("email"));
+        $contact->setCreatedAt(new \DateTime());
+
+        $postContactType = [];
+        $postList = $post = $request->request->all();
+        foreach ($postList as $key => $value) {
+            str_contains(explode('-',$key)[0], "checkbox") ? array_push($postContactType,explode('-',$key)[1]) : null ;
+        }
+
+        foreach ($contactTypes as $contactType) {
+            if(in_array($contactType->getId(),$postContactType) ){
+                $contact->addContactType($contactType);
+            }
+        }
+        
         $manager->persist($contact);
         $manager->flush();
         return $this->render('contact/index.html.twig', [
             "user" => $this->getUser(),
+            "contactTypes" => $contactTypes,
         ]);
     }
 }

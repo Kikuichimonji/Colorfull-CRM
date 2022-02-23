@@ -92,7 +92,7 @@ h1{
     position: relative;
 }
 
-#isCompany,#isCompanyLabel{
+#checkisCompany,#isCompanyLabel{
     display: none;
 }
 #addNewContact form{

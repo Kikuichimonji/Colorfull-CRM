@@ -1,103 +1,105 @@
 {% extends 'layouts/loggedin.html.twig' %}
 
-{% block title %}Calendrier{% endblock %}
+{% block title %}Calendrier
+{% endblock %}
 {% block nav %}
-    {{parent()}}
+	{{parent()}}
 {% endblock %}
 {% block content %}
-    <div id="mainPlanningBlock" data-id="{{ user.planning.id }}">
-        <h1>Calendrier</h1>
-        <div id="calendarBox">
-            <div id="externalEvents">
-                <h2>Events</h2>
-                {% for eventType in eventTypes %}
-                    <div class="fc-event" style="background-color:{{ eventType.color }}" data-id="{{ eventType.id }}">{{ eventType.label }}</div>
-                {% endfor %}
-            </div>
-            <div id="calendar-holder">
-                <div id='calendar'></div>
-            </div>
-        </div>
-        
-    </div>
-    <div class="modal">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Modifier l'évenement</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true"></span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="">
-                        <fieldset>
-                            <div class="form-group">
-                                <label for="eventType" class="form-label">Event Type</label>
-                                <select class="form-select" id="eventType">
-                                    {% for eventType in eventTypes %}
-                                        <option style="background-color:{{eventType.color}}50">{{ eventType.label }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div class="form-group ">
-                                <label for="label" class="col-form-label">Titre</label>
-                                <input type="text" class="form-control" id="label" >
-                            </div>
-                            <div class="row">
-                                <div class="form-group">
-                                    <label for="dateStart" class="col-form-label">Date Start</label>
-                                    <input type="datetime-local" class="form-control" id="dateStart">
-                                </div>
-                                <div class="form-group">
-                                    <label for="dateEnd" class="col-form-label">Date End</label>
-                                    <input type="datetime-local" class="form-control" id="dateEnd">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="description" class="form-label">Description</label>
-                                <textarea class="form-control" id="description" rows="3"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="color" class="form-label">Couleur personnalisée</label>
-                                <input type="color" class="form-control form-control-color" id="color" title="Choose your color">
-                            </div>
-                            <div class="form-check form-switch mt-4">
-                                <label class="form-check-label" for="isImportant">Is Important</label>
-                                <input class="form-check-input" type="checkbox" id="isImportant">
-                            </div>
-                            
-                        </fieldset>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <form action=""></form>
-                    <button type="button" class="btn btn-danger">Supprimer</button>
-                    <button type="button" class="btn btn-primary">Enregistrer</button>
-                    <button type="button" class="btn btn-info" data-bs-dismiss="modal">Annuler</button>
-                    <input type="hidden" id="_token" name="_token" value="{{ csrf_token('event_delete') }}">
-                </div>
-            </div>
-        </div>
-    </div>
+	<div id="mainPlanningBlock" data-id="{{ user.planning.id }}">
+		<h1>Calendrier</h1>
+		<div id="calendarBox">
+			<div id="externalEvents">
+				<h2>Events</h2>
+				{% for eventType in eventTypes %}
+					<div class="fc-event" style="background-color:{{ eventType.color }}" data-id="{{ eventType.id }}">{{ eventType.label }}</div>
+				{% endfor %}
+			</div>
+			<div id="calendar-holder">
+				<div id='calendar'></div>
+			</div>
+		</div>
+
+	</div>
+	<div class="modal">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Modifier l'évenement</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true"></span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form action="">
+						<fieldset>
+							<div class="form-group">
+								<label for="eventType" class="form-label">Event Type</label>
+								<select class="form-select" id="eventType">
+									{% for eventType in eventTypes %}
+										<option style="background-color:{{eventType.color}}50">{{ eventType.label }}</option>
+									{% endfor %}
+								</select>
+							</div>
+							<div class="form-group ">
+								<label for="label" class="col-form-label">Titre</label>
+								<input type="text" class="form-control" id="label">
+							</div>
+							<div class="row">
+								<div class="form-group">
+									<label for="dateStart" class="col-form-label">Date Start</label>
+									<input type="datetime-local" class="form-control" id="dateStart">
+								</div>
+								<div class="form-group">
+									<label for="dateEnd" class="col-form-label">Date End</label>
+									<input type="datetime-local" class="form-control" id="dateEnd">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="description" class="form-label">Description</label>
+								<textarea class="form-control" id="description" rows="3"></textarea>
+							</div>
+							<div class="form-group">
+								<label for="color" class="form-label">Couleur personnalisée</label>
+								<input type="color" class="form-control form-control-color" id="color" title="Choose your color">
+							</div>
+							<div class="form-check form-switch mt-4">
+								<label class="form-check-label" for="isImportant">Is Important</label>
+								<input class="form-check-input" type="checkbox" id="isImportant">
+							</div>
+						</fieldset>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<form action=""></form>
+					<button type="button" class="btn btn-danger">Supprimer</button>
+					<button type="button" class="btn btn-primary">Enregistrer</button>
+					<button type="button" class="btn btn-info" data-bs-dismiss="modal">Annuler</button>
+					<input type="hidden" id="_token" name="_token" value="{{ csrf_token('event_delete') }}">
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}
 
 {% block style %}
-    {{parent()}}
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.4.2/main.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@4.4.2/main.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@4.4.2/main.min.css">
-    <link href="{{asset('assets/css/planning.css')}}" rel="stylesheet" type="text/css">
-    <link href='https://use.fontawesome.com/releases/v5.0.6/css/all.css' rel='stylesheet'>
+	{{parent()}}
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.4.2/main.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@4.4.2/main.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@4.4.2/main.min.css">
+	<link href="{{asset('assets/css/planning.css')}}" rel="stylesheet" type="text/css">
+	<link href='https://use.fontawesome.com/releases/v5.0.6/css/all.css' rel='stylesheet'>
 {% endblock %}
 
 {% block script_body %}
-    {{parent()}}
-    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.4.2/main.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@4.4.2/main.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@4.4.2/main.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@4.4.2/main.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/bootstrap@4.4.2/main.min.js" charset="utf-16"></script>
-    <script> events = {{ events | raw }} </script>
-    <script src="{{asset('assets/js/calendar.js')}}"></script>
+	{{parent()}}
+	<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.4.2/main.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@4.4.2/main.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@4.4.2/main.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@4.4.2/main.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/bootstrap@4.4.2/main.min.js" charset="utf-16"></script>
+	<script>
+		events = {{ events | raw }}
+	</script>
+	<script src="{{asset('assets/js/calendar.js')}}"></script>
 {% endblock %}
