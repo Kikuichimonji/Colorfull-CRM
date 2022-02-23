@@ -137,15 +137,16 @@
 								</label>
 							{% endfor %}
 						</div>
-						<div class="input-group mt-3">
+					</fieldset>
+					<div class="input-group mt-3">
 							<select class="form-select" id="extrafieldsCompany">
 								{% for extrafield in extrafields %}
 									{% if extrafield.forCompany == 1 %}
-										<option data-type="{{extrafield.inputType}}">{{ extrafield.label }}</option>
+										<option dataType="{{extrafield.inputType}}">{{ extrafield.label }}</option>
 									{% endif %}
 								{% endfor %}
 							</select>
-							<button class="btn btn-info" type="button">Ajouter</button>
+							<button class="btn btn-info" type="button" id="extrafieldsCompanyButton">Ajouter</button>
 						</div>
 						<div class="input-group">
 							<select class="form-select" id="extrafieldsPerson">
@@ -155,9 +156,8 @@
 									{% endif %}
 								{% endfor %}
 							</select>
-							<button class="btn btn-info" type="button">Ajouter</button>
+							<button class="btn btn-info" type="button" id="extrafieldsPersonButton">Ajouter</button>
 						</div>
-					</fieldset>
 					<button class="btn btn-primary mt-4" type="submit">Créer le contact</button>
 				</form>
 			</div>

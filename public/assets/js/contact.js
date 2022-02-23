@@ -166,7 +166,7 @@ document.querySelector("#contactTab").addEventListener("click", ev =>{
     }
 })
 
-function callback(mutationsList) {
+function hideSearchInputs(mutationsList) {
     mutationsList.forEach(mutation => {
         if (mutation.attributeName === 'class') {
             document.querySelector("#contactTab").classList.contains("active") ? document.querySelector("#searchInput").classList.add("show") : document.querySelector("#searchInput").classList.remove("show")
@@ -174,9 +174,30 @@ function callback(mutationsList) {
     })
 }
 
-const mutationObserver = new MutationObserver(callback)
+const mutationObserver = new MutationObserver(hideSearchInputs)
 
 mutationObserver.observe(
     document.getElementById('contactTab'),
     { attributes: true }
 )
+
+document.getElementById("extrafieldsCompanyButton").addEventListener("click", ev => {
+    let selectBox = ev.target.previousElementSibling;
+    let el = selectBox.options[selectBox.selectedIndex];
+    let field = document.getElementById("addNewContact").querySelector("fieldset");
+
+    if(el.getAttribute("datatype") != "textarea"){
+        extrafield = document.createElement("INPUT");
+        extrafield.setAttribute("type",el.getAttribute("datatype"))
+    }else{
+        extrafield = document.createElement("TEXTAREA");
+    }
+    
+    extrafieldLabel = document.createElement("LABEL");
+    extrafieldLabel.textContent = el.textContent
+    selectBox.remove(selectBox.selectedIndex);
+
+    field.appendChild(extrafieldLabel)
+    field.appendChild(extrafield)
+
+})
