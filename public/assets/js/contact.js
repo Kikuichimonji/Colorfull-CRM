@@ -123,6 +123,11 @@ document.getElementById("isCompany").addEventListener("change", ev => {
     }
 });
 document.getElementById("checkCompany").addEventListener("change", ev => {
+    companySwitch = document.getElementById("isCompany");
+    companyLabel = document.getElementById("isCompanyLabel");
+    companySwitch.style.display = companySwitch.style.display == "block" ? "none" : "block";
+    companyLabel.style.display = companySwitch.style.display == "block" ? "block" : "none";
+    
     fetchContact();
 });
 
@@ -131,7 +136,7 @@ document.getElementById("search").addEventListener("keyup", ev => {
         fetchContact();
     }
 });
-document.getElementById("search").addEventListener("search", ev => {
-    console.log("changed")
+document.getElementById("search").addEventListener("search", ev => { //Trigger when we click on the clear search button
+    fetchContact();
 });
 fetchContact();

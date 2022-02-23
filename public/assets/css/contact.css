@@ -82,6 +82,16 @@ h1{
     top:0;
     right:0;
 }
+#searchInput label{
+    margin-right: 1em;
+}
+.form-check{
+    transform: translateY(25%);
+}
 #tabSearch{
     position: relative;
+}
+
+#isCompany,#isCompanyLabel{
+    display: none;
 }

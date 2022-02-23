@@ -6,9 +6,6 @@
 {% endblock %}
 {% block content %}
 <div class="content">
-{% if is_granted('ROLE_ADMIN') %}
-    HELLO ADMIN
-{% endif %}
     <h1>DASHBOARD</h1>
     {% if error %}
         <div>{{ error }}</div>

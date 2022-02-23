@@ -21,6 +21,11 @@
 					<li class="nav-item">
 						<a class="nav-link" href="{{ path('contact-index') }}">Contacts</a>
 					</li>
+					{% if is_granted('ROLE_ADMIN') %}
+						<li class="nav-item">
+							<a class="nav-link" href="">Admin</a>
+						</li>
+					{% endif %}
 				</ul>
 			</div>
 			<div id="sidePlanningContainer">

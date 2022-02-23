@@ -102,9 +102,14 @@ class ContactController extends AbstractController
             foreach ($notNullQuerys as $singleQuery) { //Putting all the AND requirement at the end, cause the query builder parenthesis are annoying
                 $query->andWhere($singleQuery);
             }
-            empty($notNullQuerys) 
-            ? $query->where('c.name LIKE :query') 
-            : null;
+            if(empty($notNullQuerys) && is_null($request->get('checkNames'))){
+                $query
+                ->where('c.name LIKE :query')
+                ->orWhere('c.name LIKE :query')
+                ->orWhere('c.phone2 LIKE :query')
+                ->orWhere('c.phone1 LIKE :query')
+                ->orWhere('c.email LIKE :query');
+            }   
             $query->setParameter('query','%'.$request->get('query').'%');
 
         }else{
@@ -118,7 +123,6 @@ class ContactController extends AbstractController
                 ->andWhere('c.email IS NOT NULL');
             }
             if(!is_null($request->get('checkCompany'))){
-                
                 $query->andWhere('c.is_company = :isCompany');
                 $query->setParameter('isCompany',$request->get('isCompany') ? 1 : 0);
             }
