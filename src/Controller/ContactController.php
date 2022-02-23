@@ -141,4 +141,20 @@ class ContactController extends AbstractController
         
         return new JsonResponse($jsonContacts);
     }
+
+    public function newContact(ManagerRegistry $doctrine,Request $request): Response
+    {
+        //dd($request->get('search'));
+        $entityManager = $doctrine->getManager();
+        $contactRepository = $entityManager->getRepository(Contact::class);
+        $manager = $doctrine->getManager();
+        $post = $request->request->all();
+        $contact = new Contact();
+        dd($post);
+        $manager->persist($contact);
+        $manager->flush();
+        return $this->render('contact/index.html.twig', [
+            "user" => $this->getUser(),
+        ]);
+    }
 }

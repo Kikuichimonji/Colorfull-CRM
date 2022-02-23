@@ -40,7 +40,11 @@ contact-feed:
     path: /contact/feed
     controller: App\Controller\ContactController::eventDataFeed
     methods: POST
-contact-feed-get:
-    path: /contact/feed
-    controller: App\Controller\ContactController::eventDataFeed
-    methods: GET
+# contact-feed-get:
+#     path: /contact/feed
+#     controller: App\Controller\ContactController::eventDataFeed
+#     methods: GET
+contact-create:
+    path: /contact
+    controller: App\Controller\ContactController::newContact
+    methods: POST

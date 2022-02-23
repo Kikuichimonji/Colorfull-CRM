@@ -95,3 +95,9 @@ h1{
 #isCompany,#isCompanyLabel{
     display: none;
 }
+#addNewContact form{
+    font-size: 14px;
+}
+#addNewContact .form-control{
+    font-size: 14px;
+}
