@@ -55,25 +55,76 @@ class ContactController extends AbstractController
         ]);
     }
 
-    public function eventDataFeed(ManagerRegistry $doctrine,Request $request): Response
+    /**
+     * Return the contact list in a json form
+     *
+     * @param ManagerRegistry $doctrine
+     * @param Request $request
+     * 
+     * @return JsonResponse
+     * 
+     */
+    public function eventDataFeed(ManagerRegistry $doctrine,Request $request): JsonResponse
     {
 
         $encoder = new JsonEncoder();
         $defaultContext = [
             AbstractNormalizer::IGNORED_ATTRIBUTES => ['userCreate','contacts','contactExtrafieldValues'],
-        ];
+        ]; //ignoring all the datas that goes too far in the relations
         $normalizer = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
         $serializer = new Serializer([$normalizer], [$encoder]);
         
         $entityManager = $doctrine->getManager();
         $contactRepository = $entityManager->getRepository(Contact::class);
         $query = $contactRepository->createQueryBuilder("c");
+        $notNullQuerys = [];
 
         if(!is_null($request->get('query'))){
-            $query
-            ->where('c.name LIKE :search')
-            ->setParameter('search','%'.$request->get('query').'%');
+            if(!is_null($request->get('checkNames'))){
+                $query
+                ->orWhere('c.name LIKE :query');
+            }
+            if(!is_null($request->get('checkPhones'))){
+                $query
+                ->orWhere('c.phone2 LIKE :query')
+                ->orWhere('c.phone1 LIKE :query');
+                array_push($notNullQuerys,'c.phone2 IS NOT NULL OR c.phone1 IS NOT NULL');
+            }
+            if(!is_null($request->get('checkEmails'))){
+                $query
+                ->orWhere('c.email LIKE :query');
+                array_push($notNullQuerys,'c.email IS NOT NULL');
+            }
+            if(!is_null($request->get('checkCompany'))){
+                $query->setParameter('isCompany',$request->get('isCompany') ? 1 : 0);
+                array_push($notNullQuerys,'c.is_company = :isCompany');
+            }
+            foreach ($notNullQuerys as $singleQuery) { //Putting all the AND requirement at the end, cause the query builder parenthesis are annoying
+                $query->andWhere($singleQuery);
+            }
+            empty($notNullQuerys) 
+            ? $query->where('c.name LIKE :query') 
+            : null;
+            $query->setParameter('query','%'.$request->get('query').'%');
+
+        }else{
+            
+            if(!is_null($request->get('checkPhones'))){
+                $query
+                ->andWhere('c.phone2 IS NOT NULL OR c.phone1 IS NOT NULL');
+            }
+            if(!is_null($request->get('checkEmails'))){
+                $query
+                ->andWhere('c.email IS NOT NULL');
+            }
+            if(!is_null($request->get('checkCompany'))){
+                
+                $query->andWhere('c.is_company = :isCompany');
+                $query->setParameter('isCompany',$request->get('isCompany') ? 1 : 0);
+            }
         }
+
+        //return new JsonResponse($request->get('isCompany') ? 1 : 0);
         $contacts = $query
         ->getQuery()
         ->execute();
@@ -83,7 +134,7 @@ class ContactController extends AbstractController
             $json = $serializer->serialize($contact, 'json');
             array_push($jsonContacts,$json);
         }
-
+        
         return new JsonResponse($jsonContacts);
     }
 }

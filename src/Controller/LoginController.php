@@ -55,18 +55,18 @@ class LoginController extends AbstractController
             $user,
             $password
         );
-        $roles= [];
-        switch ($request->request->get("roles")) {
-            case "admin":
-                $roles = ["ROLE_ADMIN"];
-                break;
-            case "manager":
-                $roles = ["ROLE_MANAGER"];
-                break;
-            case "user":
-                $roles = ["ROLE_USER"];
-                break;
-        }
+        $roles= ["ROLE_".strtoupper($request->request->get("roles"))];
+        // switch ($request->request->get("roles")) {
+        //     case "admin":
+        //         $roles = ["ROLE_ADMIN"];
+        //         break;
+        //     case "manager":
+        //         $roles = ["ROLE_MANAGER"];
+        //         break;
+        //     case "user":
+        //         $roles = ["ROLE_USER"];
+        //         break;
+        // }
         $user->setLastName($request->request->get("lastName"));
         $user->setFirstName($request->request->get("firstName"));
         $user->setEmail($request->request->get("email"));
@@ -78,6 +78,11 @@ class LoginController extends AbstractController
         $entityManager->persist($user);
         $entityManager->flush();
         return $this->redirectToRoute('dashboard-index');
+    }
+    public function showRegister(): Response
+    {
+        return $this->render('login/register.html.twig', [
+        ]);
     }
 
     public function admin()

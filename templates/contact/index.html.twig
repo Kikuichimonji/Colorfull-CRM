@@ -18,6 +18,34 @@
                 </li>
             </ul>
             <form class="input-group" id="searchInput" action="{{path('contact-index')}}">
+				<div class="form-check">
+					<input class="form-check-input" type="checkbox" value="" id="checkNames">
+					<label class="form-check-label" for="checkNames">
+						Nom
+					</label>
+				</div>
+				<div class="form-check">
+					<input class="form-check-input" type="checkbox" value="" id="checkPhones">
+					<label class="form-check-label" for="checkPhones">
+						Téléphone
+					</label>
+				</div>
+				<div class="form-check">
+					<input class="form-check-input" type="checkbox" value="" id="checkEmails">
+					<label class="form-check-label" for="checkEmails">
+						Email
+					</label>
+				</div>
+				<div class="form-check">
+					<input class="form-check-input" type="checkbox" value="" id="checkCompany">
+					<label class="form-check-label" for="checkCompany">
+						Status
+					</label>
+				</div>
+				 <div class="form-check form-switch">
+					<input class="form-check-input" type="checkbox" id="isCompany">
+					<label class="form-check-label" for="isCompany">Société?</label>
+				</div>
                 <div>
                     <input name='search' type="search" id="search" class="form-control" placeholder="Rechercher"/>
                 </div>

@@ -3,13 +3,20 @@ menuLinks[2].classList.add("active")
 
 
 
-function fetchContact(searchQuery = null) 
+function fetchContact(incArgs = null) 
 {
-    args = searchQuery ? {
-        'query': searchQuery,
-    } : null;
-    link = "/contact/feed"
-    //console.log(args)
+    checkboxes = document.querySelectorAll("#searchInput input[type=checkbox]")
+
+    let args = {};
+    incArgs ? args['query'] = incArgs.queryValue : null;
+
+    link = "/contact/feed";
+
+    checkboxes.forEach(checkbox => {
+        if(checkbox.checked){
+            args[checkbox.id] = checkbox.id;
+        }
+    });
     goFetch(args,link);
 }
 
@@ -17,6 +24,7 @@ function contactFeed(contacts)
 {
     let body = document.querySelector('#tableContact tbody')
     body.innerHTML = "";
+
     contacts.forEach(contact => {
 
         contact = JSON.parse(contact)
@@ -47,7 +55,6 @@ function contactFeed(contacts)
         tr.appendChild(tdPhone);
         tr.appendChild(tdEmail);
         tr.appendChild(tdCompany);
-
     });
     
 }
@@ -85,7 +92,7 @@ function goFetch(args, link)
                 return Promise.reject(error);
             } else {
                 data.then(value => { 
-                   // console.log(value)
+                    //console.log(value)
                     contactFeed(value)
                 })
             }
@@ -97,9 +104,34 @@ function goFetch(args, link)
 
 document.querySelector('#searchInput button').addEventListener("click", ev => {
     ev.preventDefault();
-    queryValue = document.querySelector('#searchInput input').value;
-    //console.log(queryValue)
-    fetchContact(queryValue);
+    queryValue = document.querySelector('#searchInput #search').value;
+    args = {
+        "queryValue": queryValue,
+        }
+    fetchContact(args);
 })
 
+document.getElementById("checkPhones").addEventListener("change", ev => {
+    fetchContact();
+});
+document.getElementById("checkEmails").addEventListener("change", ev => {
+    fetchContact();
+});
+document.getElementById("isCompany").addEventListener("change", ev => {
+    if(document.getElementById("checkCompany").checked == true){
+        fetchContact();
+    }
+});
+document.getElementById("checkCompany").addEventListener("change", ev => {
+    fetchContact();
+});
+
+document.getElementById("search").addEventListener("keyup", ev => {
+    if(ev.target.value == ""){
+        fetchContact();
+    }
+});
+document.getElementById("search").addEventListener("search", ev => {
+    console.log("changed")
+});
 fetchContact();
