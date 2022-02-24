@@ -2,8 +2,10 @@
 
 namespace App\Entity;
 
-use App\Repository\ContactExtrafieldsRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use App\Repository\ContactExtrafieldsRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass=ContactExtrafieldsRepository::class)
@@ -36,6 +38,16 @@ class ContactExtrafields
      * @ORM\Column(type="text", nullable=true)
      */
     private $extra;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ContactExtrafieldValue::class, mappedBy="contactExtrafield")
+     */
+    private $contactExtrafieldValues;
+
+    public function __construct()
+    {
+        $this->contactExtrafieldValues = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -86,6 +98,36 @@ class ContactExtrafields
     public function setExtra(string $extra): self
     {
         $this->extra = $extra;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ContactExtrafieldValue[]
+     */
+    public function getContactExtrafieldValues(): Collection
+    {
+        return $this->contactExtrafieldValues;
+    }
+
+    public function addContactExtrafieldValue(ContactExtrafieldValue $contactExtrafieldValue): self
+    {
+        if (!$this->contactExtrafieldValues->contains($contactExtrafieldValue)) {
+            $this->contactExtrafieldValues[] = $contactExtrafieldValue;
+            $contactExtrafieldValue->setContactExtrafield($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContactExtrafieldValue(ContactExtrafieldValue $contactExtrafieldValue): self
+    {
+        if ($this->contactExtrafieldValues->removeElement($contactExtrafieldValue)) {
+            // set the owning side to null (unless already changed)
+            if ($contactExtrafieldValue->getContactExtrafield() === $this) {
+                $contactExtrafieldValue->setContactExtrafield(null);
+            }
+        }
 
         return $this;
     }

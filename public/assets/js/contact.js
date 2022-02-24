@@ -7,17 +7,18 @@ let extrafieldsContainerPerson = document.getElementById("extrafieldsContainerPe
 extrafieldsCompany.style.display = "none"
 extrafieldsCompany.nextElementSibling.style.display ="none"
 extrafieldsContainerCompany.style.display = "none"
+extrafieldsContainerCompany.active = false;
 extrafieldsPerson.style.display = "none"
 extrafieldsPerson.nextElementSibling.style.display ="none"
 extrafieldsContainerPerson.style.display = "none"
-
+extrafieldsContainerPerson.active = false;
 
 /**
  * Verify the filter's checkboxes values and the query value then sed the lik to the fetch method
  *
- * @param null incArgs
+ * @param mixed incArgs
  * 
- * @return [type]
+ * @return null
  * 
  */
 function fetchContact(incArgs = null) 
@@ -27,7 +28,7 @@ function fetchContact(incArgs = null)
     let args = {};
     incArgs ? args['query'] = incArgs.queryValue : null;
 
-    link = "/contact/feed";
+    link = "/contact/feed"; //where we looking for contacts list
 
     checkboxes.forEach(checkbox => {
         if(checkbox.checked){
@@ -37,6 +38,14 @@ function fetchContact(incArgs = null)
     goFetch(args,link);
 }
 
+/**
+ * Receive stringged JSON feed in an array, then treat it and create the contact table
+ *
+ * @param array contacts
+ * 
+ * @return void
+ * 
+ */
 function contactFeed(contacts)
 {
     let body = document.querySelector('#tableContact tbody')
@@ -51,7 +60,7 @@ function contactFeed(contacts)
         let tdPhone = document.createElement("TD");
         let tdEmail = document.createElement("TD");
         let tdCompany = document.createElement("TD");
-        tdColor.classList.add('contactColorBlock');
+        tdColor.classList.add('contactColorBlock'); //the colored squares
         let colorCount = 1;
 
         contact.contactType.forEach(ct => {
@@ -76,6 +85,15 @@ function contactFeed(contacts)
     
 }
 
+/**
+ * Get the destination and the arguments then send them via fetch, then return the json response from the destination 
+ *
+ * @param json args
+ * @param string link
+ * 
+ * @return Json|string
+ * 
+ */
 function goFetch(args, link)
 {
     let myHeaders = new Headers(); //If we want custom headers
@@ -84,7 +102,7 @@ function goFetch(args, link)
     };
     let formData = new FormData(); //We append the POST data here
 
-    for (const key in args) {
+    for (const key in args) { //Putting all the args in the POST body
         formData.append(key, args[key])
     }
     let myInit = {
@@ -95,15 +113,15 @@ function goFetch(args, link)
         body: formData
     };
     const element = document.querySelector('#get-request .result');
-    let myRequest = new Request(link, myInit);
-    fetch(myRequest)
+    let myRequest = new Request(link, myInit); //building the request with all the parameters
+    fetch(myRequest) //starting the fetch request
         .then((response) => {
             const isJson = response.headers.get('content-type')?.includes('application/json');
             const data = isJson ? response.json() : null;
             const xError = response.headers.get('X-debug-Exception');
             xError ? console.log(decodeURI(xError)) : null;
 
-            if (!response.ok) {
+            if (!response.ok) { //showing the error 
                 // get error message from body or default to response status
                 const error = (data && data.message) || response.status;
                 return Promise.reject(error);
@@ -119,6 +137,9 @@ function goFetch(args, link)
         })
 }
 
+/**
+ * Launch when we click on the contact search button then fetch the events
+ */
 document.querySelector('#searchInput button').addEventListener("click", ev => {
     ev.preventDefault();
     queryValue = document.querySelector('#searchInput #search').value;
@@ -128,17 +149,29 @@ document.querySelector('#searchInput button').addEventListener("click", ev => {
     fetchContact(args);
 })
 
+/**
+ * Launch when we check the phone then fetch the contacts
+ */
 document.getElementById("checkPhones").addEventListener("change", ev => {
     fetchContact();
 });
+/**
+ * Launch when we check the email then fetch the contacts
+ */
 document.getElementById("checkEmails").addEventListener("change", ev => {
     fetchContact();
 });
+/**
+ * Launch when we check the company then fetch the contacts
+ */
 document.getElementById("checkisCompany").addEventListener("change", ev => {
     if(document.getElementById("checkCompany").checked == true){
         fetchContact();
     }
 });
+/**
+ * Launch when we switch the company status then fetch the contacts
+ */
 document.getElementById("checkCompany").addEventListener("change", ev => {
     companySwitch = document.getElementById("checkisCompany");
     companyLabel = document.getElementById("isCompanyLabel");
@@ -147,41 +180,50 @@ document.getElementById("checkCompany").addEventListener("change", ev => {
     
     fetchContact();
 });
-
+/**
+ * Launch when we clear the search box with the keyboard then fetch the contacts
+ */
 document.getElementById("search").addEventListener("keyup", ev => {
     if(ev.target.value == ""){
         fetchContact();
     }
 });
+/**
+ * Launch when we clear the search box with the clear button in the box then fetch the contacts
+ */
 document.getElementById("search").addEventListener("search", ev => { //Trigger when we click on the clear search button
     fetchContact();
 });
 fetchContact();
 
+/**
+ * hide and show different elements when we switch the company status
+ */
 document.getElementById("company").addEventListener("change", ev => {
-
     extrafieldsCompany.style.display = "block"
     extrafieldsCompany.nextElementSibling.style.display ="block"
     extrafieldsContainerCompany.style.display = "block"
+    extrafieldsContainerCompany.active = true
     extrafieldsPerson.style.display = "none"
     extrafieldsPerson.nextElementSibling.style.display ="none"
     extrafieldsContainerPerson.style.display = "none"
+    extrafieldsContainerPerson.active = false
 });
 document.getElementById("person").addEventListener("change", ev => {
     extrafieldsCompany.style.display = "none"
     extrafieldsCompany.nextElementSibling.style.display ="none"
     extrafieldsContainerCompany.style.display = "none"
+    extrafieldsContainerCompany.active = false
     extrafieldsPerson.style.display = "block"
     extrafieldsPerson.nextElementSibling.style.display ="block"
     extrafieldsContainerPerson.style.display = "block"
+    extrafieldsContainerPerson.active = true
 });
 
-document.querySelector("#contactTab").addEventListener("click", ev =>{
-    if(ev.target.classList.contains("active")){
-        
-    }
-})
 
+/**
+ * Use the mutator observer for the classList to hide the filter/search input groups
+ */
 function hideSearchInputs(mutationsList) {
     mutationsList.forEach(mutation => {
         if (mutation.attributeName === 'class') {
@@ -192,10 +234,11 @@ function hideSearchInputs(mutationsList) {
 
 const mutationObserver = new MutationObserver(hideSearchInputs)
 
-mutationObserver.observe(
+mutationObserver.observe( //will oberve the attribute list of the element
     document.getElementById('contactTab'),
     { attributes: true }
 )
+
 
 document.getElementById("extrafieldsCompanyButton").addEventListener("click", ev => { //we create the extrafields when we click on the button
     let selectBox = ev.target.previousElementSibling;
@@ -214,6 +257,7 @@ document.getElementById("extrafieldsCompanyButton").addEventListener("click", ev
     div.classList.add("mt-2")
     extrafield.classList.add("form-control");
     extrafieldLabel = document.createElement("LABEL");
+    extrafield.setAttribute("name","EX_" + el.getAttribute("dataid") + "_"+ el.textContent)
     extrafieldLabel.textContent = el.textContent;
     extrafieldLabel.classList.add("form-label");
     selectBox.remove(selectBox.selectedIndex);

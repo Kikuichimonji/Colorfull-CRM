@@ -69,7 +69,7 @@ class Contact
     private $contactType;
 
     /**
-     * @ORM\OneToMany(targetEntity=ContactExtrafieldValue::class, mappedBy="contact", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=ContactExtrafieldValue::class, mappedBy="contact")
      */
     private $contactExtrafieldValues;
 

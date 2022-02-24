@@ -20,30 +20,25 @@ class ContactExtrafieldValue
     private $id;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $value;
 
     /**
-     * @ORM\ManyToOne(targetEntity=ContactExtrafieldValue::class, inversedBy="contactExtrafieldValues")
+     * @ORM\ManyToOne(targetEntity=ContactExtrafields::class, inversedBy="contactExtrafieldValue")
      * @ORM\JoinColumn(nullable=false)
      */
     private $contactExtrafield;
 
     /**
-     * @ORM\OneToMany(targetEntity=ContactExtrafieldValue::class, mappedBy="contactExtrafield", orphanRemoval=true)
-     */
-    private $contactExtrafieldValues;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Contact::class, inversedBy="contactExtrafieldValues")
+     * @ORM\ManyToOne(targetEntity=Contact::class, inversedBy="contactExtrafieldValue")
      * @ORM\JoinColumn(nullable=false)
      */
     private $contact;
 
     public function __construct()
     {
-        $this->contactExtrafieldValues = new ArrayCollection();
+
     }
 
     public function getId(): ?int
@@ -56,51 +51,21 @@ class ContactExtrafieldValue
         return $this->value;
     }
 
-    public function setValue(string $value): self
+    public function setValue(?string $value): self
     {
         $this->value = $value;
 
         return $this;
     }
 
-    public function getContactExtrafield(): ?self
+    public function getContactExtrafield(): ?ContactExtrafields
     {
         return $this->contactExtrafield;
     }
 
-    public function setContactExtrafield(?self $contactExtrafield): self
+    public function setContactExtrafield(?ContactExtrafields $contactExtrafield): self
     {
         $this->contactExtrafield = $contactExtrafield;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|self[]
-     */
-    public function getContactExtrafieldValues(): Collection
-    {
-        return $this->contactExtrafieldValues;
-    }
-
-    public function addContactExtrafieldValue(self $contactExtrafieldValue): self
-    {
-        if (!$this->contactExtrafieldValues->contains($contactExtrafieldValue)) {
-            $this->contactExtrafieldValues[] = $contactExtrafieldValue;
-            $contactExtrafieldValue->setContactExtrafield($this);
-        }
-
-        return $this;
-    }
-
-    public function removeContactExtrafieldValue(self $contactExtrafieldValue): self
-    {
-        if ($this->contactExtrafieldValues->removeElement($contactExtrafieldValue)) {
-            // set the owning side to null (unless already changed)
-            if ($contactExtrafieldValue->getContactExtrafield() === $this) {
-                $contactExtrafieldValue->setContactExtrafield(null);
-            }
-        }
 
         return $this;
     }
