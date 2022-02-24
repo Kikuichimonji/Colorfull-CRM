@@ -2,12 +2,24 @@ let menuLinks = document.querySelectorAll(".navbar-nav .nav-link")
 menuLinks[2].classList.add("active")
 let extrafieldsCompany = document.getElementById("extrafieldsCompany")
 let extrafieldsPerson = document.getElementById("extrafieldsPerson")
+let extrafieldsContainerCompany = document.getElementById("extrafieldsContainerCompany")
+let extrafieldsContainerPerson = document.getElementById("extrafieldsContainerPerson")
 extrafieldsCompany.style.display = "none"
 extrafieldsCompany.nextElementSibling.style.display ="none"
+extrafieldsContainerCompany.style.display = "none"
 extrafieldsPerson.style.display = "none"
 extrafieldsPerson.nextElementSibling.style.display ="none"
+extrafieldsContainerPerson.style.display = "none"
 
 
+/**
+ * Verify the filter's checkboxes values and the query value then sed the lik to the fetch method
+ *
+ * @param null incArgs
+ * 
+ * @return [type]
+ * 
+ */
 function fetchContact(incArgs = null) 
 {
     checkboxes = document.querySelectorAll("#searchInput input[type=checkbox]")
@@ -150,14 +162,18 @@ document.getElementById("company").addEventListener("change", ev => {
 
     extrafieldsCompany.style.display = "block"
     extrafieldsCompany.nextElementSibling.style.display ="block"
+    extrafieldsContainerCompany.style.display = "block"
     extrafieldsPerson.style.display = "none"
     extrafieldsPerson.nextElementSibling.style.display ="none"
+    extrafieldsContainerPerson.style.display = "none"
 });
 document.getElementById("person").addEventListener("change", ev => {
     extrafieldsCompany.style.display = "none"
     extrafieldsCompany.nextElementSibling.style.display ="none"
+    extrafieldsContainerCompany.style.display = "none"
     extrafieldsPerson.style.display = "block"
     extrafieldsPerson.nextElementSibling.style.display ="block"
+    extrafieldsContainerPerson.style.display = "block"
 });
 
 document.querySelector("#contactTab").addEventListener("click", ev =>{
@@ -181,10 +197,12 @@ mutationObserver.observe(
     { attributes: true }
 )
 
-document.getElementById("extrafieldsCompanyButton").addEventListener("click", ev => {
+document.getElementById("extrafieldsCompanyButton").addEventListener("click", ev => { //we create the extrafields when we click on the button
     let selectBox = ev.target.previousElementSibling;
     let el = selectBox.options[selectBox.selectedIndex];
-    let field = document.getElementById("addNewContact").querySelector("fieldset");
+    let field = document.getElementById("addNewContact").querySelector("#extrafieldsContainerCompany");
+    let div = document.createElement("DIV");
+
 
     if(el.getAttribute("datatype") != "textarea"){
         extrafield = document.createElement("INPUT");
@@ -192,12 +210,19 @@ document.getElementById("extrafieldsCompanyButton").addEventListener("click", ev
     }else{
         extrafield = document.createElement("TEXTAREA");
     }
-    
+    div.classList.add("form-group")
+    div.classList.add("mt-2")
+    extrafield.classList.add("form-control");
     extrafieldLabel = document.createElement("LABEL");
-    extrafieldLabel.textContent = el.textContent
+    extrafieldLabel.textContent = el.textContent;
+    extrafieldLabel.classList.add("form-label");
     selectBox.remove(selectBox.selectedIndex);
+    if(selectBox.options.length == 0){
+        selectBox.parentNode.style.display = "none";
+    }
 
-    field.appendChild(extrafieldLabel)
-    field.appendChild(extrafield)
+    div.appendChild(extrafieldLabel)
+    div.appendChild(extrafield)
+    field.appendChild(div)
 
 })
