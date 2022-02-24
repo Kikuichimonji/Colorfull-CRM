@@ -48,3 +48,11 @@ contact-create:
     path: /contact
     controller: App\Controller\ContactController::newContact
     methods: POST
+contact-show:
+    path: /contact/{id}
+    controller: App\Controller\ContactController::showContact
+    methods: GET
+contact-update:
+    path: /contact/save/{id}
+    controller: App\Controller\ContactController::updateContact
+    methods: POST

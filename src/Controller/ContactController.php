@@ -18,6 +18,7 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 
 class ContactController extends AbstractController
@@ -144,15 +145,12 @@ class ContactController extends AbstractController
      */
     public function newContact(ManagerRegistry $doctrine, Request $request): Response
     {
-        
         $entityManager = $doctrine->getManager();
-        $contactRepository = $entityManager->getRepository(Contact::class);
 
         $contactTypeRepository = $entityManager->getRepository(ContactType::class);
         $contactTypes = $contactTypeRepository->findAll();
 
         $contactExtrafieldsRepository = $entityManager->getRepository(ContactExtrafields::class);
-        $contactExtrafieldValueRepository = $entityManager->getRepository(ContactExtrafieldValue::class);
 
         $extrafieldsRepository = $entityManager->getRepository(ContactExtrafields::class);
         $extrafields = $extrafieldsRepository->findAll();
@@ -174,7 +172,7 @@ class ContactController extends AbstractController
         $postList = $post = $request->request->all();
         foreach ($postList as $key => $value) { //Reading all the checkboxes datas and extravalues and pushing them into thir array to add them later
             str_contains(explode('-', $key)[0], "checkbox") ? array_push($postContactType, explode('-', $key)[1]) : null;
-            str_contains(explode('_', $key)[0], "EX") ? array_push( $extraArray,[explode('_', $key)[1], explode('_', $key)[2], $value]) : null;
+            str_contains(explode('_', $key)[0], "EX") ? array_push( $extraArray,[explode('_', $key)[1], $value]) : null;
         }
 
         foreach ($contactTypes as $contactType) { //Reading all the contactTypes, and if they matches the array we add them in the collection
@@ -188,7 +186,7 @@ class ContactController extends AbstractController
             $extrafieldValue = new ContactExtrafieldValue();
             $extrafieldValue->setContactExtrafield($extrafield);
             $extrafieldValue->setContact($contact);
-            $extrafieldValue->setValue($extra[2]);
+            $extrafieldValue->setValue($extra[1]);
             $entityManager->persist($extrafieldValue);
         }
 
@@ -202,5 +200,43 @@ class ContactController extends AbstractController
             "contactTypes" => $contactTypes,
             "extrafields" => $extrafields,
         ]);
+    }
+    public function showContact(ManagerRegistry $doctrine, $id):Response
+    {
+        $entityManager = $doctrine->getManager();
+        $contactRepository = $entityManager->getRepository(Contact::class);
+        $contact = $contactRepository->findOneBy(['id' => $id]);
+
+        $contactTypeRepository = $entityManager->getRepository(ContactType::class);
+        $contactTypes = $contactTypeRepository->findAll();
+
+        $extrafieldsValueRepository = $entityManager->getRepository(ContactExtrafieldValue::class);
+        //$extrafieldsValues = $extrafieldsValueRepository->findBy(["contact" => $id]);
+
+        //dd($extrafieldsValues);
+        $extrafieldsRepository = $entityManager->getRepository(ContactExtrafields::class);
+        $extrafields = $extrafieldsRepository->findAll();
+
+        return $this->render('contact/show.html.twig', [
+            "user" => $this->getUser(),
+            "contactTypes" => $contactTypes,
+            "extrafields" => $extrafields,
+            "contact" => $contact,
+        ]);
+    }
+
+    public function updateContact(ManagerRegistry $doctrine, Request $request, $id):Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_MANAGER');
+        $entityManager = $doctrine->getManager();
+        $contactRepository = $entityManager->getRepository(Contact::class);
+        $contact = $contactRepository->findOneBy(['id' => $id]);
+
+        $extrafieldsValueRepository = $entityManager->getRepository(ContactExtrafieldValue::class);
+
+        $extrafieldsRepository = $entityManager->getRepository(ContactExtrafields::class);
+        $extrafields = $extrafieldsRepository->findAll();
+
+        return $this->redirectToRoute('contact-index');
     }
 }

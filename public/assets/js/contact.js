@@ -55,6 +55,11 @@ function contactFeed(contacts)
 
         contact = JSON.parse(contact)
         let tr = document.createElement("TR");
+        tr.hiddenId = contact.id;
+        //console.log(contact.id)
+        tr.addEventListener("click", ev => {
+            window.location.href = '/contact/' + ev.currentTarget.hiddenId
+        })
         let tdColor = document.createElement("TD");
         let tdName = document.createElement("TD");
         let tdPhone = document.createElement("TD");
@@ -270,3 +275,4 @@ document.getElementById("extrafieldsCompanyButton").addEventListener("click", ev
     field.appendChild(div)
 
 })
+

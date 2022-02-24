@@ -25,13 +25,13 @@ class ContactExtrafieldValue
     private $value;
 
     /**
-     * @ORM\ManyToOne(targetEntity=ContactExtrafields::class, inversedBy="contactExtrafieldValue")
+     * @ORM\ManyToOne(targetEntity=ContactExtrafields::class, inversedBy="contactExtrafieldValues")
      * @ORM\JoinColumn(nullable=false)
      */
     private $contactExtrafield;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Contact::class, inversedBy="contactExtrafieldValue")
+     * @ORM\ManyToOne(targetEntity=Contact::class, inversedBy="contactExtrafieldValues")
      * @ORM\JoinColumn(nullable=false)
      */
     private $contact;
