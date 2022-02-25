@@ -1,6 +1,6 @@
 {% extends 'layouts/loggedin.html.twig' %}
 
-{% block title %}Profil {% endblock %}
+{% block title %}Profil {{ user.firstName }} {{ user.lastName }} {% endblock %}
 {% block nav %}
     {{parent()}}
 {% endblock %}

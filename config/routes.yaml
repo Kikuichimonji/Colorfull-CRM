@@ -56,3 +56,7 @@ contact-update:
     path: /contact/save/{id}
     controller: App\Controller\ContactController::updateContact
     methods: POST
+user-profile:
+    path: /user
+    controller: App\Controller\UserController::index
+    methods: GET

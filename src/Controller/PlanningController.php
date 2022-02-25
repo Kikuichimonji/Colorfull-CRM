@@ -141,16 +141,19 @@ class PlanningController extends AbstractController
      */
     public function deleteEvent(Request $request,ManagerRegistry $doctrine): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
         if(!$this->isCsrfTokenValid("event_delete",$request->request->get("_token"))){
             return new JsonResponse("Problem CSRF");
         }
-
         $entityManager = $doctrine->getManager();
         $repository = $entityManager->getRepository(Event::class);
         $event = $repository->find($request->request->get("id"));
         if (!$event) {
             return new JsonResponse("Pas d'évenement trouvé à cet id : ".$request->request->get("id"));    
         }else{
+            if($event->getPlanning()->getPlanningOwner()->getId() != $this->getUser()->getId()){
+                return new JsonResponse("Vous n'avez pas le droit de modifier ce planning");
+            }
             $entityManager->remove($event);
             $entityManager->flush();
             return new JsonResponse("Event deleted");

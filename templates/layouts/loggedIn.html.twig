@@ -7,7 +7,7 @@
             {% set img = "asset('assets/img/user.picture')" %}
 			<div id="navTop">
 				<img src="{{asset('assets/img/' ~ user.picture )}}" alt="">
-				<a class="navbar-brand" href="#">{{user.firstName}} {{user.lastName}}</a>
+				<a class="navbar-brand" href="{{ path('user-profile') }}">{{user.firstName}} {{user.lastName}}</a>
 			</div>
 			<div class="" id="navbarColor01">
 				<ul class="navbar-nav me-auto">

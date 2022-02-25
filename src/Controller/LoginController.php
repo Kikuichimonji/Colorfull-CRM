@@ -49,6 +49,7 @@ class LoginController extends AbstractController
      */
     public function register(Request $request,UserPasswordHasherInterface $passwordHasher,ManagerRegistry $doctrine): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_MANAGER');
         $user = new User();
         $password = $request->request->get("password");
         $hashedPassword = $passwordHasher->hashPassword(

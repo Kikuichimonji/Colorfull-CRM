@@ -34,6 +34,7 @@ class ContactController extends AbstractController
      */
     public function index(ManagerRegistry $doctrine, Request $request): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
         $entityManager = $doctrine->getManager();
 
         $contactTypeRepository = $entityManager->getRepository(ContactType::class);
@@ -60,6 +61,7 @@ class ContactController extends AbstractController
      */
     public function eventDataFeed(ManagerRegistry $doctrine, Request $request): JsonResponse
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
         $encoder = new JsonEncoder();
         $defaultContext = [ //ignoring all the datas that goes too far in the relations to limit depth
             AbstractNormalizer::IGNORED_ATTRIBUTES => ['userCreate', 'contacts', 'contactExtrafieldValues'],
@@ -145,6 +147,7 @@ class ContactController extends AbstractController
      */
     public function newContact(ManagerRegistry $doctrine, Request $request): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
         $entityManager = $doctrine->getManager();
 
         $contactTypeRepository = $entityManager->getRepository(ContactType::class);
@@ -203,6 +206,7 @@ class ContactController extends AbstractController
     }
     public function showContact(ManagerRegistry $doctrine, $id):Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
         $entityManager = $doctrine->getManager();
         $contactRepository = $entityManager->getRepository(Contact::class);
         $contact = $contactRepository->findOneBy(['id' => $id]);
@@ -231,12 +235,26 @@ class ContactController extends AbstractController
         $entityManager = $doctrine->getManager();
         $contactRepository = $entityManager->getRepository(Contact::class);
         $contact = $contactRepository->findOneBy(['id' => $id]);
+        $post = $request->request;
 
-        $extrafieldsValueRepository = $entityManager->getRepository(ContactExtrafieldValue::class);
-
-        $extrafieldsRepository = $entityManager->getRepository(ContactExtrafields::class);
-        $extrafields = $extrafieldsRepository->findAll();
-
+        $contact->setName($post->get("name"));
+        $contact->setIsCompany($post->get("isCompany") == "company");
+        $contact->setPhone1($post->get("phone1"));
+        $contact->setPhone2($post->get("phone2"));
+        $contact->setEmail($post->get("email"));
+    
+        foreach ($contact->getContactExtrafieldValues() as $extrafield) {
+            $extraId = $extrafield->getContactExtrafield()->getId();
+            if(array_key_exists("EX_".$extraId,$post->all())){
+                foreach ($contact->getContactExtrafieldValues() as $extrafieldValues) {
+                    if($extraId == $extrafieldValues->getContactExtrafield()->getId()){
+                        $extrafieldValues->setValue($post->get("EX_".$extraId));
+                    } 
+                }
+            }
+        }
+        //dd($contact->getContactExtrafieldValues()->toArray() );
+        $entityManager->flush();
         return $this->redirectToRoute('contact-index');
     }
 }
