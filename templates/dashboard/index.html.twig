@@ -98,7 +98,7 @@
                     </div>
                     <div class="dashBlock">
                         {% for contact in contacts %}
-                            <div class="contactLine">
+                            <div class="contactLine" id='{{ contact.id}}'>
                                 <div class='contactColorBlock'>
                                     {% set colorCount = 1 %}
                                     {% for type in contact.contactType %}

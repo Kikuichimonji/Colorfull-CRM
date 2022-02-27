@@ -5,12 +5,15 @@ namespace App\Controller;
 use App\Entity\Event;
 use App\Entity\Planning;
 use App\Entity\EventType;
+use App\Form\EventFormType;
+use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
 
 class PlanningController extends AbstractController
 {
@@ -26,7 +29,7 @@ class PlanningController extends AbstractController
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
         $eventTypeRepository = $doctrine->getRepository(EventType::class);
-        $eventType = $eventTypeRepository->findAll();
+        $eventTypes = $eventTypeRepository->findAll();
         $eventCollection = $this->getUser()->getPlanning()->getEvents();
         $events = [];
         foreach($eventCollection as $event){
@@ -45,7 +48,7 @@ class PlanningController extends AbstractController
         }
         return $this->render('planning/index.html.twig', [
             "user" => $this->getUser(),
-            "eventTypes" => $eventType,
+            "eventTypes" => $eventTypes,
             "events" => json_encode($events),
         ]);
     }
@@ -62,6 +65,7 @@ class PlanningController extends AbstractController
     public function createEvent(Request $request,ManagerRegistry $doctrine): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
+        
         $eventTypeRepository = $doctrine->getRepository(EventType::class);
         $planningRepository = $doctrine->getRepository(Planning::class);
         $manager = $doctrine->getManager();
@@ -103,6 +107,15 @@ class PlanningController extends AbstractController
     public function updateEvent(Request $request,ManagerRegistry $doctrine): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
+
+        $form = $this->createForm(EventFormType::class);
+        $form->submit($request->request->all());
+        
+        if (!$form->isValid()) {
+            $errors = $form->getErrors(true); // Array of Error
+            return new JsonResponse($errors[0]->getMessage());
+        }
+
         $post = $request->request->all();
         $eventRepository = $doctrine->getRepository(Event::class);
         $event = $eventRepository->find($request->request->get("id"));

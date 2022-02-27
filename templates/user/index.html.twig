@@ -5,26 +5,61 @@
     {{parent()}}
 {% endblock %}
 {% block content %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from base.html.twig:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/laragon/www/Projet_3/src/Controller/HomeController.php'|file_link(0) }}">src/Controller/HomeController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/laragon/www/Projet_3/templates/home/index.html.twig'|file_link(0) }}">templates/home/index.html.twig</a></code></li>
-    </ul>
-    
+<div id="userBlock">
+    <form action="{{ path('user-update') }}" method="post">
+        <h1> Profil de {{ user.firstName }} {{ user.lastName }}</h1>
+        {% if errors is defined %}
+            {% for error in errors %}
+                {{ error.message }}
+            {% endfor %}
+        {% endif %}
+        <div class="form-group row">
+            <label for="firstName" class="col-sm-2 col-form-label">Prénom</label>
+            <div class="col-sm-10">
+                <input type="text" {% if not is_granted('ROLE_MANAGER') %} disabled {% endif %} class="form-control" name="firstName" id="firstName" value="{{ user.firstName }}">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="lastName" class="col-sm-2 col-form-label">Nom</label>
+            <div class="col-sm-10">
+                <input type="text" {% if not is_granted('ROLE_MANAGER') %} disabled {% endif %} class="form-control" name="lastName" id="lastName" value="{{ user.lastName }}">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="phone" class="col-sm-2 col-form-label">Téléphone</label>
+            <div class="col-sm-10">
+                <input type="text" {% if not is_granted('ROLE_MANAGER') %} disabled {% endif %} class="form-control" name="phone" id="phone" value="{{ user.phone }}">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="email" class="col-sm-2 col-form-label">Email</label>
+            <div class="col-sm-10">
+                <input type="text" {% if not is_granted('ROLE_MANAGER') %} disabled {% endif %} class="form-control" name="email" id="email" value="{{ user.email }}">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="password" class="col-sm-2 col-form-label">Mot de passe</label>
+            <div class="col-sm-10">
+                <input type="password" {% if not is_granted('ROLE_MANAGER') %} disabled {% endif %} class="form-control" name="password" id="password">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="file" class="col-sm-2 col-form-label">Image de profil</label>
+            <div class="col-sm-10">
+                <input class="form-control" type="file" id="formFile">
+                <img src="{{asset('assets/img/' ~ user.picture )}}" alt="">
+            </div>
+        </div>
+        <button type='submit' class="btn btn-primary">Enregistrer</button>
+        <input type="hidden" id="_token" name="_token" value="{{ csrf_token('user_form') }}">
+    </form>
 </div>
 {% endblock %}
 
 {% block style %}
     {{parent()}}
-
+    <link href="{{asset('assets/css/user.css')}}" rel="stylesheet" type="text/css">
 {% endblock %}
 
 {% block script_body %}

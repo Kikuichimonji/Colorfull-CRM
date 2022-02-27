@@ -63,6 +63,7 @@ h2,h3{
     padding: 0.5em 0;
     border-top: 1px solid var(--borderColor25);
     display: flex;
+    cursor: pointer;
 }
 .contactLine p:not(.contactLine p:last-child){
     border-right: 1px solid var(--borderColor25);

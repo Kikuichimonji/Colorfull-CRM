@@ -8,6 +8,8 @@ let calendarHeight = document.getElementById('mainPlanningBlock').offsetHeight -
 let externalEvents = document.querySelectorAll("#externalEvents .fc-event");
 let planning = document.getElementById("mainPlanningBlock")
 let modal = document.querySelector(".modal");
+let csrfToken = document.getElementById("_tokenUpdate").value;
+
 
 externalEvents.forEach( el => {
     el.hiddenId = el.getAttribute("data-id");
@@ -94,10 +96,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     "description" : modal.querySelector("#description").value,
                     "color" : modal.querySelector("#color").value,
                     "isImportant" : modal.querySelector("#isImportant").checked,
+                    '_token' : csrfToken,
                 };
                 updateEvent("",calendar,args)
                 modal.style.display = "none";
-                location.reload();
+                //location.reload();
             }
             modalDeleteEvent = function (ev)
             {
@@ -142,13 +145,14 @@ function updateEvent(info,calendar,args = null)
     args = args ? args : {
         "id" : info.event.id,
         "label" : info.event.title,
-        "dateStart" : info.event.start.toISOString(),
-        "dateEnd" : info.event.end ? info.event.end.toISOString() : null,
+        "dateStart" : info.event.start.toISOString().split('.')[0] ,
+        "dateEnd" : info.event.end ? info.event.end.toISOString().split('.')[0] : null,
         "eventType" : info.event.extendedProps.eventType,
         "planning" : info.event.extendedProps.planning,
         "description" : info.event.extendedProps.description,
         "color" : info.event.extendedProps.customColor,
         "isImportant" : info.event.extendedProps.isImportant,
+        '_token' : csrfToken,
     };
     link = "/calendar/save"
     //console.log(args)

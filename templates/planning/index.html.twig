@@ -75,7 +75,8 @@
 					<button type="button" class="btn btn-danger">Supprimer</button>
 					<button type="button" class="btn btn-primary">Enregistrer</button>
 					<button type="button" class="btn btn-info" data-bs-dismiss="modal">Annuler</button>
-					<input type="hidden" id="_token" name="_token" value="{{ csrf_token('event_delete') }}">
+					<input type="hidden" id="_token" name="_token" value="{{ csrf_token('event_delete') }}"> 
+					<input type="hidden" id="_tokenUpdate" name="_token" value="{{ csrf_token('event_form') }}">
 				</div>
 			</div>
 		</div>
