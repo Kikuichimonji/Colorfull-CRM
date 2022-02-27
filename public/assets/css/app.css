@@ -66,3 +66,21 @@ nav{
 #loggoutLink{
     margin-bottom: 30%;
 }
+#toastContainer{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin-bottom: 4em;
+    margin-right: 2em;
+}
+.toast{
+    margin-top: 1em;
+}
+.toast-header.success{
+    background-color:var(--bs-success);
+    color:white;
+}
+.toast-header.error{
+    background-color:var(--bs-secondary);
+    color:white;
+}

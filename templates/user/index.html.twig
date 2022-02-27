@@ -1,67 +1,99 @@
 {% extends 'layouts/loggedin.html.twig' %}
 
-{% block title %}Profil {{ user.firstName }} {{ user.lastName }} {% endblock %}
+{% block title %}Profil
+	{{ user.firstName }}
+	{{ user.lastName }}
+{% endblock %}
 {% block nav %}
-    {{parent()}}
+	{{parent()}}
 {% endblock %}
 {% block content %}
 
-<div id="userBlock">
-    <form action="{{ path('user-update') }}" method="post">
-        <h1> Profil de {{ user.firstName }} {{ user.lastName }}</h1>
-        {% if errors is defined %}
-            {% for error in errors %}
-                {{ error.message }}
+	<div id="userBlock">
+		<form action="{{ path('user-update') }}" method="post" enctype="multipart/form-data">
+			<h1>
+				Profil de
+				{{ user.firstName }}
+				{{ user.lastName }}</h1>
+			<div class="form-group row">
+				<label for="firstName" class="col-sm-2 col-form-label">Prénom</label>
+				<div class="col-sm-10">
+					<input type="text" {% if not is_granted('ROLE_MANAGER') %} disabled {% endif %} class="form-control" name="firstName" id="firstName" value="{{ user.firstName }}">
+				</div>
+			</div>
+			<div class="form-group row">
+				<label for="lastName" class="col-sm-2 col-form-label">Nom</label>
+				<div class="col-sm-10">
+					<input type="text" {% if not is_granted('ROLE_MANAGER') %} disabled {% endif %} class="form-control" name="lastName" id="lastName" value="{{ user.lastName }}">
+				</div>
+			</div>
+			<div class="form-group row">
+				<label for="phone" class="col-sm-2 col-form-label">Téléphone</label>
+				<div class="col-sm-10">
+					<input type="tel" {% if not is_granted('ROLE_MANAGER') %} disabled {% endif %} class="form-control" name="phone" id="phone" value="{{ user.phone }}" placeholder='Ex: 06.01.02.03.04 ou +336-01-02-03-04'>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label for="email" class="col-sm-2 col-form-label">Email</label>
+				<div class="col-sm-10">
+					<input type="text" {% if not is_granted('ROLE_MANAGER') %} disabled {% endif %} class="form-control" name="email" id="email" value="{{ user.email }}">
+				</div>
+			</div>
+			<div class="form-group row">
+				<label for="password" class="col-sm-2 col-form-label">Mot de passe</label>
+				<div class="col-sm-10">
+					<input type="password" {% if not is_granted('ROLE_MANAGER') %} disabled {% endif %} class="form-control" name="password" id="password">
+				</div>
+			</div>
+			<div class="form-group row">
+				<label for="formFile" class="col-sm-2 col-form-label">Image de profil</label>
+				<div class="col-sm-10">
+					<input class="form-control" type="file" id="formFile" name="formFile">
+					<img src="{{asset('assets/img/' ~ user.picture )}}" alt="">
+				</div>
+			</div>
+			<button type='submit' class="btn btn-primary">Enregistrer</button>
+			<input type="hidden" id="_token" name="_token" value="{{ csrf_token('user_form') }}">
+		</form>
+        <div id="toastContainer">
+            {% if errors is defined %}
+                {% for error in errors %}
+                    <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-header error">
+                            <strong class="me-auto">Erreur</strong>
+                            <button type="button" class="btn-close ms-2 mb-1" data-bs-dismiss="toast" aria-label="Close">
+                                <span aria-hidden="true"></span>
+                            </button>
+                        </div>
+                        <div class="toast-body">
+                            {{ error.message }}
+                        </div>
+                    </div>
+                    
+                {% endfor %}
+            {% endif %}
+            {% for message in app.flashes('success') %}
+                <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header success">
+                        <strong class="me-auto">Succès</strong>
+                        <button type="button" class="btn-close ms-2 mb-1" data-bs-dismiss="toast" aria-label="Close">
+                            <span aria-hidden="true"></span>
+                        </button>
+                    </div>
+                    <div class="toast-body">
+                        {{message}}
+                    </div>
+                </div>
             {% endfor %}
-        {% endif %}
-        <div class="form-group row">
-            <label for="firstName" class="col-sm-2 col-form-label">Prénom</label>
-            <div class="col-sm-10">
-                <input type="text" {% if not is_granted('ROLE_MANAGER') %} disabled {% endif %} class="form-control" name="firstName" id="firstName" value="{{ user.firstName }}">
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="lastName" class="col-sm-2 col-form-label">Nom</label>
-            <div class="col-sm-10">
-                <input type="text" {% if not is_granted('ROLE_MANAGER') %} disabled {% endif %} class="form-control" name="lastName" id="lastName" value="{{ user.lastName }}">
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="phone" class="col-sm-2 col-form-label">Téléphone</label>
-            <div class="col-sm-10">
-                <input type="text" {% if not is_granted('ROLE_MANAGER') %} disabled {% endif %} class="form-control" name="phone" id="phone" value="{{ user.phone }}">
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="email" class="col-sm-2 col-form-label">Email</label>
-            <div class="col-sm-10">
-                <input type="text" {% if not is_granted('ROLE_MANAGER') %} disabled {% endif %} class="form-control" name="email" id="email" value="{{ user.email }}">
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="password" class="col-sm-2 col-form-label">Mot de passe</label>
-            <div class="col-sm-10">
-                <input type="password" {% if not is_granted('ROLE_MANAGER') %} disabled {% endif %} class="form-control" name="password" id="password">
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="file" class="col-sm-2 col-form-label">Image de profil</label>
-            <div class="col-sm-10">
-                <input class="form-control" type="file" id="formFile">
-                <img src="{{asset('assets/img/' ~ user.picture )}}" alt="">
-            </div>
-        </div>
-        <button type='submit' class="btn btn-primary">Enregistrer</button>
-        <input type="hidden" id="_token" name="_token" value="{{ csrf_token('user_form') }}">
-    </form>
-</div>
+		</div>
+	</div>
 {% endblock %}
 
 {% block style %}
-    {{parent()}}
-    <link href="{{asset('assets/css/user.css')}}" rel="stylesheet" type="text/css">
+	{{parent()}}
+	<link href="{{asset('assets/css/user.css')}}" rel="stylesheet" type="text/css">
 {% endblock %}
 
 {% block script_body %}
-    {{parent()}}
+	{{parent()}}
 {% endblock %}
