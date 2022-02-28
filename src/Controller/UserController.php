@@ -64,10 +64,10 @@ class UserController extends AbstractController
         }
 
         if(!empty($request->get('lastName'))){
-            $user->setLastName($request->get('lastName'));
+            $user->getLastName() == $request->get('lastName') ? null : $user->setLastName($request->get('lastName'));
         }
         if(!empty($request->get('firstName'))){
-            $user->setFirstName($request->get('firstName'));
+            $user->getFirstName() == $request->get('firstName') ? null : $user->setFirstName($request->get('firstName'));
         }
         if(!empty($request->get('password'))){
             $hashedPassword = $passwordHasher->hashPassword( //Hashing the new passowrd
@@ -121,7 +121,7 @@ class UserController extends AbstractController
             }
         }
 
-        if(!empty($request->get('email'))){ //check if the mail change, if that's the case we change the folder name
+        if(!empty($request->get('email')) && $request->get('email') != $user->getEmail() ){ //check if the mail change, if that's the case we change the folder name
             $userMail = $userRepository->findOneBy(["email" => $request->get('email')]);
             if($userMail){ //If someone already use the mail
                 $this->addFlash('error', "Cet email est déjà utilisé");
