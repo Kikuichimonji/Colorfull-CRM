@@ -20,6 +20,10 @@ planning-index:
     path: /calendar
     controller: App\Controller\PlanningController::index
     methods: GET
+event-feed:
+    path: /calendar/feed
+    controller: App\Controller\PlanningController::eventFeed
+    methods: GET
 event-save:
     path: /calendar
     controller: App\Controller\PlanningController::createEvent
@@ -38,7 +42,7 @@ contact-index:
     methods: GET
 contact-feed:
     path: /contact/feed
-    controller: App\Controller\ContactController::eventDataFeed
+    controller: App\Controller\ContactController::contactDataFeed
     methods: POST
 # contact-feed-get:
 #     path: /contact/feed

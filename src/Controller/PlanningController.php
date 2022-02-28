@@ -30,26 +30,10 @@ class PlanningController extends AbstractController
         $this->denyAccessUnlessGranted('ROLE_USER');
         $eventTypeRepository = $doctrine->getRepository(EventType::class);
         $eventTypes = $eventTypeRepository->findAll();
-        $eventCollection = $this->getUser()->getPlanning()->getEvents();
-        $events = [];
-        foreach($eventCollection as $event){ //for each events we get, we transform it into an array with some extra infos
-            array_push($events, [
-                "id" => $event->getId(),
-                "backgroundColor" => $event->getColor() ?? $event->getEventType()->getColor(),
-                "start" => $event->getDateStart() ? $event->getDateStart()->format("Y-m-d H:i:s") : null,
-                "end" => $event->getDateEnd() ? $event->getDateEnd()->format("Y-m-d H:i:s") : null,
-                "title" => $event->getLabel(),
-                "description" => $event->getDescription(),
-                "isImportant" => $event->getIsImportant(),
-                "customColor" => $event->getColor(),
-                "eventType" => $event->getEventType()->getId(),
-                "planning" => $event->getPlanning()->getId(),
-            ]);
-        }
+
         return $this->render('planning/index.html.twig', [
             "user" => $this->getUser(),
             "eventTypes" => $eventTypes,
-            "events" => json_encode($events),
         ]);
     }
 
@@ -173,6 +157,36 @@ class PlanningController extends AbstractController
             return new JsonResponse("Event deleted");
         }
 
+    }
+
+    public function eventFeed(ManagerRegistry $doctrine, Request $request): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+        $eventTypeRepository = $doctrine->getRepository(EventType::class);
+        $eventTypes = $eventTypeRepository->findAll();
+        $eventCollection = $this->getUser()->getPlanning()->getEvents();
+        $events = [];
         
+        foreach($eventCollection as $event){ //for each events we get, we transform it into an array with some extra infos
+            $dateParam = new \DateTime($request->query->get('start'));
+            $dateEvent = new \Datetime($event->getDateStart()->format("Y-m-d H:i:s"));
+            
+            if(!date_diff($dateParam,$dateEvent)->invert){
+                array_push($events, [
+                    "id" => $event->getId(),
+                    "backgroundColor" => $event->getColor() ?? $event->getEventType()->getColor(),
+                    "start" => $event->getDateStart() ? $event->getDateStart()->format("Y-m-d H:i:s") : null,
+                    "end" => $event->getDateEnd() ? $event->getDateEnd()->format("Y-m-d H:i:s") : null,
+                    "title" => $event->getLabel(),
+                    "description" => $event->getDescription(),
+                    "isImportant" => $event->getIsImportant(),
+                    "customColor" => $event->getColor(),
+                    "eventType" => $event->getEventType()->getId(),
+                    "planning" => $event->getPlanning()->getId(),
+                ]);
+            }
+            
+        }
+        return new JsonResponse($events);
     }
 }

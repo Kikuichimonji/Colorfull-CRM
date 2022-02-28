@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
         editable: true,
         droppable: true,
         themeSystem: 'bootstrap',
-        events: events,
+        events: 'calendar/feed',
         header: {
             left: 'prev,next today',
             center: 'title',

@@ -59,7 +59,7 @@ class ContactController extends AbstractController
      * @return JsonResponse
      * 
      */
-    public function eventDataFeed(ManagerRegistry $doctrine, Request $request): JsonResponse
+    public function contactDataFeed(ManagerRegistry $doctrine, Request $request): JsonResponse
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
         $encoder = new JsonEncoder();
