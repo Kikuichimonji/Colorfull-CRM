@@ -205,7 +205,6 @@ function goFetch(args,calendar,link)
             }else{
                 data.then(value => { console.log(value)})
                 //calendar.refetchEvents();
-                
             }
         })
         .catch(error => {

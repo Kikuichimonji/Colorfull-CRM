@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Planning;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -51,6 +52,7 @@ class LoginController extends AbstractController
     {
         //$this->denyAccessUnlessGranted('ROLE_MANAGER');
         $user = new User();
+        $planning = new Planning();
         $password = $request->request->get("password");
         $hashedPassword = $passwordHasher->hashPassword(
             $user,
@@ -58,6 +60,7 @@ class LoginController extends AbstractController
         );
         $roles= ["ROLE_".strtoupper($request->request->get("roles"))];
 
+        $planning->setLabel("No title");
         $user->setLastName($request->request->get("lastName"));
         $user->setFirstName($request->request->get("firstName"));
         $user->setEmail($request->request->get("email"));
@@ -65,6 +68,9 @@ class LoginController extends AbstractController
         $user->setPhone($request->request->get("phone"));
         $user->setCreatedAt(new \DateTime('NOW'));
         $user->setPassword($hashedPassword);
+
+        $planning->setPlanningOwner($user);
+        $user->setPlanning($planning);
         $entityManager = $doctrine->getManager();
         $entityManager->persist($user);
         $entityManager->flush();

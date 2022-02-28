@@ -5,8 +5,9 @@
 {% block nav %}
 	{{parent()}}
 {% endblock %}
+
 {% block content %}
-	<div id="mainPlanningBlock" data-id="{{ user.planning.id }}">
+	<div id="mainPlanningBlock" {% if user.planning is not null %}data-id="{{ user.planning.id }}"{% endif %}>
 		<h1>Calendrier</h1>
 		<div id="calendarBox">
 			<div id="externalEvents">
