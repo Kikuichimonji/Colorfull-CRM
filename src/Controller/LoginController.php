@@ -49,7 +49,7 @@ class LoginController extends AbstractController
      */
     public function register(Request $request,UserPasswordHasherInterface $passwordHasher,ManagerRegistry $doctrine): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_MANAGER');
+        //$this->denyAccessUnlessGranted('ROLE_MANAGER');
         $user = new User();
         $password = $request->request->get("password");
         $hashedPassword = $passwordHasher->hashPassword(
@@ -68,6 +68,7 @@ class LoginController extends AbstractController
         $entityManager = $doctrine->getManager();
         $entityManager->persist($user);
         $entityManager->flush();
+
         return $this->redirectToRoute('dashboard-index');
     }
     public function showRegister(): Response
