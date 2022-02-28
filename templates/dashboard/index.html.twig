@@ -1,8 +1,8 @@
-{# {% extends '/layouts/loggedin.html.twig' %} #}
+{# {% extends 'layouts/loggedin.html.twig' %} #}
 
 {% block title %}Dashboard{% endblock %}
 {% block nav %}
-    {{parent()}}
+    {# {{parent()}} #}
 {% endblock %}
 {% block content %}
 <div class="content">
@@ -139,11 +139,11 @@
 {% endblock %}
 
 {% block style %}
-    {{parent()}}
+    {# {{parent()}} #}
     <link href="{{asset('assets/css/dashboard.css')}}" rel="stylesheet" type="text/css">
 {% endblock %}
 
 {% block script_body %}
-    {{parent()}}
+    {# {{parent()}} #}
     <script src="{{asset('assets/js/dashboard.js')}}"></script>
 {% endblock %}
