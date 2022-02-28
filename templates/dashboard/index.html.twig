@@ -16,25 +16,25 @@
                 <h2>évenements</h2>
                 <div class="dashBlockHeader">
                     <div class="dashBlock">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
-                            <th scope="col">Label</th>
-                            <th scope="col">Date début</th>
-                            <th scope="col">Date fin</th>
-                            <th scope="col">Type</th>
-                            </tr>
-                        </thead>
-                    <tbody>
-                        {% set todayDate = "now"|date("d") %}
-                        {% set todayHour = "now"|date("H") %}
-                        {% set today = 0 %}
-                        {% set tommorow = 0 %}
-                        {% set later = 0 %}
-                        
-                        {% if planning is not null %}
+                    {% if planning is not null %}
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col">Label</th>
+                                <th scope="col">Date début</th>
+                                <th scope="col">Date fin</th>
+                                <th scope="col">Type</th>
+                                </tr>
+                            </thead>
+                        <tbody>
+                            {% set todayDate = "now"|date("d") %}
+                            {% set todayHour = "now"|date("H") %}
+                            {% set today = 0 %}
+                            {% set tommorow = 0 %}
+                            {% set later = 0 %}
+
                             {% for event in planning.events|sort((a, b) => a.dateEnd <=> b.dateEnd) %}
                                 {% set eventDay = event.dateEnd|date("d") %}
                                 {% set eventHour = event.dateEnd|date("H") %}
@@ -84,6 +84,8 @@
                                 </td>
                                 <td style="color:{{ event.eventType.color }}">{{ event.eventType.label }}</td></tr>
                             {% endfor %}
+                        {% else %}
+                            <p>Vide :(</p>
                         {% endif %}
                         </tbody>
                         </table>
@@ -126,12 +128,16 @@
                     {% endfor %}
                 </div>
                 {% endfor %}
-                <div class='invitedBlock'>
-                <h3>Invité</h3>
-                    {% for planning in user.plannings %}
-                        <div> <p>{{ planning.planningowner.firstname}}</p> <p>{{ planning.planningowner.lastName}}</p></div>
-                    {% endfor %}
-                </div>
+                {% if user.plannings|length > 0 %}
+                    <div class='invitedBlock'>
+                    <h3>Invité</h3>
+                        {% for planning in user.plannings %}
+                            <div> <p>{{ planning.planningowner.firstname}}</p> <p>{{ planning.planningowner.lastName}}</p></div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p>Vide :(</p>
+                {% endif %}
             </div>
         </div>
     </div>

@@ -6,7 +6,11 @@
 		<div class="container-fluid">
             {% set img = "asset('assets/img/user.picture')" %}
 			<div id="navTop">
+			{% if user.picture is not null %}
 				<img src="{{asset('assets/img/' ~ user.picture )}}" alt="">
+			{% else %}
+				<img src="{{asset('assets/img/peepo.png')}}" alt="">
+			{% endif %}
 				<a class="navbar-brand" href="{{ path('user-profile') }}">{{user.firstName}} {{user.lastName}}</a>
 			</div>
 			<div class="" id="navbarColor01">
@@ -29,9 +33,8 @@
 				</ul>
 			</div>
 			<div id="sidePlanningContainer">
-				<p class='navbar-brand'>Planning</p>
-				
 				{% if user.planning is not null %}
+					<p class='navbar-brand'>Planning</p>
 					{% set event = user.planning.events|first %}
 					<div style="border-color:{{ event.eventtype.color }}"><p>{{ event.eventtype.label }}</p><p>{{ event.datestart|date("H:i") }}</p><p>{{ event.dateend|date("H:i") }}</p></div>
 				{% endif %}
