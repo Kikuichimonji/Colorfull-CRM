@@ -1,4 +1,4 @@
-{% extends 'layouts/app.html.twig' %}
+{% extends '/layouts/app.html.twig' %}
 
 {% block title %}{% endblock %}
 {% block nav %}
@@ -30,8 +30,11 @@
 			</div>
 			<div id="sidePlanningContainer">
 				<p class='navbar-brand'>Planning</p>
-				{% set event = user.planning.events|first %}
-				<div style="border-color:{{ event.eventtype.color }}"><p>{{ event.eventtype.label }}</p><p>{{ event.datestart|date("H:i") }}</p><p>{{ event.dateend|date("H:i") }}</p></div>
+				
+				{% if user.planning is not null %}
+					{% set event = user.planning.events|first %}
+					<div style="border-color:{{ event.eventtype.color }}"><p>{{ event.eventtype.label }}</p><p>{{ event.datestart|date("H:i") }}</p><p>{{ event.dateend|date("H:i") }}</p></div>
+				{% endif %}
 			</div>
 			
 			<a class="btn btn-light" id="loggoutLink" href="{{ path('app_logout') }}">Déconnection</a>
