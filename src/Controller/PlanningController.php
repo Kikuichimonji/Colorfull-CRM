@@ -32,7 +32,7 @@ class PlanningController extends AbstractController
         $eventTypes = $eventTypeRepository->findAll();
         $eventCollection = $this->getUser()->getPlanning()->getEvents();
         $events = [];
-        foreach($eventCollection as $event){
+        foreach($eventCollection as $event){ //for each events we get, we transform it into an array with some extra infos
             array_push($events, [
                 "id" => $event->getId(),
                 "backgroundColor" => $event->getColor() ?? $event->getEventType()->getColor(),
@@ -70,11 +70,11 @@ class PlanningController extends AbstractController
         $planningRepository = $doctrine->getRepository(Planning::class);
         $manager = $doctrine->getManager();
         $post = $request->request->all();
-        $event = new Event($post);
+        $event = new Event();
 
-        foreach($post as $key => $value){
+        foreach($post as $key => $value){ //we create a new event from the form datas
             $method = "set".ucfirst($key);
-            if(method_exists($event,$method)){
+            if(method_exists($event,$method)){ //we check if the setter actually exist
                 if(($method == "setDateStart" || $method == "setDateEnd") && $value != "null"){
                     $value = new \DateTime($value);
                 }
@@ -84,7 +84,7 @@ class PlanningController extends AbstractController
                 if($method == "setPlanning"){
                     $value = $planningRepository->findOneBy(["id" => "$value"]);
                 }
-                $value = $value === "null" ? null : $value;
+                $value = $value === "null" ? null : $value; //when we get the value, NULL and UNDEFINED are in a string form
                 $value = $value === "undefined" ? null : $value;
             
                 $event->$method($value);
@@ -107,16 +107,16 @@ class PlanningController extends AbstractController
     public function updateEvent(Request $request,ManagerRegistry $doctrine): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
-
+        $post = $request->request->all();
         $form = $this->createForm(EventFormType::class);
-        $form->submit($request->request->all());
+        $form->submit($post);
         
         if (!$form->isValid()) {
             $errors = $form->getErrors(true); // Array of Error
             return new JsonResponse($errors[0]->getMessage());
         }
 
-        $post = $request->request->all();
+        
         $eventRepository = $doctrine->getRepository(Event::class);
         $event = $eventRepository->find($request->request->get("id"));
 
@@ -126,7 +126,7 @@ class PlanningController extends AbstractController
 
         foreach($post as $key => $value){
             $method = "set".ucfirst($key);
-            if(method_exists($event,$method)){
+            if(method_exists($event,$method)){ //we check if the setter actually exist
                 if($method == "setDateStart" || $method == "setDateEnd" && $value != "null"){
                     $value = new \DateTime($value);
                 }
@@ -137,11 +137,12 @@ class PlanningController extends AbstractController
                     $value = $planningRepository->findOneBy(["id" => "$value"]);
                 }
                 $event->$method($value === "null" ? null : $value);
+                $value = $value === "undefined" ? null : $value;
             }
         }
 
         $manager->flush();
-        return new JsonResponse($event);
+        return new JsonResponse("ok");
     }
     /**
      * Delete an event from database
@@ -154,13 +155,13 @@ class PlanningController extends AbstractController
      */
     public function deleteEvent(Request $request,ManagerRegistry $doctrine): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
-        if(!$this->isCsrfTokenValid("event_delete",$request->request->get("_token"))){
+        $this->denyAccessUnlessGranted('ROLE_USER'); //if the user do not have the basic role he get redirect to the login
+        if(!$this->isCsrfTokenValid("event_delete",$request->request->get("_token"))){ //we verify if the token is valid
             return new JsonResponse("Problem CSRF");
         }
         $entityManager = $doctrine->getManager();
         $repository = $entityManager->getRepository(Event::class);
-        $event = $repository->find($request->request->get("id"));
+        $event = $repository->find($request->request->get("id")); // we check if an event actually exist at this id
         if (!$event) {
             return new JsonResponse("Pas d'évenement trouvé à cet id : ".$request->request->get("id"));    
         }else{

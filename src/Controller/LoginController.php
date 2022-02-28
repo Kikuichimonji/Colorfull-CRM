@@ -57,17 +57,7 @@ class LoginController extends AbstractController
             $password
         );
         $roles= ["ROLE_".strtoupper($request->request->get("roles"))];
-        // switch ($request->request->get("roles")) {
-        //     case "admin":
-        //         $roles = ["ROLE_ADMIN"];
-        //         break;
-        //     case "manager":
-        //         $roles = ["ROLE_MANAGER"];
-        //         break;
-        //     case "user":
-        //         $roles = ["ROLE_USER"];
-        //         break;
-        // }
+
         $user->setLastName($request->request->get("lastName"));
         $user->setFirstName($request->request->get("firstName"));
         $user->setEmail($request->request->get("email"));

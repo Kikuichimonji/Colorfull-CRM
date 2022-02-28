@@ -18,6 +18,7 @@ use Symfony\Component\Validator\Constraints\Image;
 class UserFormType extends AbstractType
 {
     /**
+     * Validate the user profile form
      * @param FormBuilderInterface $builder    
      * @param array $options    
      **/
@@ -83,7 +84,11 @@ class UserFormType extends AbstractType
                         'maxHeightMessage' => "The image height is too big ({{ height }}px). Allowed maximum height is {{ max_height }}px.",
                         'maxWidth' => 500,
                         'maxWidthMessage' => 'The image width is too big ({{ width }}px). Allowed maximum width is {{ max_width }}px.',
-                        'mimeTypes' => ['image/png','image/jpg','image/gif','image/svg+xml'],
+                        'mimeTypes' => ['image/png',
+                                        'image/jpg',
+                                        'image/gif',
+                                        'image/svg+xml'
+                                    ],
                         'mimeTypesMessage' => 'Format non autorisé. Formats autorisés: {{ types }}'
                     ]),
                 ],
