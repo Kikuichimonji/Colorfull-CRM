@@ -62,6 +62,8 @@ class ContactController extends AbstractController
      */
     public function contactDataFeed(ManagerRegistry $doctrine, Request $request): JsonResponse
     {
+        $page = $request->query->get('page') ?? 1;
+        $contactsPerPage = 10;
         $this->denyAccessUnlessGranted('ROLE_USER');
         $encoder = new JsonEncoder();
         $defaultContext = [ //ignoring all the datas that goes too far in the relations to limit depth
@@ -132,7 +134,8 @@ class ContactController extends AbstractController
             $json = $serializer->serialize($contact, 'json'); //transforming the contact into a json object
             array_push($jsonContacts, $json);
         }
-
+        
+        //$jsonContacts = array_slice($jsonContacts,($contactsPerPage * $page)-$contactsPerPage , $contactsPerPage); 
         return new JsonResponse($jsonContacts); //we send back a json with the events so we can use them in JS
     }
 

@@ -46,12 +46,16 @@ function fetchContact(incArgs = null)
  * @return void
  * 
  */
-function contactFeed(contacts)
+function contactFeed(contacts,page = 1)
 {
     let body = document.querySelector('#tableContact tbody')
-    body.innerHTML = "";
+    let contactsPerPage = 10;
 
-    contacts.forEach(contact => {
+    body.innerHTML = "";
+    console.log(contacts.length)
+    cutContact = contacts.slice((contactsPerPage * page)-contactsPerPage,contactsPerPage)
+
+    cutContact.forEach(contact => {
 
         contact = JSON.parse(contact)
         let tr = document.createElement("TR");
