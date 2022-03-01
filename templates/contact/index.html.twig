@@ -1,6 +1,6 @@
 {% extends 'layouts/loggedIn.html.twig' %}
 
-{% block title %}Calendrier
+{% block title %}Contacts
 {% endblock %}
 {% block nav %}
 	{{parent()}}
@@ -11,13 +11,29 @@
 		<div id="tabSearch">
 			<ul class="nav nav-tabs">
 				<li class="nav-item">
-					<a class="nav-link active" data-bs-toggle="tab" href="#contacts" id="contactTab">Contacts</a>
+					{% if tab is not defined %}
+						{% set tabClass = 'nav-link active' %}
+						{% set mainContentClass = 'tab-pane fade active show' %}
+					{% else %}
+						{% set tabClass = 'nav-link' %}
+						{% set mainContentClass = 'tab-pane fade' %}
+					{% endif %}
+					<a class="{{tabClass}}" data-bs-toggle="tab" href="#contacts" id="contactTab">Contacts</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link" data-bs-toggle="tab" href="#collabo">Collaborateurs</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" data-bs-toggle="tab" href="#addNewContact">Ajouter un contact</a>
+					{% if tab is defined %}
+						{% if tab == 'addContact' %}
+							{% set tabClass = 'nav-link active' %}
+							{% set contentClass = 'tab-pane fade active show' %}
+						{% endif %}
+					{% else %}
+						{% set tabClass = 'nav-link ' %}
+						{% set contentClass = 'tab-pane fade' %}
+					{% endif %}
+					<a class="{{ tabClass }}" data-bs-toggle="tab" href="#addNewContact">Ajouter un contact</a>
 				</li>
 			</ul>
 			<form class="input-group fade show" id="searchInput" action="{{path('contact-index')}}">
@@ -58,7 +74,7 @@
 			</form>
 		</div>
 		<div id="contactTab" class="tab-content">
-			<div class="table-responsive tab-pane fade active show" id="contacts">
+			<div class="table-responsive {{ mainContentClass }}" id="contacts">
 				<div class="tableHeader">
 					{% for contactType in contactTypes %}
 						<div class='colorHeader'>
@@ -66,7 +82,6 @@
 							<p>{{contactType.label}}</p>
 						</div>
 					{% endfor %}
-
 				</div>
 				<table class="table table-hover table-striped" id='tableContact'>
 					<thead>
@@ -96,42 +111,54 @@
 					</tbody>
 				</table>
 			</div>
-			<div class="tab-pane fade" id="addNewContact">
+			<div class="{{ contentClass }}" id="addNewContact">
 				<legend >Nouveau contact</legend>
 				<form action="{{ path('contact-create') }}" method="post">
 					<fieldset class="form-group">
 						<div class="form-check">
 							<label class="form-check-label">
-								<input type="radio" class="form-check-input" name="isCompany" id="company" value="company">
+								{% if post.is_company is defined %}
+									{% set companyCheck = post.is_company %}
+								{% else %}
+									{% set companyCheck = "" %}
+								{% endif %}
+								<input type="radio" class="form-check-input" name="is_company" id="company" {{ companyCheck == "company" ? 'checked' : null }} value="company" required>
 								Société
 							</label>
 							<label class="form-check-label  ms-5" >
-								<input type="radio" class="form-check-input" name="isCompany" id="person" value="person">
+								<input type="radio" class="form-check-input" name="is_company" id="person" {{ companyCheck == "person" ? 'checked' : null }} value="person">
 								Particulier
 							</label>
 						</div>
 						<div class="form-group">
 							<label for="name" class="form-label mt-2">Nom</label>
-							<input type="text" class="form-control" id="name" name="name">
+							<input type="text" class="form-control" id="name" name="name" value="{{post.name ?? null}}" required>
 						</div>
 							<div class='input-group'>
 							<div class="form-group">
 								<label for="phone1" class="form-label mt-2">Numéro fixe</label>
-								<input type="tel" class="form-control" id="phone1" name="phone1">
+								<input type="tel" class="form-control" id="phone1" name="phone1" value="{{post.phone1 ?? null}}"> 
 							</div>
 							<div class="form-group">
 								<label for="phone2" class="form-label mt-2">Numéro mobile</label>
-								<input type="tel" class="form-control" id="phone2" name="phone2">
+								<input type="tel" class="form-control" id="phone2" name="phone2" value="{{post.phone2 ?? null}}">
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="email" class="form-label mt-2">Email</label>
-							<input type="email" class="form-control" id="email" name="email">
+							<input type="email" class="form-control" id="email" name="email" value="{{post.email ?? null}}">
 						</div>
 						<div class="form-group">
 							<legend class="sm">Types</legend>
 							{% for contactType in contactTypes %}
-								<input class="form-check-input" type="checkbox" value="" id="checkbox-{{ contactType.id }}" name="checkbox-{{ contactType.id }}" style="background-color:{{ contactType.color }}75">
+								
+								{% set checkName = "checkbox-" ~ contactType.id %}
+								{% if post[checkName] is defined %}
+									{% set checked = "checked" %}
+								{% else %}
+									{% set checked = "" %}
+								{% endif %}
+								<input class="form-check-input" type="checkbox" value="" id="checkbox-{{ contactType.id }}" name="checkbox-{{contactType.id}}" {{checked}} style="background-color:{{ contactType.color }}75">
 								<label class="form-check-label" for="checkbox-{{ contactType.id }}">
 									{{ contactType.label }}
 								</label>
@@ -163,9 +190,38 @@
 							<button class="btn btn-info" type="button" id="extrafieldsPersonButton">Ajouter</button>
 						</div>
 					<button class="btn btn-primary mt-4" type="submit">Créer le contact</button>
+					<input type="hidden" id="_token" name="_token" value="{{ csrf_token('contact_form') }}">
 				</form>
 			</div>
 		</div>
+	</div>
+	<div id="toastContainer">
+		{% for message in app.flashes('error') %}
+			<div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+				<div class="toast-header error">
+					<strong class="me-auto">Erreur</strong>
+					<button type="button" class="btn-close ms-2 mb-1" data-bs-dismiss="toast" aria-label="Close">
+						<span aria-hidden="true"></span>
+					</button>
+				</div>
+				<div class="toast-body">
+					{{message}}
+				</div>
+			</div>
+		{% endfor %}
+		{% for message in app.flashes('success') %}
+			<div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+				<div class="toast-header success">
+					<strong class="me-auto">Succès</strong>
+					<button type="button" class="btn-close ms-2 mb-1" data-bs-dismiss="toast" aria-label="Close">
+						<span aria-hidden="true"></span>
+					</button>
+				</div>
+				<div class="toast-body">
+					{{message}}
+				</div>
+			</div>
+		{% endfor %}
 	</div>
 {% endblock %}
 {% block style %}

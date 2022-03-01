@@ -74,7 +74,7 @@ class LoginController extends AbstractController
         $entityManager = $doctrine->getManager();
         $entityManager->persist($user);
         $entityManager->flush();
-
+        $this->addFlash('success', "L'utilisateur a bien été créé");
         return $this->redirectToRoute('dashboard-index');
     }
     public function showRegister(): Response

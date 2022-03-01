@@ -72,27 +72,27 @@ class UserFormType extends AbstractType
                         'message' => "Votre numéro de téléphone n'est pas valide ",
                     ])
                 ],
-            ])
-            ->add('formFile', FileType::class, [
-                'constraints' => [
-                    new File([
-                        'maxSize' => '1M',
-                        'maxSizeMessage' => 'The file is too large ({{ size }} {{ suffix }}). Allowed maximum size is {{ limit }} {{ suffix }}.',
-                    ]),
-                    new Image([
-                        'maxHeight' => 500,
-                        'maxHeightMessage' => "The image height is too big ({{ height }}px). Allowed maximum height is {{ max_height }}px.",
-                        'maxWidth' => 500,
-                        'maxWidthMessage' => 'The image width is too big ({{ width }}px). Allowed maximum width is {{ max_width }}px.',
-                        'mimeTypes' => ['image/png',
-                                        'image/jpg',
-                                        'image/gif',
-                                        'image/svg+xml'
-                                    ],
-                        'mimeTypesMessage' => 'Format non autorisé. Formats autorisés: {{ types }}'
-                    ]),
-                ],
             ]);
+            // ->add('form_file', FileType::class, [
+            //     'constraints' => [
+            //         new File([
+            //             'maxSize' => '1M',
+            //             'maxSizeMessage' => 'The file is too large ({{ size }} {{ suffix }}). Allowed maximum size is {{ limit }} {{ suffix }}.',
+            //         ]),
+            //         new Image([
+            //             'maxHeight' => 500,
+            //             'maxHeightMessage' => "The image height is too big ({{ height }}px). Allowed maximum height is {{ max_height }}px.",
+            //             'maxWidth' => 500,
+            //             'maxWidthMessage' => 'The image width is too big ({{ width }}px). Allowed maximum width is {{ max_width }}px.',
+            //             'mimeTypes' => ['image/png',
+            //                             'image/jpg',
+            //                             'image/gif',
+            //                             'image/svg+xml'
+            //                         ],
+            //             'mimeTypesMessage' => 'Format non autorisé. Formats autorisés: {{ types }}'
+            //         ]),
+            //     ],
+            // ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

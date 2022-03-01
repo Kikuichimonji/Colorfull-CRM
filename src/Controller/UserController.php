@@ -47,12 +47,15 @@ class UserController extends AbstractController
         $filesystem = new Filesystem();
         $userPath = 'assets/img/'.$user->getEmail();
         $userRepository = $doctrine->getRepository(User::class);
+        $session = $request->getSession();
 
         if(!$filesystem->exists($userPath)){ //If the user do not have any file folder we create a new one
             $filesystem->mkdir($userPath);
         }
         
         $form = $this->createForm(UserFormType::class);
+        //$allForm =array_merge($request->request->all(),$request->files->all());
+
         $form->submit($request->request->all());
 
         if (!$form->isValid()) { //validate form info in UserFormType
@@ -79,7 +82,7 @@ class UserController extends AbstractController
         
         $user->setPhone($request->get('phone')); //can be empty
 
-        if(!empty($request->files->get("formFile"))){ //Can't make the symfony validation work for file, so i manually check the infos
+        if(!empty($request->files->get("form_file"))){ //Can't make the symfony validation work for file, so i manually check the infos
 
             $allowedMimes = [
                 'image/png',
@@ -92,30 +95,32 @@ class UserController extends AbstractController
             $maxWidth = 500;
             $maxHeight = 500;
             
-            $file = $request->files->get("formFile");
-
+            $file = $request->files->get("form_file");
+            
             if(!in_array($file->getClientMimeType(),$allowedMimes)){ //Check if the file mime is allowed
-                $mimeError = "Le type de fichier n'est pas accepté (".$file->getClientMimeType()."), accèpté : ";
+                $mimeError = "Le type de fichier n'est pas accepté (".$file->getClientMimeType()."), accepté : ";
                 foreach ($allowedMimes as $mime) {
                     $mimeError.=$mime.", ";
                 }
                 $this->addFlash('error', $mimeError);
-                return $this->render('user/index.html.twig', [
-                    'user' => $user,
-                ]);
             }
             if($file->getSize() >= $maxFileSize ){ //Check if the file size is too big
                 $this->addFlash('error', "Le fichier est trop volumineux (".$file->getSize()."), 500ko accepté");
+            }
+            
+            if(!empty($session->getFlashBag()->peekAll())){
                 return $this->render('user/index.html.twig', [
                     'user' => $user,
                 ]);
             }
+
             if(getimagesize($file)[0] > $maxWidth || getimagesize($file)[1] > $maxHeight){ //Check if the image size is too big
                 $this->addFlash('error', "Les dimentions du fichier sont trop grandes (".getimagesize($file)[0]."px x ".getimagesize($file)[1]."px), 500 x 500 Max");
                 return $this->render('user/index.html.twig', [
                     'user' => $user,
                 ]);
             }
+
             if($file->move($userPath,"profileImage.".$file->getClientOriginalExtension())){ //If we successfully move the file to the folder we assign it in the user
                 $user->setPicture($user->getEmail()."/profileImage.".$file->getClientOriginalExtension());
             }

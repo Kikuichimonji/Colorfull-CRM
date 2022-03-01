@@ -76,6 +76,7 @@ class PlanningController extends AbstractController
         }
         $manager->persist($event);
         $manager->flush();
+        
         return new JsonResponse($event->getEventType());
     }
 

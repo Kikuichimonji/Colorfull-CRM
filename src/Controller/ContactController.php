@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Contact;
 use App\Entity\ContactType;
+use App\Form\ContactFormType;
 use App\Entity\ContactExtrafields;
 use App\Entity\ContactExtrafieldValue;
 use Doctrine\Persistence\ManagerRegistry;
@@ -15,10 +16,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 
 class ContactController extends AbstractController
@@ -147,25 +148,43 @@ class ContactController extends AbstractController
     public function newContact(ManagerRegistry $doctrine, Request $request): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
+        $post = $request->request;
+        $user = $this->getUser();
         $entityManager = $doctrine->getManager();
-
         $contactTypeRepository = $entityManager->getRepository(ContactType::class);
         $contactTypes = $contactTypeRepository->findAll();
-
-        $contactExtrafieldsRepository = $entityManager->getRepository(ContactExtrafields::class);
-
         $extrafieldsRepository = $entityManager->getRepository(ContactExtrafields::class);
         $extrafields = $extrafieldsRepository->findAll();
+        //dd($post);
+        $form = $this->createForm(ContactFormType::class);
+        $form->submit($post->all());
 
-        $post = $request->request;
+        if (!$form->isValid()) { //validate form info in UserFormType
+            $errors = $form->getErrors(true); // Array of Error
+            foreach ($errors as $error) {
+                $this->addFlash('error', $error->getMessage());
+            }
+            return $this->render('contact/index.html.twig', [
+                'user' => $user,
+                'tab' => "addContact",
+                "contactTypes" => $contactTypes,
+                "extrafields" => $extrafields,
+                "post" => $post->all(),
+            ]);
+        }
+
+        $contactTypeRepository = $entityManager->getRepository(ContactType::class);
+
+        $contactExtrafieldsRepository = $entityManager->getRepository(ContactExtrafields::class);
 
         $contact = new Contact(); //Setting up all the contact data the barbarian way
         $contact->setUserCreate($this->getUser());
         $contact->setName($post->get("name"));
         $contact->setIsCompany($post->get("isCompany") == "company");
-        $contact->setPhone1($post->get("phone1"));
-        $contact->setPhone2($post->get("phone2"));
-        $contact->setEmail($post->get("email"));
+
+        $contact->setPhone1($post->get("phone1") == "" ? null : $post->get("phone1"));
+        $contact->setPhone2($post->get("phone2") == "" ? null : $post->get("phone2"));
+        $contact->setEmail($post->get("email") == "" ? null : $post->get("email"));
         $contact->setCreatedAt(new \DateTime());
 
         $extraArray = []; //we're gonna store all the extarfields values in it
@@ -193,9 +212,9 @@ class ContactController extends AbstractController
 
         $entityManager->persist($contact);
         $entityManager->flush();
-
+        $this->addFlash('success', "Le contact a bien été ajouté");
         return $this->render('contact/index.html.twig', [
-            "user" => $this->getUser(),
+            "user" => $user,
             "contactTypes" => $contactTypes,
             "extrafields" => $extrafields,
         ]);
@@ -249,13 +268,15 @@ class ContactController extends AbstractController
         $entityManager = $doctrine->getManager();
         $contactRepository = $entityManager->getRepository(Contact::class);
         $contact = $contactRepository->findOneBy(['id' => $id]);
+        $contactTypeRepository = $entityManager->getRepository(ContactType::class);
+        $contactTypes = $contactTypeRepository->findAll();
         $post = $request->request;
 
         $contact->setName($post->get("name")); //setting up all the new datas
         $contact->setIsCompany($post->get("isCompany") == "company");
-        $contact->setPhone1($post->get("phone1"));
-        $contact->setPhone2($post->get("phone2"));
-        $contact->setEmail($post->get("email"));
+        $contact->setPhone1($post->get("phone1") == "" ? null : $post->get("phone1"));
+        $contact->setPhone2($post->get("phone2") == "" ? null : $post->get("phone2"));
+        $contact->setEmail($post->get("email") == "" ? null : $post->get("email"));
 
         foreach ($contact->getContactExtrafieldValues() as $extrafield) { //double foreach to store all the extrafields datas
             $extraId = $extrafield->getContactExtrafield()->getId();
@@ -268,7 +289,20 @@ class ContactController extends AbstractController
             }
         }
 
+        $postContactType = []; //we're gonna store the contact types in it
+        $postList = $post = $request->request->all();
+        foreach ($postList as $key => $value) { //Reading all the checkboxes datas and extravalues and pushing them into thir array to add them later
+            str_contains(explode('-', $key)[0], "checkbox") ? array_push($postContactType, explode('-', $key)[1]) : null;
+        }
+
+        foreach ($contactTypes as $contactType) { //Reading all the contactTypes, and if they matches the array we add them in the collection
+            if (in_array($contactType->getId(), $postContactType)) {
+                $contact->addContactType($contactType);
+            }
+        }
+
         $entityManager->flush();
+        $this->addFlash('success', "Le contact à bien été modifié");
         return $this->redirectToRoute('contact-index');
     }
 }
