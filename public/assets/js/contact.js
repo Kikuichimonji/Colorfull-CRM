@@ -50,11 +50,12 @@ function contactFeed(contacts,page = 1)
 {
     let body = document.querySelector('#tableContact tbody')
     let contactsPerPage = 10;
-
+    let nbPage = Math.ceil(contacts.length/contactsPerPage);
     body.innerHTML = "";
-    console.log(contacts.length)
-    cutContact = contacts.slice((contactsPerPage * page)-contactsPerPage,contactsPerPage)
-
+    //console.log(contacts.length,nbPage)
+    cutContact = contacts
+    cutContact = cutContact.slice((contactsPerPage * page)-contactsPerPage,contactsPerPage * page)
+    // console.log((contactsPerPage * page)-contactsPerPage)
     cutContact.forEach(contact => {
 
         contact = JSON.parse(contact)
@@ -80,7 +81,7 @@ function contactFeed(contacts,page = 1)
             tdColor.appendChild(div)
         });
 
-        tdName.textContent = contact.name
+        tdName.textContent = contact.name 
         tdPhone.textContent = contact.phone1 ?? contact.phone2 ?? "/";
         tdEmail.textContent = contact.email;
         tdCompany.textContent = contact.isCompany ? "Société" : "Particulier";
@@ -90,6 +91,25 @@ function contactFeed(contacts,page = 1)
         tr.appendChild(tdPhone);
         tr.appendChild(tdEmail);
         tr.appendChild(tdCompany);
+
+        let pagination = document.querySelector(".pagination")
+        pagination.innerHTML = ""
+        for (let count = 1; count <= nbPage; count++) {
+            let li = document.createElement("LI");
+            let link = document.createElement("A");
+            pagination.appendChild(li)
+            li.appendChild(link)
+            li.classList.add("page-item")
+            page == count ? li.classList.add("active") : null;
+            link.classList.add("page-link")
+            link.innerHTML = count
+
+            link.addEventListener("click", ev => {
+                //console.log(contacts)
+                contactFeed(contacts,ev.target.textContent)
+            })
+        }
+        
     });
     
 }

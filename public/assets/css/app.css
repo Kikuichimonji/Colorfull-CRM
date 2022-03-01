@@ -85,3 +85,7 @@ nav{
     background-color:var(--bs-secondary);
     color:white;
 }
+
+.pagination .page-item{
+    cursor: pointer;
+}
