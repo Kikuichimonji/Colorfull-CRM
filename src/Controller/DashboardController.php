@@ -24,10 +24,20 @@ class DashboardController extends AbstractController
     public function index(ManagerRegistry $doctrine): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
+        /** @var ContactRepository $contactRepository  */
         $contactRepository = $doctrine->getRepository(Contact::class);
         $contactTypeRepository = $doctrine->getRepository(ContactType::class);
 
-        $contacts = $contactRepository->findAll();
+        //$contacts = $contactRepository->findAll();
+        $query = $contactRepository->createQueryBuilder('c');
+        $contacts = $query
+        // ->select(['c','ct'])
+        //     ->leftJoin('c.contactType','ct')
+            ->setMaxResults(20)
+            ->getQuery()
+            ->execute();
+            
+        //dd($contacts[1]);
         $contactTypes = $contactTypeRepository->findAll();
         $planning = $this->getUser()->getPlanning();
         $error = is_null($planning) ? "Votre planing n'a pas été généré correctement" : null ;

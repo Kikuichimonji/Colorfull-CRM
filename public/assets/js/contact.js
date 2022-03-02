@@ -104,10 +104,9 @@ function contactFeed(contacts,page = 1)
             page == count ? li.classList.add("active") : null;
             link.classList.add("page-link")
             link.innerHTML = count
-
+            link.hiddenId = count
             link.addEventListener("click", ev => {
-                //console.log(contacts)
-                contactFeed(contacts,ev.target.textContent)
+                contactFeed(contacts,ev.target.hiddenId)
             })
         }
 

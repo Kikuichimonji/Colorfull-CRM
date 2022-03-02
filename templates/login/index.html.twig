@@ -1,43 +1,58 @@
 {% extends 'layouts/app.html.twig' %}
 
-{% block title %}Login{% endblock %}
-{% block nav %}
-
+{% block title %}Login
 {% endblock %}
+{% block nav %}{% endblock %}
 {% block content %}
-{% set values = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f']%}
-<div id="login">
-    <h1>
-        <span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>C</span><span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>o</span><span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>l</span><span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>o</span><span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>r</span><span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>f</span><span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>u</span><span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>l</span><span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>l</span>
-        <span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>C</span><span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>R</span><span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>M</span>
-    </h1>
-    <h2>Veuillez vous connecter</h2>
-    {% if error %}
-        <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
-    <form action="{{path('login')}}" method="post">
-        <div class='mb-3'>
-            <label for="username" class="form-label">Mail</label>
-            <input type="text" name="_username" id="username" value="{{ last_username }}">
-        </div>
-        <div class='mb-3'>
-            <label for="password" class="form-label">Mot de passe</label>
-            <input type="password" name="_password" id="password" >
-            <button type="submit" class="btn btn-primary">Se connecter</button>
-        </div>
-        <input type="hidden" name="_target_path" value="/dashboard"/>
-        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-    </form>
-    <a href="" class="link-primary">Mot de passe oublié? Cliquez ici</a>
-</div>
+	{% set values = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f']%}
+	<div id="login">
+		<h1>
+			<span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>C</span>
+			<span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>o</span>
+			<span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>l</span>
+			<span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>o</span>
+			<span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>r</span>
+			<span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>f</span>
+			<span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>u</span>
+			<span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>l</span>
+			<span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>l</span>
+			<span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>C</span>
+			<span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>R</span>
+			<span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>M</span>
+		</h1>
+		<h2>Veuillez vous connecter</h2>
+		{% if error %}
+			<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+		{% endif %}
+		<form id='login-form' action="{{path('login')}}" method="post">
+			<div class='mb-3'>
+				<label for="email" class="form-label">Mail (demo@demo.fr)</label>
+				<input type="text" name="email" id="email" value="{{ last_username }}">
+			</div>
+			<div class='mb-3'>
+				<label for="password" class="form-label">Mot de passe (demo)</label>
+				<input type="password" name="password" id="password">
+				<button type="submit" class="btn btn-primary g-recaptcha" data-sitekey="6LewPK0eAAAAAL-PDKe60I-ETIPqrmCP-dZQY-_h" data-callback='onSubmit' data-action='submit'>Se connecter</button>
+			</div>
+			<input type="hidden" name="_token" value="{{ csrf_token('login_form') }}">
+		</form>
+		<a href="" class="link-primary">Mot de passe oublié? Cliquez ici</a>
+	</div>
+
 {% endblock %}
 
 
 {% block style %}
-    {{parent()}}
-    <link href="{{asset('assets/css/login.css')}}" rel="stylesheet" type="text/css">
+	{{parent()}}
+	<link href="{{asset('assets/css/login.css')}}" rel="stylesheet" type="text/css">
 {% endblock %}
 
 {% block script_body %}
-    {{parent()}}
+	{{parent()}}
+	<script>
+		function onSubmit(token) {
+            document.getElementById("login-form").submit();
+        }
+	</script>
+	<script src="https://www.google.com/recaptcha/api.js"></script>
 {% endblock %}

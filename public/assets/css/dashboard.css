@@ -91,6 +91,7 @@ h2,h3{
     text-align: center;
     min-width: 75px;
     overflow: hidden;
+    max-height: 1.5em;
 }
 #blockContact .contactLine p:nth-child(2){
     min-width: 120px;

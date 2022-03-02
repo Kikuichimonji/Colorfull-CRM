@@ -2,14 +2,19 @@
 
 namespace App\Controller;
 
+use Faker\Factory;
 use App\Entity\Contact;
 use App\Entity\ContactType;
 use App\Form\ContactFormType;
 use App\Entity\ContactExtrafields;
+use Faker\Provider\fr_FR\Internet;
 use App\Entity\ContactExtrafieldValue;
 use Doctrine\Persistence\ManagerRegistry;
+use Faker\Provider\fr_FR\Person as Person;
+use Faker\Provider\fr_FR\Company as Company;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\HttpFoundation\Request;
+use Faker\Provider\fr_FR\PhoneNumber as Phone;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -91,7 +96,7 @@ class ContactController extends AbstractController
                     ->orWhere('c.email LIKE :query');
                 array_push($notNullQuerys, 'c.email IS NOT NULL');
             }
-            if (!is_null($request->get('checkisCompany'))) {
+            if (!is_null($request->get('checkisCompany')) && !is_null($request->get('checkCompany'))) {
                 $query->setParameter('isCompany', $request->get('checkisCompany') ? 1 : 0);
                 array_push($notNullQuerys, 'c.is_company = :isCompany');
             }
@@ -305,5 +310,91 @@ class ContactController extends AbstractController
         $entityManager->flush();
         $this->addFlash('success', "Le contact à bien été modifié");
         return $this->redirectToRoute('contact-index');
+    }
+
+    /**
+     * Generate a numbr of fake contacts then add them to the database
+     *
+     * @param Request $request
+     * 
+     * @return void
+     * 
+     */
+    public function populate(Request $request, ManagerRegistry $doctrine) : Response
+    {
+        $entityManager = $doctrine->getManager();
+        $contactTypeRepository = $entityManager->getRepository(ContactType::class);
+        $contactTypes = $contactTypeRepository->findAll();
+        
+        $contactTypeRand = [];
+
+        $faker = Factory::create();
+        $faker->addProvider(new Person($faker));
+        $faker->addProvider(new Company($faker));
+        $faker->addProvider(new Phone($faker));
+        $faker->addProvider(new Internet($faker));
+
+        
+        $ammount = $request->get('count');
+
+        for ($i=0; $i < $ammount/2; $i++) { 
+            $rand = rand(0,1);
+            $rand2 = rand(0,1);
+            $emailRand = rand(0,1000);
+            $contactTypeRand = [];
+            $randAmountTypes = rand(0,4);
+            for ($j=0; $j <= $randAmountTypes; $j++) { 
+                $randTypes = rand(0,1);
+                if($randTypes){
+                    array_push($contactTypeRand,$j);
+                }
+            }
+
+            $contact = new Contact(); 
+            $contact->setUserCreate($this->getUser());
+            $contact->setName($faker->company);
+            $contact->setIsCompany(1);
+            $contact->setPhone1($rand ? $faker->phoneNumber : null);
+            $contact->setPhone2($rand2 ? $faker->mobileNumber : null);
+            $contact->setEmail($emailRand.'.'.$faker->email);
+            $contact->setCreatedAt(new \DateTime());
+            foreach ($contactTypes as $contactType) { //Reading all the contactTypes, and if they matches the array we add them in the collection
+                if (in_array($contactType->getId(), $contactTypeRand)) {
+                    $contact->addContactType($contactType);
+                }
+            }
+            $entityManager->persist($contact);
+        }
+        for ($i=0; $i < $ammount/2; $i++) { 
+            $rand = rand(0,1);
+            $rand2 = rand(0,1);
+            $emailRand = rand(0,1000);
+            $contactTypeRand = [];
+            $randAmountTypes = rand(0,4);
+            for ($j=0; $j <= $randAmountTypes; $j++) { 
+                $randTypes = rand(0,1);
+                if($randTypes){
+                    array_push($contactTypeRand,$j);
+                }
+            }
+
+            $contact = new Contact(); 
+            $contact->setUserCreate($this->getUser());
+            $contact->setName($faker->firstName." ".$faker->lastName); 
+            $contact->setIsCompany(0);
+            $contact->setPhone1($rand ? $faker->phoneNumber : null);
+            $contact->setPhone2($rand2 ? $faker->mobileNumber : null);
+            $contact->setEmail($emailRand.'.'.$faker->email);
+            $contact->setCreatedAt(new \DateTime());
+            foreach ($contactTypes as $contactType) { //Reading all the contactTypes, and if they matches the array we add them in the collection
+                if (in_array($contactType->getId(), $contactTypeRand)) {
+                    $contact->addContactType($contactType);
+                }
+            }
+            $entityManager->persist($contact);
+        }
+        
+        $entityManager->flush();
+        return new Response("généré",200);
     }
 }
