@@ -47,7 +47,7 @@ function fetchContact(incArgs = null)
  * @return void
  * 
  */
-function contactFeed(contacts,page = 1)
+function contactFeed(contacts,page = 1,newFeed = null)
 {
     let body = document.querySelector('#tableContact tbody')
     let contactsPerPage = CPP.value == 'All' ?  999999 : CPP.value;
@@ -93,34 +93,39 @@ function contactFeed(contacts,page = 1)
         tr.appendChild(tdEmail);
         tr.appendChild(tdCompany);
 
-        let pagination = document.querySelector(".pagination")
-        pagination.innerHTML = ""
-        for (let count = 1; count <= nbPage; count++) {
-            
-            let li = document.createElement("LI");
-            let link = document.createElement("A");
-            pagination.appendChild(li)
-            li.appendChild(link)
-            li.classList.add("page-item")
-            page == count ? li.classList.add("active") : null;
-            link.classList.add("page-link")
-            link.innerHTML = count
-            link.hiddenId = count
-            link.addEventListener("click", ev => {
-                ev.target.scrollIntoView({inline: "center",behavior: "smooth"});
-                contactFeed(contacts,ev.target.hiddenId)
-            })
-        }
-
     });
+
+    let pagination = document.querySelector(".pagination")
+    pagination.innerHTML = ""
+    for (let count = 1; count <= nbPage; count++) {
+        
+        let li = document.createElement("LI");
+        let link = document.createElement("A");
+        pagination.appendChild(li)
+        li.appendChild(link)
+        li.classList.add("page-item")
+        page == count ? li.classList.add("active") : null;
+        link.classList.add("page-link")
+        link.innerHTML = count
+        link.hiddenId = count
+        link.addEventListener("click", ev => {
+            ev.target.scrollIntoView({inline: "center",behavior: "smooth"});
+            contactFeed(contacts,ev.target.hiddenId)
+        })
+    }
 
     function contactsPerPageHandler(ev) 
     {
+
         ev.stopImmediatePropagation();
         ev.target.removeEventListener("change",contactsPerPageHandler)
-        contactFeed(contacts)
+        contactFeed(contacts,1,1)
     }
     CPP.addEventListener("change", contactsPerPageHandler)
+
+    if(newFeed){
+        console.log(document.querySelector('#contactTab').clientHeight)
+    }
 }
 
 /**

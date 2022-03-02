@@ -92,15 +92,18 @@ nav{
 }
 .pagination{
     overflow-x: scroll;
-    margin-bottom: 5px;
+    padding-bottom: 5px;
+    width: 50%;
+    margin: auto;
+    border-radius: 0.4rem;
 }
-.pagination::-webkit-scrollbar {
-    width: 5px;
-    height: 8px;
-    background-color: #aaa; /* or add it to the track */
+.pagination::-webkit-scrollbar,#tableContainer::-webkit-scrollbar {
+    height: 0.5em;
+    background-color: var(--bs-light); /* or add it to the track */
 }
-.pagination::-webkit-scrollbar-thumb {
+.pagination::-webkit-scrollbar-thumb,#tableContainer::-webkit-scrollbar-thumb {
     background: var(--bs-primary);
+    border-radius: 20px;
 }
 .page-item .page-link{
     background-color: var(--bs-primary);
