@@ -75,3 +75,8 @@ user-update:
     path: /user
     controller: App\Controller\UserController::update
     methods: POST
+
+admin-index:
+    path: /admin
+    controller: App\Controller\AdminController::index
+    methods: GET

@@ -1,0 +1,21 @@
+{% extends 'layouts/loggedIn.html.twig' %}
+
+{% block title %}Panel Admin{% endblock %}
+{% block nav %}
+    {{parent()}}
+{% endblock %}
+{% block content %}
+<div id="adminContainer">
+    <h1>Pannel Admin</h1>
+</div>
+{% endblock %}
+
+{% block style %}
+    {{parent()}}
+    <link href="{{asset('assets/css/admin.css')}}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block script_body %}
+    {{parent()}}
+    <script src="{{asset('assets/js/admin.js')}}"></script>
+{% endblock %}
