@@ -97,13 +97,16 @@ nav{
     margin: auto;
     border-radius: 0.4rem;
 }
-.pagination::-webkit-scrollbar,#tableContainer::-webkit-scrollbar {
+.pagination::-webkit-scrollbar,#tableContainer::-webkit-scrollbar,.dashBlock::-webkit-scrollbar {
     height: 0.5em;
     background-color: var(--bs-light); /* or add it to the track */
 }
-.pagination::-webkit-scrollbar-thumb,#tableContainer::-webkit-scrollbar-thumb {
+.pagination::-webkit-scrollbar-thumb,#tableContainer::-webkit-scrollbar-thumb,.dashBlock::-webkit-scrollbar-thumb {
     background: var(--bs-primary);
     border-radius: 20px;
+}
+.dashBlock::-webkit-scrollbar{
+    width: 0.8em;
 }
 .page-item .page-link{
     background-color: var(--bs-primary);

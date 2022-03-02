@@ -7,33 +7,23 @@
 	{% set values = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f']%}
 	<div id="login">
 		<h1>
-			<span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>C</span>
-			<span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>o</span>
-			<span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>l</span>
-			<span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>o</span>
-			<span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>r</span>
-			<span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>f</span>
-			<span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>u</span>
-			<span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>l</span>
-			<span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>l</span>
-			<span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>C</span>
-			<span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>R</span>
-			<span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>M</span>
+			<span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>C</span><span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>o</span><span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>l</span><span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>o</span><span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>r</span><span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>f</span><span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>u</span><span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>l</span><span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>l</span>
+			<span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>C</span><span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>R</span><span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>M</span>
 		</h1>
-		<h2>Veuillez vous connecter</h2>
+		<h2 class="mt-4">Veuillez vous connecter</h2>
 		{% if error %}
 			<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
 		{% endif %}
 		<form id='login-form' action="{{path('login')}}" method="post">
-			<div class='mb-3'>
+			<div class='form-floating mt-2'>
+				<input type="text"  class="form-control" name="email" id="email" value="{{ last_username }}" placeholder="demo@demo.fr">
 				<label for="email" class="form-label">Mail (demo@demo.fr)</label>
-				<input type="text" name="email" id="email" value="{{ last_username }}">
 			</div>
-			<div class='mb-3'>
+			<div class='form-floating mt-2'>
+				<input type="password" name="password" id="password" class="form-control"placeholder="demo">
 				<label for="password" class="form-label">Mot de passe (demo)</label>
-				<input type="password" name="password" id="password">
-				<button type="submit" class="btn btn-primary g-recaptcha" data-sitekey="6Lcxfq4eAAAAABRIbwrsHQ4dvXjZAxr5n40WKoaQ" data-callback='onSubmit' data-action='submit'>Se connecter</button>
 			</div>
+			<button type="submit" class="btn btn-primary g-recaptcha mt-4" data-sitekey="6Lcxfq4eAAAAABRIbwrsHQ4dvXjZAxr5n40WKoaQ" data-callback='onSubmit' data-action='submit'>Se connecter</button>
 			<input type="hidden" name="_token" value="{{ csrf_token('login_form') }}">
 		</form>
 		<a href="" class="link-primary">Mot de passe oublié? Cliquez ici</a>

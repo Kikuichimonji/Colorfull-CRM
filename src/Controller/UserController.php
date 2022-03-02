@@ -73,6 +73,12 @@ class UserController extends AbstractController
             $user->getFirstName() == $request->get('firstName') ? null : $user->setFirstName($request->get('firstName'));
         }
         if(!empty($request->get('password'))){
+            if($user->getEmail() == "demo@demo.fr"){
+                $this->addFlash('error', "Vous n'avez pas la permission de changer le mot de passe du compte démo");
+                return $this->render('user/index.html.twig', [
+                    'user' => $user,
+                ]);
+            }
             $hashedPassword = $passwordHasher->hashPassword( //Hashing the new passowrd
                 $user,
                 $request->get('password')
@@ -127,6 +133,12 @@ class UserController extends AbstractController
         }
 
         if(!empty($request->get('email')) && $request->get('email') != $user->getEmail() ){ //check if the mail change, if that's the case we change the folder name
+            if($user->getEmail() == "demo@demo.fr"){
+                $this->addFlash('error', "Vous n'avez pas la permission de changer le mail du compte démo");
+                return $this->render('user/index.html.twig', [
+                    'user' => $user,
+                ]);
+            }
             $userMail = $userRepository->findOneBy(["email" => $request->get('email')]);
             if($userMail){ //If someone already use the mail
                 $this->addFlash('error', "Cet email est déjà utilisé");

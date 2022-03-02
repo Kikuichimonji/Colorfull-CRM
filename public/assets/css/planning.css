@@ -19,6 +19,7 @@
     height: fit-content;
     padding: 1em 1em;
     border: 1px solid var(--borderColor75);
+    min-width: 150px;
 }
 .fc-event{
     margin-top: 0.5em;
