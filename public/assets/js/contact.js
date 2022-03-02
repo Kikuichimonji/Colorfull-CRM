@@ -4,6 +4,7 @@ let extrafieldsCompany = document.getElementById("extrafieldsCompany")
 let extrafieldsPerson = document.getElementById("extrafieldsPerson")
 let extrafieldsContainerCompany = document.getElementById("extrafieldsContainerCompany")
 let extrafieldsContainerPerson = document.getElementById("extrafieldsContainerPerson")
+let CPP = document.querySelector('#nbContactsPerPage');
 extrafieldsCompany.style.display = "none"
 extrafieldsCompany.nextElementSibling.style.display ="none"
 extrafieldsContainerCompany.style.display = "none"
@@ -49,19 +50,19 @@ function fetchContact(incArgs = null)
 function contactFeed(contacts,page = 1)
 {
     let body = document.querySelector('#tableContact tbody')
-    let contactsPerPage = 10;
+    let contactsPerPage = CPP.value == 'All' ?  999999 : CPP.value;
     let nbPage = Math.ceil(contacts.length/contactsPerPage);
     body.innerHTML = "";
-    //console.log(contacts.length,nbPage)
+    
     cutContact = contacts
     cutContact = cutContact.slice((contactsPerPage * page)-contactsPerPage,contactsPerPage * page)
-    // console.log((contactsPerPage * page)-contactsPerPage)
+
     cutContact.forEach(contact => {
 
         contact = JSON.parse(contact)
         let tr = document.createElement("TR");
         tr.hiddenId = contact.id;
-        //console.log(contact.id)
+
         tr.addEventListener("click", ev => {
             window.location.href = '/contact/' + ev.currentTarget.hiddenId
         })
@@ -109,9 +110,16 @@ function contactFeed(contacts,page = 1)
                 contactFeed(contacts,ev.target.textContent)
             })
         }
-        
+
     });
-    
+
+    function contactsPerPageHandler(ev) 
+    {
+        ev.stopImmediatePropagation();
+        ev.target.removeEventListener("change",contactsPerPageHandler)
+        contactFeed(contacts)
+    }
+    CPP.addEventListener("change", contactsPerPageHandler)
 }
 
 /**

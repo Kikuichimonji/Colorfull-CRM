@@ -88,6 +88,7 @@ nav{
 
 .pagination .page-item{
     cursor: pointer;
+    margin-top: 1em;
 }
 .page-item .page-link{
     background-color: var(--bs-primary);

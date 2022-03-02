@@ -66,15 +66,31 @@ h1{
 
 .colorHeader{
     display: flex;
+    margin-left: 2em;
 }
 .colorHeader span{
     margin-right: 0.5em;
 }
+#tableContainer{
+    overflow-y: scroll;
+    max-height: 70vh;
+}
 .tableHeader{
     display: flex;
     justify-content: space-evenly;
-    width: 50%;
+    width: 100%;
     min-width: 500px;
+}
+.tableHeader .form-group{
+    margin-left: auto;
+    display: flex;
+    height: 2em;
+}
+.tableHeader .form-group .form-select{
+    width: auto;
+}
+.tableHeader .form-group label{
+    transform: translate(-5%,25%);
 }
 #searchInput{
     min-width: 200px;

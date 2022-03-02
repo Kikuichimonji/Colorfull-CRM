@@ -68,10 +68,10 @@
 				<div class="input-group ">
 					<input name='search' type="search" id="search" class="form-control" placeholder="Rechercher"/>
 					<button class="btn btn-primary">
-					<i class="fas fa-search"></i>
+						<i class="fas fa-search"></i>
 					</button>
 				</div>
-				
+
 			</form>
 		</div>
 		<div id="contactTab" class="tab-content">
@@ -83,23 +83,33 @@
 							<p>{{contactType.label}}</p>
 						</div>
 					{% endfor %}
+					<div class="form-group">
+						<label for="nbContactsPerPage" class="form-label">Contacts par page</label>
+						<select class="form-select" id="nbContactsPerPage">
+							<option>10</option>
+							<option>15</option>
+							<option>25</option>
+							<option>50</option>
+							<option>All</option>
+						</select>
+					</div>
 				</div>
-				<table class="table table-hover table-striped" id='tableContact'>
-					<thead>
-						<tr>
-							<th scope="col">Type</th>
-							<th scope="col">Nom</th>
-							<th scope="col">Téléphone</th>
-							<th scope="col">Email</th>
-							<th scope="col">Status</th>
-						</tr>
-					</thead>
-					<tbody></tbody>
-				</table>
+				<div id="tableContainer">
+					<table class="table table-hover table-striped" id='tableContact'>
+						<thead>
+							<tr>
+								<th scope="col">Type</th>
+								<th scope="col">Nom</th>
+								<th scope="col">Téléphone</th>
+								<th scope="col">Email</th>
+								<th scope="col">Status</th>
+							</tr>
+						</thead>
+						<tbody></tbody>
+					</table>
+				</div>
 				<div>
-					<ul class="pagination">
-						
-					</ul>
+					<ul class="pagination"></ul>
 				</div>
 			</div>
 			<div class="table-responsive tab-pane fade" id="collabo">
