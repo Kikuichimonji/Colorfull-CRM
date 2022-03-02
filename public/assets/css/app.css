@@ -90,6 +90,18 @@ nav{
     cursor: pointer;
     margin-top: 1em;
 }
+.pagination{
+    overflow-x: scroll;
+    margin-bottom: 5px;
+}
+.pagination::-webkit-scrollbar {
+    width: 5px;
+    height: 8px;
+    background-color: #aaa; /* or add it to the track */
+}
+.pagination::-webkit-scrollbar-thumb {
+    background: var(--bs-primary);
+}
 .page-item .page-link{
     background-color: var(--bs-primary);
     border-color: var(--bs-primary);

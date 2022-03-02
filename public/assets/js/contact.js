@@ -96,6 +96,7 @@ function contactFeed(contacts,page = 1)
         let pagination = document.querySelector(".pagination")
         pagination.innerHTML = ""
         for (let count = 1; count <= nbPage; count++) {
+            
             let li = document.createElement("LI");
             let link = document.createElement("A");
             pagination.appendChild(li)
@@ -106,6 +107,7 @@ function contactFeed(contacts,page = 1)
             link.innerHTML = count
             link.hiddenId = count
             link.addEventListener("click", ev => {
+                ev.target.scrollIntoView({inline: "center",behavior: "smooth"});
                 contactFeed(contacts,ev.target.hiddenId)
             })
         }
