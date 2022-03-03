@@ -322,6 +322,7 @@ class ContactController extends AbstractController
      */
     public function populate(Request $request, ManagerRegistry $doctrine) : Response
     {
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
         $entityManager = $doctrine->getManager();
         $contactTypeRepository = $entityManager->getRepository(ContactType::class);
         $contactTypes = $contactTypeRepository->findAll();

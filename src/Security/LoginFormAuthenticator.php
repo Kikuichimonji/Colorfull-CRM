@@ -43,8 +43,11 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 
         if (!$form->isValid()) { 
             $errors = $form->getErrors(true);
-            return new RedirectResponse($this->urlGenerator->generate('dashboard-index')); 
-            dd($errors);
+            
+            // header("Location: /");
+            // die();
+            // return new RedirectResponse($this->urlGenerator->generate('dashboard-index')); 
+            // dd($errors);
         }
 
         $email = $request->request->get('email', '');

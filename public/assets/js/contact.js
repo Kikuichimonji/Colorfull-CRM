@@ -124,7 +124,7 @@ function contactFeed(contacts,page = 1,newFeed = null)
     CPP.addEventListener("change", contactsPerPageHandler)
 
     if(newFeed){
-        console.log(document.querySelector('#contactTab').clientHeight)
+        //console.log(document.querySelector('#contactTab').clientHeight)
     }
 }
 

@@ -22,6 +22,7 @@
     min-width: 150px;
 }
 .fc-event{
+    padding-left: 5%;
     margin-top: 0.5em;
     margin-bottom: 0.5em;
     cursor: pointer;
