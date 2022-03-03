@@ -85,5 +85,5 @@ newInput.addEventListener("click", ev => {
     radioPersonDiv.appendChild(radioPersonLabel);
     radioPersonLabel.appendChild(radioPersonInput);
     containerDiv.appendChild(deleteIcon);
-    document.getElementById("tab1").appendChild(containerDiv);
+    document.querySelector("#formTab1 div").appendChild(containerDiv);
 })
