@@ -12,3 +12,38 @@ h1{
     height: 75%;
     overflow-y: auto;
 }
+#extrafieldsTab button{
+    margin-left: 2em;
+}
+#extrafieldsTab .fieldsSize{
+    width:30%;
+}
+#extrafieldsTab .form-group i{
+    margin: auto 0;
+    color: red;
+    padding: 0.5em;
+    border-radius: 5px;
+    font-size: 1.5em;
+}
+#extrafieldsTab .form-group i:hover{
+    background-color: #dadada;
+    cursor: pointer;
+}
+#extrafieldsTab button i{
+    margin-right: 0.5em;
+}
+.radioCompany{
+    display: flex;
+}
+.form-group{
+    display: flex;
+    justify-content: space-evenly;
+    height: 58px;
+    margin-bottom: 1em;
+}
+.form-check{
+    margin: auto 0;
+}
+.form-group span{
+    margin: auto 0;
+}

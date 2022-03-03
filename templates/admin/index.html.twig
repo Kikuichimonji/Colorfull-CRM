@@ -6,7 +6,7 @@
 	{{parent()}}
 {% endblock %}
 {% block content %}
-	{% set inputTpye = ['text','color','textarea'] %}
+	{% set inputTypes = ['text','textarea','color'] %}
 	<div id="adminContainer">
 		<h1>Pannel Admin</h1>
 		<ul class="nav nav-tabs">
@@ -21,41 +21,60 @@
 			</li>
 		</ul>
 		<div id="extrafieldsTab" class="tab-content">
-			<div class="tab-pane fade active show" id="tab1">
-				{% for extrafield in extrafields %}
-					<p>{{extrafield.id}}</p>
-					<div class="form-group">
-						<div class="form-floating mb-1">
-							<input type="text" class="form-control" id="label" placeholder="name@example.com" value="{{extrafield.label}}">
-							<label for="label">Label</label>
-						</div>
-						<div class="form-floating mb-1">
-							<input type="text" class="form-control" id="inputType" placeholder="Password" value="{{extrafield.inputType}}">
-							<label for="inputType">Input Type</label>
-						</div>
-						<div class="form-floating mb-1">
-							<input type="text" class="form-control" id="forCompany" placeholder="Password" value="{{extrafield.forCompany}}">
-							<label for="forCompany">For Company</label>
-						</div>
+			<form action="" method="post">
+				<div class="tab-pane fade active show mt-2" id="tab1">
+					{% for extrafield in extrafields %}
+						<div class="form-group">
+							<span>{% if extrafield.id <10 %}0{% endif %}{{extrafield.id}}</span>
+							<div class="form-floating fieldsSize">
+								<input type="text" class="form-control" name="label_{{extrafield.id}}" id="label_{{extrafield.id}}" placeholder="Label" value="{{extrafield.label}}">
+								<label for="label_{{extrafield.id}}">Label</label>
+							</div>
+							<div class="input-group fieldsSize">
+								<select class="form-select " name="inputType_{{extrafield.id}}" id="inputType_{{extrafield.id}}">
+									{% for inputType in inputTypes %}
+										<option {% if inputType ==  extrafield.inputType %}selected{% endif %}>{{inputType}}</option>
+									{% endfor %}
+								</select>
+								<label for="inputType_{{extrafield.id}}" class="input-group-text">Input Type</label>
+							</div>
+							<fieldset class="radioCompany fieldsSize">
+								<div class="form-check">
+									<label class="form-check-label">
+										<input type="radio" class="form-check-input ms-1 me-1" name="forCompany_{{extrafield.id}}" id="company_{{extrafield.id}}" value="company" {% if extrafield.forCompany == true %} checked="" {% endif %}>
+										Société
+									</label>
+								</div>
+								<div class="form-check">
+									<label class="form-check-label">
+										<input type="radio" class="form-check-input ms-2 me-1" name="forCompany_{{extrafield.id}}" id="person_{{extrafield.id}}" value="person" {% if extrafield.forCompany == false %} checked="" {% endif %}>
+										Personne
+									</label>
+								</div>
+							</fieldset>
+							<i class="fas fa-ban"></i>
+							</div>
+						{% endfor %}
 					</div>
-				{% endfor %}
-			</div>
-			<div class="tab-pane fade" id="tab2">
-				<p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit.</p>
-			</div>
-			<div class="tab-pane fade" id="tab3">
-				<p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony. Leggings gentrify squid 8-bit cred pitchfork.</p>
+					<button type="submit" class="btn btn-primary">Enregistrer</button> <button class="btn btn-info" id="newInput"><i class="fas fa-plus-circle"></i>Nouveau champ</button>
+				</form>
+				<div class="tab-pane fade" id="tab2">
+					<p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit.</p>
+				</div>
+				<div class="tab-pane fade" id="tab3">
+					<p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony. Leggings gentrify squid 8-bit cred pitchfork.</p>
+				</div>
 			</div>
 		</div>
-	</div>
-{% endblock %}
+	{% endblock %}
 
-{% block style %}
-	{{parent()}}
-	<link href="{{asset('assets/css/admin.css')}}" rel="stylesheet" type="text/css">
-{% endblock %}
+	{% block style %}
+		{{parent()}}
+		<link href="{{asset('assets/css/admin.css')}}" rel="stylesheet" type="text/css">
+		<link href='https://use.fontawesome.com/releases/v5.15.4/css/all.css' rel='stylesheet'>
+	{% endblock %}
 
-{% block script_body %}
-	{{parent()}}
-	<script src="{{asset('assets/js/admin.js')}}"></script>
-{% endblock %}
+	{% block script_body %}
+		{{parent()}}
+		<script src="{{asset('assets/js/admin.js')}}"></script>
+	{% endblock %}
