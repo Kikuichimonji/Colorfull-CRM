@@ -6,22 +6,39 @@
 	{{parent()}}
 {% endblock %}
 {% block content %}
+	{% set inputTpye = ['text','color','textarea'] %}
 	<div id="adminContainer">
 		<h1>Pannel Admin</h1>
 		<ul class="nav nav-tabs">
 			<li class="nav-item">
-				<a class="nav-link active" data-bs-toggle="tab" href="#tab1">Home</a>
+				<a class="nav-link active" data-bs-toggle="tab" href="#tab1">Extrafields</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" data-bs-toggle="tab" href="#tab2">Profile</a>
+				<a class="nav-link" data-bs-toggle="tab" href="#tab2">Tab2</a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" data-bs-toggle="tab" href="#tab3">Tab3</a>
 			</li>
 		</ul>
-		<div id="myTabContent" class="tab-content">
+		<div id="extrafieldsTab" class="tab-content">
 			<div class="tab-pane fade active show" id="tab1">
-				<p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
+				{% for extrafield in extrafields %}
+					<p>{{extrafield.id}}</p>
+					<div class="form-group">
+						<div class="form-floating mb-1">
+							<input type="text" class="form-control" id="label" placeholder="name@example.com" value="{{extrafield.label}}">
+							<label for="label">Label</label>
+						</div>
+						<div class="form-floating mb-1">
+							<input type="text" class="form-control" id="inputType" placeholder="Password" value="{{extrafield.inputType}}">
+							<label for="inputType">Input Type</label>
+						</div>
+						<div class="form-floating mb-1">
+							<input type="text" class="form-control" id="forCompany" placeholder="Password" value="{{extrafield.forCompany}}">
+							<label for="forCompany">For Company</label>
+						</div>
+					</div>
+				{% endfor %}
 			</div>
 			<div class="tab-pane fade" id="tab2">
 				<p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit.</p>

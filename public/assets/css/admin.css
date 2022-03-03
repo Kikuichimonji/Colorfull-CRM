@@ -1,7 +1,14 @@
+body{
+    height: 100vh;
+}
 #adminContainer {
     width: 80%;
     margin: 0 auto;
 }
 h1{
     text-align: center;
+}
+#extrafieldsTab{
+    height: 75%;
+    overflow-y: auto;
 }
