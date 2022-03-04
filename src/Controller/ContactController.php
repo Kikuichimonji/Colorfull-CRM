@@ -3,13 +3,14 @@
 namespace App\Controller;
 
 use Faker\Factory;
+use App\Entity\Team;
+use App\Entity\User;
 use App\Entity\Contact;
 use App\Entity\ContactType;
 use App\Form\ContactFormType;
 use App\Entity\ContactExtrafields;
 use Faker\Provider\fr_FR\Internet;
 use App\Entity\ContactExtrafieldValue;
-use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
 use Faker\Provider\fr_FR\Person as Person;
 use Faker\Provider\fr_FR\Company as Company;
@@ -44,8 +45,8 @@ class ContactController extends AbstractController
         $this->denyAccessUnlessGranted('ROLE_USER');
         $entityManager = $doctrine->getManager();
 
-        $userReposiroty =  $entityManager->getRepository(User::class);
-        $users =  $userReposiroty->findAll();
+        $userRepository =  $entityManager->getRepository(User::class);
+        $users =  $userRepository->findAll();
 
         $contactTypeRepository = $entityManager->getRepository(ContactType::class);
         $contactTypes = $contactTypeRepository->findAll();
@@ -53,11 +54,16 @@ class ContactController extends AbstractController
         $extrafieldsRepository = $entityManager->getRepository(ContactExtrafields::class);
         $extrafields = $extrafieldsRepository->findAll();
 
+        $ownedCollaboTeams = $this->getUser()->getOwnedTeams();
+        $collaboTeams = $this->getUser()->getInvitedTeams();
+
         return $this->render('contact/index.html.twig', [
             "user" => $this->getUser(),
             "contactTypes" => $contactTypes,
             "extrafields" => $extrafields,
             "users" => $users,
+            "ownedCollaboTeams" => $ownedCollaboTeams,
+            "collaboTeams" => $collaboTeams,
         ]);
     }
 

@@ -121,9 +121,38 @@
 							<th scope="col">Email Pro</th>
 							<th scope="col">Téléphone Pro</th>
 							<th scope="col">Role</th>
+							<th scope="col">Team</th>
 						</tr>
 					</thead>
 					<tbody>
+					{% for collabos in collaboTeams %}
+						{% set bg = "background-color:" ~ collabos.color %}
+						{% for collabo in collabos.users %}
+							{% if user.id != collabo.id %}
+								<tr style="{{bg}}">
+									<td scope="col">{{ collabo.firstName }}</td>
+									<td scope="col">{{ collabo.lastName }}</td>
+									<td scope="col">{{ collabo.email }}</td>
+									<td scope="col">{{ collabo.phone }}</td>
+									<td scope="col">{{collabo.roles|first}}</td>
+									<td scope="col">{{collabos.label}}</td>
+								</tr>
+							{% endif %}
+						{% endfor %}
+					{% endfor %}
+					{% for collabos in ownedCollaboTeams %}
+						{% set bg = "background-color:" ~ collabos.color %}
+						{% for collabo in collabos.users %}
+							<tr style="{{bg}}">
+								<td scope="col">{{ collabo.firstName }}</td>
+								<td scope="col">{{ collabo.lastName }}</td>
+								<td scope="col">{{ collabo.email }}</td>
+								<td scope="col">{{ collabo.phone }}</td>
+								<td scope="col">{{collabo.roles|first}}</td>
+								<td scope="col">{{collabos.label}}</td>
+							</tr>
+						{% endfor %}
+					{% endfor %}
 					{% for collabo in users %}
 						<tr class=''>
 							<td scope="col">{{ collabo.firstName }}</td>
@@ -131,6 +160,7 @@
 							<td scope="col">{{ collabo.email }}</td>
 							<td scope="col">{{ collabo.phone }}</td>
 							<td scope="col">{{collabo.roles|first}}</td>
+							<td scope="col">/</td>
 						</tr>
 					{% endfor %}
 					</tbody>

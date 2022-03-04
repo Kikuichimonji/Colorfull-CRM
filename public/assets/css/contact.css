@@ -71,7 +71,7 @@ h1{
 .colorHeader span{
     margin-right: 0.5em;
 }
-#tableContainer{
+#tableContainer,#collabo{
     overflow-y: auto;
     max-height: 70vh;
 }
