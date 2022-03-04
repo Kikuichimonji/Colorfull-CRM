@@ -2,7 +2,14 @@ let menuLinks = document.querySelectorAll(".navbar-nav .nav-link")
 menuLinks[3].classList.add("active")
 
 let newInput = document.querySelector("#newInput")
+let deleteList = document.querySelectorAll(".fa-ban")
 
+
+deleteList.forEach(icon => {
+    icon.addEventListener("click", ev => {
+        ev.target.parentNode.outerHTML = "";
+    })
+});
 
 newInput.addEventListener("click", ev => {
     ev.preventDefault();
@@ -33,6 +40,7 @@ newInput.addEventListener("click", ev => {
     labelInput.setAttribute("id","label_" + countInput)
     labelInput.setAttribute("placeholder","label")
     labelInput.classList.add('form-control')
+    labelInput.required = true;
     labelLabel.setAttribute("for","label_" + countInput)
     labelLabel.innerText = "Label"
 
@@ -66,10 +74,14 @@ newInput.addEventListener("click", ev => {
     radioCompanyInput.setAttribute("id","company_" + countInput);
     radioPersonInput.setAttribute("id","person_" + countInput);
     radioCompanyInput.value = "company"
-    radioPersonInput.value = "person"
+    radioPersonInput.value = "person";
+    radioCompanyInput.required=true;
 
     deleteIcon.className = "fas fa-ban"
-    
+    deleteIcon.addEventListener("click", ev => {
+        console.log(ev.target)
+    })
+
     containerDiv.appendChild(span);
     containerDiv.appendChild(labelDiv);
     labelDiv.appendChild(labelInput);

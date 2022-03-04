@@ -80,3 +80,7 @@ admin-index:
     path: /admin
     controller: App\Controller\AdminController::index
     methods: GET
+admin-extrafields-save:
+    path: /admin
+    controller: App\Controller\AdminController::newExtrafields
+    methods: POST

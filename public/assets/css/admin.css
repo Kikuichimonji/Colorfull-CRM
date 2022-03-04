@@ -47,3 +47,16 @@ h1{
 .form-group span{
     margin: auto 0;
 }
+
+#adminContainer .nav-link.active{
+    border-color: var(--borderColor);
+    border-bottom: 1px solid white;
+}
+#adminContainer .nav-tabs{
+    border-color: var(--borderColor);
+    
+}
+#adminContainer .nav-tabs .nav-link:focus,#adminContainer .nav-tabs .nav-link:hover{
+    border-color: var(--borderColor);
+    border-bottom: 1px solid white;
+}

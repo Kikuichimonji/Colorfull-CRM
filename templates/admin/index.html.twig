@@ -14,27 +14,34 @@
 				<a class="nav-link active" data-bs-toggle="tab" href="#tab1">Extrafields</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" data-bs-toggle="tab" href="#tab2">Tab2</a>
+				<a class="nav-link" data-bs-toggle="tab" href="#tab2">Event Types</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" data-bs-toggle="tab" href="#tab3">Tab3</a>
+				<a class="nav-link" data-bs-toggle="tab" href="#tab3">Contact Types</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" data-bs-toggle="tab" href="#tab3">Edition utilisateurs</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" data-bs-toggle="tab" href="#tab3">Ajout utilisateur</a>
 			</li>
 		</ul>
 		<div id="extrafieldsTab" class="tab-content">
 			<div class="tab-pane fade active show mt-2" id="tab1">
-				<form action="" method="post" id="formTab1">
+				<form action="{{path('admin-extrafields-save')}}" method="post" id="formTab1">
 					<div>
 						{% for extrafield in extrafields %}
 							<div class="form-group">
-								<span>{% if extrafield.id <10 %}0{% endif %}{{extrafield.id}}</span>
+								<span>
+									{% if extrafield.id <10 %}0{% endif %}{{extrafield.id}}</span>
 								<div class="form-floating fieldsSize">
-									<input type="text" class="form-control" name="label_{{extrafield.id}}" id="label_{{extrafield.id}}" placeholder="Label" value="{{extrafield.label}}">
+									<input type="text" class="form-control" name="label_{{extrafield.id}}" id="label_{{extrafield.id}}" placeholder="Label" value="{{extrafield.label}}" required>
 									<label for="label_{{extrafield.id}}">Label</label>
 								</div>
 								<div class="input-group fieldsSize">
 									<select class="form-select " name="inputType_{{extrafield.id}}" id="inputType_{{extrafield.id}}">
 										{% for inputType in inputTypes %}
-											<option {% if inputType ==  extrafield.inputType %}selected{% endif %}>{{inputType}}</option>
+											<option {% if inputType == extrafield.inputType %} selected {% endif %}>{{inputType}}</option>
 										{% endfor %}
 									</select>
 									<label for="inputType_{{extrafield.id}}" class="input-group-text">Input Type</label>
@@ -42,7 +49,7 @@
 								<fieldset class="radioCompany fieldsSize">
 									<div class="form-check">
 										<label class="form-check-label">
-											<input type="radio" class="form-check-input ms-1 me-1" name="forCompany_{{extrafield.id}}" id="company_{{extrafield.id}}" value="company" {% if extrafield.forCompany == true %} checked="" {% endif %}>
+											<input type="radio" class="form-check-input ms-1 me-1" name="forCompany_{{extrafield.id}}" id="company_{{extrafield.id}}" value="company" {% if extrafield.forCompany == true %} checked="" {% endif %} required>
 											Société
 										</label>
 									</div>
@@ -57,7 +64,9 @@
 							</div>
 						{% endfor %}
 					</div>
-					<button type="submit" class="btn btn-primary">Enregistrer</button> <button class="btn btn-info" id="newInput"><i class="fas fa-plus-circle"></i>Nouveau champ</button>
+					<button type="submit" class="btn btn-primary">Enregistrer</button>
+					<button class="btn btn-info" id="newInput">
+						<i class="fas fa-plus-circle"></i>Nouveau champ</button>
 				</form>
 			</div>
 
@@ -68,15 +77,44 @@
 				<p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony. Leggings gentrify squid 8-bit cred pitchfork.</p>
 			</div>
 		</div>
-	{% endblock %}
+		<div id="toastContainer">
+			{% for message in app.flashes('error') %}
+				<div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+					<div class="toast-header error">
+						<strong class="me-auto">Erreur</strong>
+						<button type="button" class="btn-close ms-2 mb-1" data-bs-dismiss="toast" aria-label="Close">
+							<span aria-hidden="true"></span>
+						</button>
+					</div>
+					<div class="toast-body">
+						{{message}}
+					</div>
+				</div>
+			{% endfor %}
+			{% for message in app.flashes('success') %}
+				<div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+					<div class="toast-header success">
+						<strong class="me-auto">Succès</strong>
+						<button type="button" class="btn-close ms-2 mb-1" data-bs-dismiss="toast" aria-label="Close">
+							<span aria-hidden="true"></span>
+						</button>
+					</div>
+					<div class="toast-body">
+						{{message}}
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+{% endblock %}
 
-	{% block style %}
-		{{parent()}}
-		<link href="{{asset('assets/css/admin.css')}}" rel="stylesheet" type="text/css">
-		<link href='https://use.fontawesome.com/releases/v5.15.4/css/all.css' rel='stylesheet'>
-	{% endblock %}
+{% block style %}
+	{{parent()}}
+	<link href="{{asset('assets/css/admin.css')}}" rel="stylesheet" type="text/css">
+	<link href='https://use.fontawesome.com/releases/v5.15.4/css/all.css' rel='stylesheet'>
+{% endblock %}
 
-	{% block script_body %}
-		{{parent()}}
-		<script src="{{asset('assets/js/admin.js')}}"></script>
-	{% endblock %}
+{% block script_body %}
+	{{parent()}}
+	<script src="{{asset('assets/js/admin.js')}}"></script>
+{% endblock %}
