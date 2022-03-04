@@ -113,16 +113,27 @@
 				</div>
 			</div>
 			<div class="table-responsive tab-pane fade" id="collabo">
-				<table class="table table-hover ">
+				<table class="table table-hover table-striped">
 					<thead>
 						<tr>
-							<th scope="col">Type</th>
-							<th scope="col">Column heading</th>
-							<th scope="col">Column heading</th>
-							<th scope="col">Column heading</th>
+							<th scope="col">Prénom</th>
+							<th scope="col">Nom</th>
+							<th scope="col">Email Pro</th>
+							<th scope="col">Téléphone Pro</th>
+							<th scope="col">Role</th>
 						</tr>
 					</thead>
-					<tbody></tbody>
+					<tbody>
+					{% for collabo in users %}
+						<tr class=''>
+							<td scope="col">{{ collabo.firstName }}</td>
+							<td scope="col">{{ collabo.lastName }}</td>
+							<td scope="col">{{ collabo.email }}</td>
+							<td scope="col">{{ collabo.phone }}</td>
+							<td scope="col">{{collabo.roles|first}}</td>
+						</tr>
+					{% endfor %}
+					</tbody>
 				</table>
 			</div>
 			<div class="{{ contentClass }}" id="addNewContact">

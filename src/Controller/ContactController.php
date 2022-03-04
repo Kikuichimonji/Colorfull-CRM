@@ -9,6 +9,7 @@ use App\Form\ContactFormType;
 use App\Entity\ContactExtrafields;
 use Faker\Provider\fr_FR\Internet;
 use App\Entity\ContactExtrafieldValue;
+use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
 use Faker\Provider\fr_FR\Person as Person;
 use Faker\Provider\fr_FR\Company as Company;
@@ -38,10 +39,13 @@ class ContactController extends AbstractController
      * @return Response Returning contactTypes and extrafields
      * 
      */
-    public function index(ManagerRegistry $doctrine, Request $request): Response
+    public function index(ManagerRegistry $doctrine): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
         $entityManager = $doctrine->getManager();
+
+        $userReposiroty =  $entityManager->getRepository(User::class);
+        $users =  $userReposiroty->findAll();
 
         $contactTypeRepository = $entityManager->getRepository(ContactType::class);
         $contactTypes = $contactTypeRepository->findAll();
@@ -53,6 +57,7 @@ class ContactController extends AbstractController
             "user" => $this->getUser(),
             "contactTypes" => $contactTypes,
             "extrafields" => $extrafields,
+            "users" => $users,
         ]);
     }
 

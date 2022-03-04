@@ -1,14 +1,6 @@
 login:
     path: /
     controller: App\Controller\LoginController::index
-login-register:
-    path: /register
-    controller: App\Controller\LoginController::showRegister
-    methods: GET
-login-register-form:
-    path: /register
-    controller: App\Controller\LoginController::register
-    methods: POST
 app_logout:
     path: /logout
     methods: GET
@@ -83,4 +75,8 @@ admin-index:
 admin-extrafields-save:
     path: /admin
     controller: App\Controller\AdminController::newExtrafields
+    methods: POST
+admin-register:
+    path: /admin/register
+    controller: App\Controller\LoginController::register
     methods: POST

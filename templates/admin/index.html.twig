@@ -20,48 +20,50 @@
 				<a class="nav-link" data-bs-toggle="tab" href="#tab3">Contact Types</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" data-bs-toggle="tab" href="#tab3">Edition utilisateurs</a>
+				<a class="nav-link" data-bs-toggle="tab" href="#tab4">Edition utilisateurs</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" data-bs-toggle="tab" href="#tab3">Ajout utilisateur</a>
+				<a class="nav-link" data-bs-toggle="tab" href="#newUser">Ajout utilisateur</a>
 			</li>
 		</ul>
 		<div id="extrafieldsTab" class="tab-content">
 			<div class="tab-pane fade active show mt-2" id="tab1">
 				<form action="{{path('admin-extrafields-save')}}" method="post" id="formTab1">
 					<div>
+						{% set count = 1 %}
 						{% for extrafield in extrafields %}
-							<div class="form-group">
+							<div class="form-group" id="{{count}}">
 								<span>
-									{% if extrafield.id <10 %}0{% endif %}{{extrafield.id}}</span>
+									{% if count <10 %}0{% endif %}{{count}}</span>
 								<div class="form-floating fieldsSize">
-									<input type="text" class="form-control" name="label_{{extrafield.id}}" id="label_{{extrafield.id}}" placeholder="Label" value="{{extrafield.label}}" required>
-									<label for="label_{{extrafield.id}}">Label</label>
+									<input type="text" class="form-control" name="label_{{count}}" id="label_{{count}}" placeholder="Label" value="{{extrafield.label}}" required>
+									<label for="label_{{count}}">Label</label>
 								</div>
 								<div class="input-group fieldsSize">
-									<select class="form-select " name="inputType_{{extrafield.id}}" id="inputType_{{extrafield.id}}">
+									<select class="form-select " name="inputType_{{count}}" id="inputType_{{count}}">
 										{% for inputType in inputTypes %}
 											<option {% if inputType == extrafield.inputType %} selected {% endif %}>{{inputType}}</option>
 										{% endfor %}
 									</select>
-									<label for="inputType_{{extrafield.id}}" class="input-group-text">Input Type</label>
+									<label for="inputType_{{count}}" class="input-group-text">Input Type</label>
 								</div>
 								<fieldset class="radioCompany fieldsSize">
 									<div class="form-check">
 										<label class="form-check-label">
-											<input type="radio" class="form-check-input ms-1 me-1" name="forCompany_{{extrafield.id}}" id="company_{{extrafield.id}}" value="company" {% if extrafield.forCompany == true %} checked="" {% endif %} required>
+											<input type="radio" class="form-check-input ms-1 me-1" name="forCompany_{{count}}" id="company_{{count}}" value="company" {% if extrafield.forCompany == true %} checked="" {% endif %} required>
 											Société
 										</label>
 									</div>
 									<div class="form-check">
 										<label class="form-check-label">
-											<input type="radio" class="form-check-input ms-2 me-1" name="forCompany_{{extrafield.id}}" id="person_{{extrafield.id}}" value="person" {% if extrafield.forCompany == false %} checked="" {% endif %}>
+											<input type="radio" class="form-check-input ms-2 me-1" name="forCompany_{{count}}" id="person_{{count}}" value="person" {% if extrafield.forCompany == false %} checked="" {% endif %}>
 											Personne
 										</label>
 									</div>
 								</fieldset>
 								<i class="fas fa-ban"></i>
 							</div>
+							{% set count = count + 1 %}
 						{% endfor %}
 					</div>
 					<button type="submit" class="btn btn-primary">Enregistrer</button>
@@ -75,6 +77,59 @@
 			</div>
 			<div class="tab-pane fade" id="tab3">
 				<p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony. Leggings gentrify squid 8-bit cred pitchfork.</p>
+			</div>
+			<div class="tab-pane fade" id="tab4">
+				<p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony. Leggings gentrify squid 8-bit cred pitchfork.</p>
+			</div>
+			<div class="tab-pane fade" id="newUser">
+				<h2>Nouvel utilisateur</h2>
+				<form action="{{path('admin-register')}}" method="post">
+					<div class='mb-3 form-floating'>
+						<input type="text" name="email" id="email" class="form-control" placeholder="mail">
+						<label for="email" class="form-label">Mail</label>
+					</div>
+					<div class="form-group">
+						<div class='mb-3 form-floating'>
+							<input type="text" name="lastName" id="lastName" class="form-control" placeholder="name">
+							<label for="lastName" class="form-label">Nom</label>
+						</div>
+						<div class='mb-3 form-floating'>
+							<input type="text" name="firstName" id="firstName" class="form-control" placeholder="name">
+							<label for="firstName" class="form-label">Prénom</label>
+						</div>
+					</div>
+					<div class='mb-3 form-floating'>
+						<input type="text" name="phone" id="phone" class="form-control" placeholder="mail">
+						<label for="phone" class="form-label">Téléphone</label>
+					</div>
+					<div class='mb-3 form-floating'>
+						<input type="password" name="password" id="password"  class="form-control" placeholder="password">
+						<label for="password" class="form-label">Mot de passe</label>
+					</div>
+					<div class="form-group">
+						<legend class="mt-4">Roles</legend>
+						<div class="form-check">
+							<label class="form-check-label">
+								<input type="radio" class="form-check-input" name="roles" id="role1" value="user" checked="">
+								Utilisateur
+							</label>
+						</div>
+						<div class="form-check">
+							<label class="form-check-label">
+								<input type="radio" class="form-check-input" name="roles" id="role2" value="manager">
+								Manager
+							</label>
+						</div>
+						<div class="form-check">
+							<label class="form-check-label">
+								<input type="radio" class="form-check-input" name="roles" id="role3" value="admin">
+								Administrateur
+							</label>
+						</div>
+					</div>
+					
+					<button type="submit" class="btn btn-primary">Ajouter l'utilisateur</button>
+				</form>
 			</div>
 		</div>
 		<div id="toastContainer">

@@ -35,16 +35,16 @@ h1{
 .radioCompany{
     display: flex;
 }
-.form-group{
+#tab1 .form-group{
     display: flex;
     justify-content: space-evenly;
     height: 58px;
     margin-bottom: 1em;
 }
-.form-check{
+#tab1 .form-check{
     margin: auto 0;
 }
-.form-group span{
+#tab1 .form-group span{
     margin: auto 0;
 }
 

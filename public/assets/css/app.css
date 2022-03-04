@@ -44,8 +44,11 @@ nav{
     align-items: center;
 }
 #navTop img{
-    height: 100px;
-    width: 100px;
+    height: 100%;
+    width: 100%;
+    max-height: 150px;
+    max-width: 150px;
+    object-fit: contain;
 }
 #sidePlanningContainer{
     

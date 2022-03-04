@@ -3,17 +3,49 @@ menuLinks[3].classList.add("active")
 
 let newInput = document.querySelector("#newInput")
 let deleteList = document.querySelectorAll(".fa-ban")
+let inputGroupsList = document.querySelectorAll(".form-group")
+inputGroupsList.forEach(inputGroup => {
+    inputGroup.hiddenId = inputGroup.id;
+    inputGroup.removeAttribute("id");
+})
 
+function minusEl(el)
+{
+
+    el.querySelector("span").innerText = el.hiddenId <10 ? "0" + (el.hiddenId -1) : (el.hiddenId -1);
+    let labelInput = el.querySelector("#label_"+el.hiddenId)
+    labelInput.setAttribute("name","label_"+(el.hiddenId-1))
+    labelInput.setAttribute("id","label_"+(el.hiddenId-1))
+    let labelLabel = labelInput.nextElementSibling;
+    labelLabel.setAttribute("for","label_"+(el.hiddenId-1))
+    let selectInput = el.querySelector("#inputType_"+el.hiddenId)
+    selectInput.setAttribute("name","inputType_"+(el.hiddenId-1))
+    selectInput.setAttribute("id","inputType_"+(el.hiddenId-1))
+    let selectLabel = selectInput.nextElementSibling;
+    selectLabel.setAttribute("for","inputType_"+(el.hiddenId-1))
+    let radioButtons = el.querySelectorAll(".radioCompany input")
+    radioButtons[0].setAttribute("name","forCompany_"+(el.hiddenId-1))
+    radioButtons[0].setAttribute("id","company_"+(el.hiddenId-1))
+    radioButtons[1].setAttribute("name","forCompany_"+(el.hiddenId-1))
+    radioButtons[1].setAttribute("id","person_"+(el.hiddenId-1))
+    el.hiddenId = el.hiddenId-1
+    if(el.nextElementSibling){
+        nextEl = el.nextElementSibling
+        minusEl(nextEl)
+    }
+}
 
 deleteList.forEach(icon => {
     icon.addEventListener("click", ev => {
+        
+        ev.target.parentNode.nextElementSibling ? minusEl(ev.target.parentNode.nextElementSibling) : null
         ev.target.parentNode.outerHTML = "";
     })
 });
 
 newInput.addEventListener("click", ev => {
     ev.preventDefault();
-    let countInput = document.getElementsByClassName("form-group").length + 1
+    let countInput = document.querySelectorAll("#formTab1 .form-group").length + 1
     let containerDiv = document.createElement("DIV");
     let span = document.createElement("SPAN");
     let labelDiv = document.createElement("DIV");
@@ -32,6 +64,7 @@ newInput.addEventListener("click", ev => {
     let deleteIcon = document.createElement("I");
 
     containerDiv.classList.add("form-group");
+    containerDiv.hiddenId = countInput;
     span.innerText = countInput < 10 ? "0" + countInput: countInput;
 
     labelDiv.className = "form-floating fieldsSize";
@@ -79,7 +112,9 @@ newInput.addEventListener("click", ev => {
 
     deleteIcon.className = "fas fa-ban"
     deleteIcon.addEventListener("click", ev => {
-        console.log(ev.target)
+        
+        ev.target.parentNode.nextElementSibling ? minusEl(ev.target.parentNode.nextElementSibling) : null
+        ev.target.parentNode.outerHTML = "";
     })
 
     containerDiv.appendChild(span);

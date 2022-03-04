@@ -50,7 +50,7 @@ class LoginController extends AbstractController
      */
     public function register(Request $request,UserPasswordHasherInterface $passwordHasher,ManagerRegistry $doctrine): Response
     {
-        //$this->denyAccessUnlessGranted('ROLE_MANAGER');
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $user = new User();
         $planning = new Planning();
         $password = $request->request->get("password");
@@ -75,14 +75,15 @@ class LoginController extends AbstractController
         $entityManager->persist($user);
         $entityManager->flush();
         $this->addFlash('success', "L'utilisateur a bien été créé");
-        return $this->redirectToRoute('dashboard-index');
-    }
-    public function showRegister(): Response
-    {
-        return $this->render('login/register.html.twig', [
-        ]);
+        return $this->redirectToRoute('admin-index');
     }
 
+    /**
+     * Nothing interesting, just some memos
+     *
+     * @return [type]
+     * 
+     */
     public function admin()
     {
         $hasAccess = $this->isGranted('ROLE_ADMIN');
