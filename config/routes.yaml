@@ -63,6 +63,10 @@ user-profile:
     path: /user
     controller: App\Controller\UserController::index
     methods: GET
+user-show:
+    path: /user/{id}
+    controller: App\Controller\UserController::index
+    methods: GET
 user-update:
     path: /user
     controller: App\Controller\UserController::update

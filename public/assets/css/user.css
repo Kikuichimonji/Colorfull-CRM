@@ -2,10 +2,29 @@
     width: 80%;
     margin: 0 auto;
 }
+h1{
+    text-align: center;
+}
 .form-control::placeholder{
     color: #AAA;
 }
 form img{
     max-width: 300px;
     max-height: 300px;
+}
+#roleBox {
+    display: flex;
+    margin: auto;
+    width: 60%;
+    justify-content: space-evenly;
+}
+#roleBox .form-check{
+    margin-left: 1em;
+}
+#roleBoxContainer{
+    display: flex;
+
+}
+.form-group{
+    margin-top: 0.5em;
 }

@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Entity\Planning;
+use App\Form\UserFormType;
+use App\Entity\ContactExtrafields;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -51,6 +53,32 @@ class LoginController extends AbstractController
     public function register(Request $request,UserPasswordHasherInterface $passwordHasher,ManagerRegistry $doctrine): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        $form = $this->createForm(UserFormType::class);
+        $form->submit($request->request->all());
+        $extrafieldsRepository = $doctrine->getRepository(ContactExtrafields::class);
+        $extrafields = $extrafieldsRepository->findAll();
+        
+
+        if (!$form->isValid()) { //validate form info in UserFormType
+            $errors = $form->getErrors(true); // Array of Error
+            
+            foreach ($errors as $error) {
+                $this->addFlash('error', $error->getMessage());
+            }
+            
+            return $this->render('admin/index.html.twig', [
+                'extrafields' => $extrafields,
+            ]);
+        }
+        $userRepository = $doctrine->getRepository(User::class);
+        $user = $userRepository->findOneBy(["email" => $request->request->get("email")]);
+        if( $user){
+            $this->addFlash('error', "Cet email est déjà utilisé");
+            return $this->render('admin/index.html.twig', [
+                'extrafields' => $extrafields,
+            ]);
+        }
         $user = new User();
         $planning = new Planning();
         $password = $request->request->get("password");

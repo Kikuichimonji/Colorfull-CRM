@@ -39,5 +39,11 @@
 {% endblock %}
 
 {% block script_body %}
-	
+	{{parent()}}
+	<script>
+		function onSubmit(token) {
+            document.getElementById("login-form").submit();
+        }
+	</script>
+	<script src="https://www.google.com/recaptcha/api.js"></script>
 {% endblock %}

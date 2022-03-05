@@ -21,11 +21,12 @@ class UserController extends AbstractController
      * @return Response
      * 
      */
-    public function index(): Response
+    public function index($id = null, ManagerRegistry $doctrine): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
+        $user = $id == null ? $this->getUser() : $doctrine->getRepository(User::class)->findOneBy(['id' => $id]);
         return $this->render('user/index.html.twig', [
-            'user' => $this->getUser(),
+            'user' => $user ?? $this->getUser(),
         ]);
     }
 
@@ -43,10 +44,15 @@ class UserController extends AbstractController
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
         $manager = $doctrine->getManager();
-        $user = $this->getUser();
+        $userSession = $this->getUser();
         $filesystem = new Filesystem();
-        $userPath = 'assets/img/'.$user->getEmail();
         $userRepository = $doctrine->getRepository(User::class);
+        $user = $userRepository->findOneBy(["email" => $request->get('mailOri')]);
+        $userPath = 'assets/img/'.$user->getEmail();
+
+        if($user->getId() != $userSession->getId()){ //If the user in session is different than the profil they are looking, they need to be admin to update
+            $this->denyAccessUnlessGranted('ROLE_MANAGER');
+        }
         $session = $request->getSession();
 
         if(!$filesystem->exists($userPath)){ //If the user do not have any file folder we create a new one
@@ -149,13 +155,30 @@ class UserController extends AbstractController
             $oldPath = 'assets/img/'.$user->getEmail();
             $user->setEmail($request->get('email'));
             $userPath = 'assets/img/'.$user->getEmail();
+            
             if(!$filesystem->exists($userPath)){
                 $filesystem->rename($oldPath, $userPath);
             }
+            $explodedPic = explode('/',$user->getPicture());
+            $user->setPicture($user->getEmail()."/".$explodedPic[1]);
+        }
+
+        if(!empty($request->get('roles'))){
+            $this->denyAccessUnlessGranted('ROLE_MANAGER');
+            $roles = ["ROLE_".strtoupper($request->request->get("roles"))];
+
+            if($roles == ["ROLE_ADMIN"]){
+                $this->denyAccessUnlessGranted('ROLE_ADMIN');
+            }
+            if($roles == ["ROLE_SUPER_ADMIN"]){
+                $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
+            }
+            $user->setRoles($roles);
         }
 
         $manager->persist($user);
         $manager->flush();
+        
         $this->addFlash('success', "Les informations ont bien été modifiées");
         return $this->render('user/index.html.twig', [
             'user' => $user,

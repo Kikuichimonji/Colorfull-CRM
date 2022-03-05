@@ -45,6 +45,33 @@
 					<input type="password" {% if not is_granted('ROLE_MANAGER') %} disabled {% endif %} class="form-control" name="password" id="password">
 				</div>
 			</div>
+			{% if is_granted('ROLE_MANAGER') %}
+				<div class="form-group" id="roleBoxContainer">
+					<label class="form-check-label">Roles</label>
+					<div id="roleBox">
+						<div class="form-check">
+							<label class="form-check-label">
+								<input type="radio" class="form-check-input" name="roles" id="role1" value="user" checked="">
+								Utilisateur
+							</label>
+						</div>
+						<div class="form-check">
+							<label class="form-check-label">
+								<input type="radio" class="form-check-input" name="roles" id="role2" value="manager">
+								Manager
+							</label>
+						</div>
+						{% if is_granted('ROLE_ADMIN') %}
+						<div class="form-check">
+							<label class="form-check-label">
+								<input type="radio" class="form-check-input" name="roles" id="role3" value="admin">
+								Administrateur
+							</label>
+						</div>
+						{% endif %}
+					</div>
+				</div>
+			{% endif %}
 			<div class="form-group row">
 				<label for="form_file" class="col-sm-2 col-form-label">Image de profil</label>
 				<div class="col-sm-10">
@@ -52,8 +79,9 @@
 					<img src="{{asset('assets/img/' ~ user.picture )}}" alt="">
 				</div>
 			</div>
-			<button type='submit' class="btn btn-primary">Enregistrer</button>
+			{% if is_granted('ROLE_MANAGER') or user.email == app.user.email %}<button type='submit' class="btn btn-primary">Enregistrer</button>{% endif %}
 			<input type="hidden" id="_token" name="_token" value="{{ csrf_token('user_form') }}">
+			<input type="hidden" id="mailOri" name="mailOri" value="{{ user.email }}">
 		</form>
         <div id="toastContainer">
             {% if errors is defined %}
