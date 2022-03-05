@@ -1,3 +1,7 @@
+body{
+    height: 100vh;
+
+}
 #login, #login button{
     font-family: 'Open Sans', sans-serif;
 }
@@ -5,4 +9,28 @@
     margin: auto;
     text-align: center;
     width: 60%;
+    height: 80%;
+    background-color : #3cce8b82;
+    border-radius: 5px;
+    box-shadow: var(--box-shadow);
+    border: 1px solid var(--bs-primary);
+}
+#login h1{
+    background-color: #FFFFFF;
+    width: fit-content;
+    margin: 0 auto;
+    padding: 0.5em 1em;
+    border-radius: 5px;
+}
+#login .backgroundBox{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    margin: auto;
+    padding: 1em;
+    width: 60%;
+    height: 100%;
+}
+#login a {
+    color: #5a5a5a;
 }

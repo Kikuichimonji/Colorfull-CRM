@@ -170,9 +170,8 @@ class ContactController extends AbstractController
         $entityManager = $doctrine->getManager();
         $contactTypeRepository = $entityManager->getRepository(ContactType::class);
         $contactTypes = $contactTypeRepository->findAll();
-        $extrafieldsRepository = $entityManager->getRepository(ContactExtrafields::class);
-        $extrafields = $extrafieldsRepository->findAll();
-        //dd($post);
+        $contactExtrafieldsRepository = $entityManager->getRepository(ContactExtrafields::class);
+
         $form = $this->createForm(ContactFormType::class);
         $form->submit($post->all());
 
@@ -181,21 +180,11 @@ class ContactController extends AbstractController
             foreach ($errors as $error) {
                 $this->addFlash('error', $error->getMessage());
             }
-            return $this->render('contact/index.html.twig', [
-                'user' => $user,
-                'tab' => "addContact",
-                "contactTypes" => $contactTypes,
-                "extrafields" => $extrafields,
-                "post" => $post->all(),
-            ]);
+            return $this->redirectToRoute('contact-index');
         }
 
-        $contactTypeRepository = $entityManager->getRepository(ContactType::class);
-
-        $contactExtrafieldsRepository = $entityManager->getRepository(ContactExtrafields::class);
-
         $contact = new Contact(); //Setting up all the contact data the barbarian way
-        $contact->setUserCreate($this->getUser());
+        $contact->setUserCreate($user);
         $contact->setName($post->get("name"));
         $contact->setIsCompany($post->get("isCompany") == "company");
 
@@ -230,11 +219,7 @@ class ContactController extends AbstractController
         $entityManager->persist($contact);
         $entityManager->flush();
         $this->addFlash('success', "Le contact a bien été ajouté");
-        return $this->render('contact/index.html.twig', [
-            "user" => $user,
-            "contactTypes" => $contactTypes,
-            "extrafields" => $extrafields,
-        ]);
+        return $this->redirectToRoute('contact-index');
     }
 
     /**
@@ -255,8 +240,6 @@ class ContactController extends AbstractController
 
         $contactTypeRepository = $entityManager->getRepository(ContactType::class);
         $contactTypes = $contactTypeRepository->findAll();
-
-        $extrafieldsValueRepository = $entityManager->getRepository(ContactExtrafieldValue::class);
 
         $extrafieldsRepository = $entityManager->getRepository(ContactExtrafields::class);
         $extrafields = $extrafieldsRepository->findAll();
@@ -349,7 +332,7 @@ class ContactController extends AbstractController
         
         $ammount = $request->get('count');
 
-        for ($i=0; $i < $ammount/2; $i++) { 
+        for ($i=0; $i < $ammount; $i++) { 
             $rand = rand(0,1);
             $rand2 = rand(0,1);
             $emailRand = rand(0,1000);
@@ -364,36 +347,15 @@ class ContactController extends AbstractController
 
             $contact = new Contact(); 
             $contact->setUserCreate($this->getUser());
-            $contact->setName($faker->company);
-            $contact->setIsCompany(1);
-            $contact->setPhone1($rand ? $faker->phoneNumber : null);
-            $contact->setPhone2($rand2 ? $faker->mobileNumber : null);
-            $contact->setEmail($emailRand.'.'.$faker->email);
-            $contact->setCreatedAt(new \DateTime());
-            foreach ($contactTypes as $contactType) { //Reading all the contactTypes, and if they matches the array we add them in the collection
-                if (in_array($contactType->getId(), $contactTypeRand)) {
-                    $contact->addContactType($contactType);
-                }
-            }
-            $entityManager->persist($contact);
-        }
-        for ($i=0; $i < $ammount/2; $i++) { 
-            $rand = rand(0,1);
-            $rand2 = rand(0,1);
-            $emailRand = rand(0,1000);
-            $contactTypeRand = [];
-            $randAmountTypes = rand(0,4);
-            for ($j=0; $j <= $randAmountTypes; $j++) { 
-                $randTypes = rand(0,1);
-                if($randTypes){
-                    array_push($contactTypeRand,$j);
-                }
-            }
 
-            $contact = new Contact(); 
-            $contact->setUserCreate($this->getUser());
-            $contact->setName($faker->firstName." ".$faker->lastName); 
-            $contact->setIsCompany(0);
+            if(rand(0,1)){
+                $contact->setName($faker->company);
+                $contact->setIsCompany(1);
+            }else{
+                $contact->setName($faker->firstName." ".$faker->lastName); 
+                $contact->setIsCompany(0);
+            }
+        
             $contact->setPhone1($rand ? $faker->phoneNumber : null);
             $contact->setPhone2($rand2 ? $faker->mobileNumber : null);
             $contact->setEmail($emailRand.'.'.$faker->email);

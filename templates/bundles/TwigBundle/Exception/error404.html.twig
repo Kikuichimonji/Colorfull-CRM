@@ -1,0 +1,22 @@
+{% extends 'layouts/loggedIn.html.twig' %}
+
+{% block title %}404{% endblock %}
+{% block nav %}
+    {{parent()}}
+{% endblock %}
+{% block content %}
+<div class="content">
+    <h1>404</h1>
+    <h2>Impossible de trouver la page en question</h2>
+</div>
+{% endblock %}
+
+{% block style %}
+    {{parent()}}
+    
+{% endblock %}
+
+{% block script_body %}
+    {{parent()}}
+    
+{% endblock %}

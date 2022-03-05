@@ -1,0 +1,22 @@
+{% extends 'layouts/loggedIn.html.twig' %}
+
+{% block title %}403{% endblock %}
+{% block nav %}
+    {{parent()}}
+{% endblock %}
+{% block content %}
+<div class="content">
+    <h1>403</h1>
+    <h2>Accès non autorisé</h2>
+</div>
+{% endblock %}
+
+{% block style %}
+    {{parent()}}
+    
+{% endblock %}
+
+{% block script_body %}
+    {{parent()}}
+    
+{% endblock %}

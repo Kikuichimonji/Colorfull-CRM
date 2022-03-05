@@ -6,13 +6,15 @@
 		<div class="container-fluid">
             {% set img = "asset('assets/img/user.picture')" %}
 			<div id="navTop">
-			{% if user.picture is not null %}
-				<img src="{{asset('assets/img/' ~ user.picture )}}" alt="">
+
+			{% if app.user.picture is not null %}
+				<img src="{{asset('assets/img/' ~ app.user.picture )}}" alt="">
 			{% else %}
 				<img src="{{asset('assets/img/default.png')}}" alt="">
 			{% endif %}
-				<a class="navbar-brand" href="{{ path('user-profile') }}">{{user.firstName}} {{user.lastName}}</a>
+				<a class="navbar-brand" href="{{ path('user-profile') }}">{{app.user.firstName}} {{app.user.lastName}}</a>
 			</div>
+			
 			<div class="" id="navbarColor01">
 				<ul class="navbar-nav me-auto">
 					<li class="nav-item">
@@ -33,9 +35,9 @@
 				</ul>
 			</div>
 			<div id="sidePlanningContainer">
-				{% if user.planning.events|length > 0 %}
+				{% if app.user.planning.events|length > 0 %}
 					<p class='navbar-brand'>Planning</p>
-					{% set event = user.planning.events|first %}
+					{% set event = app.user.planning.events|first %}
 					<div style="border-color:{{ event.eventtype.color }}"><p>{{ event.eventtype.label }}</p><p>{{ event.datestart|date("H:i") }}</p><p>{{ event.dateend|date("H:i") }}</p></div>
 				{% endif %}
 			</div>

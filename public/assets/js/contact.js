@@ -50,9 +50,11 @@ function fetchContact(incArgs = null)
 function contactFeed(contacts,page = 1,newFeed = null)
 {
     let body = document.querySelector('#tableContact tbody')
+    let title = document.querySelector("h1 span")
     let contactsPerPage = CPP.value == 'All' ?  999999 : CPP.value;
     let nbPage = Math.ceil(contacts.length/contactsPerPage);
     body.innerHTML = "";
+    title.textContent="( " + contacts.length + " )"
     
     cutContact = contacts
     cutContact = cutContact.slice((contactsPerPage * page)-contactsPerPage,contactsPerPage * page)
