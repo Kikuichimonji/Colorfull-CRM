@@ -11,7 +11,6 @@
 				<span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>C</span><span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>o</span><span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>l</span><span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>o</span><span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>r</span><span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>f</span><span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>u</span><span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>l</span><span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>l</span>
 				<span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>C</span><span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>R</span><span style='color:#{{random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)  }}'>M</span>
 			</h1>
-			<h2 class="mt-4">Veuillez vous connecter</h2>
 			{% if error %}
 				<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
 			{% endif %}
@@ -40,11 +39,5 @@
 {% endblock %}
 
 {% block script_body %}
-	{{parent()}}
-	<script>
-		function onSubmit(token) {
-            document.getElementById("login-form").submit();
-        }
-	</script>
-	<script src="https://www.google.com/recaptcha/api.js"></script>
+	
 {% endblock %}
