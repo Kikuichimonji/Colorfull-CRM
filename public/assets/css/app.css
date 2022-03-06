@@ -123,3 +123,11 @@ nav{
     background-color: var(--bs-primary);
     border-color: var(--bs-primary);
 }
+#error404,#error403{
+    height: 40vh;
+    text-align: center;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}

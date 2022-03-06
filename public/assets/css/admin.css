@@ -60,3 +60,6 @@ h1{
     border-color: var(--borderColor);
     border-bottom: 1px solid white;
 }
+#usersList tr{
+    cursor: pointer;
+}

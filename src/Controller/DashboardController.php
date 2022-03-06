@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Contact;
 use App\Entity\Planning;
 use App\Entity\ContactType;
+use App\Entity\Event;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,13 +32,23 @@ class DashboardController extends AbstractController
         //$contacts = $contactRepository->findAll();
         $query = $contactRepository->createQueryBuilder('c');
         $contacts = $query
-        // ->select(['c','ct'])
-        //     ->leftJoin('c.contactType','ct')
+            ->orderBy('c.created_at', 'DESC')
             ->setMaxResults(20)
             ->getQuery()
             ->execute();
+
+        $query = $doctrine->getRepository(Event::class)->createQueryBuilder('e');
+        $events = $query
+            ->where("e.planning = :planning")
+            ->andWhere("e.date_end >= :now")
+            ->orWhere("e.date_start >= :now")
+            ->orderBy('e.date_start', 'ASC')
+            ->setParameter('planning', $this->getUser()->getPlanning()->getId())
+            ->setParameter('now', new \Datetime())
+            ->getQuery()
+            ->execute();
             
-        //dd($contacts[1]);
+     
         $contactTypes = $contactTypeRepository->findAll();
         $planning = $this->getUser()->getPlanning();
         $error = is_null($planning) ? "Votre planing n'a pas été généré correctement" : null ;
@@ -48,6 +59,7 @@ class DashboardController extends AbstractController
             'contacts' => $contacts,
             'error' => $error,
             'contactTypes' => $contactTypes,
+            'events' => $events,
         ]);
     }
 }

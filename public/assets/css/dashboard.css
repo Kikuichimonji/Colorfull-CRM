@@ -168,6 +168,12 @@ h2,h3{
     justify-content: space-evenly;
     flex-direction: column;
 }
+#blockPlanning .teamBlock div,#blockPlanning .invitedBlock div{
+    cursor: pointer;
+}
+#blockPlanning .teamBlock div:hover,#blockPlanning .invitedBlock div:hover{
+    border-width: 5px;
+}
 #blockPlanning .dashBlock div p{
     margin: 0;
 }
@@ -176,4 +182,10 @@ h2,h3{
     position: absolute;
     transform: translate(50%,50%);
     right: 50%;
+}
+.important{
+    color: red;
+}
+.icon{
+    text-align: center;
 }

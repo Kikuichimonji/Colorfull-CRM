@@ -2,11 +2,12 @@
 
 namespace App\Controller;
 
+use DateTime;
+use App\Entity\User;
 use App\Entity\Event;
 use App\Entity\Planning;
 use App\Entity\EventType;
 use App\Form\EventFormType;
-use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,6 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+use function PHPUnit\Framework\isNull;
 
 class PlanningController extends AbstractController
 {
@@ -66,7 +68,7 @@ class PlanningController extends AbstractController
                     $value = $eventTypeRepository->findOneBy(["id" => "$value"]);
                 }
                 if($method == "setPlanning"){
-                    $value = $planningRepository->findOneBy(["id" => "$value"]);
+                    $value = $planningRepository->findOneBy(["planning_owner" => "$value"]);
                 }
                 $value = $value === "null" ? null : $value; //when we get the value, NULL and UNDEFINED are in a string form
                 $value = $value === "undefined" ? null : $value;
@@ -119,13 +121,16 @@ class PlanningController extends AbstractController
                     $value = $eventTypeRepository->findOneBy(["id" => "$value"]);
                 }
                 if($method == "setPlanning"){
-                    $value = $planningRepository->findOneBy(["id" => "$value"]);
+                    $value = $planningRepository->findOneBy(["planning_owner" => "$value"]);
+                }
+                if($method == "setIsImportant"){
+                    $value = $value == 'true' ? 1 : 0;
                 }
                 $event->$method($value === "null" ? null : $value);
                 $value = $value === "undefined" ? null : $value;
             }
         }
-
+        
         $manager->flush();
         return new JsonResponse("ok");
     }
@@ -160,12 +165,14 @@ class PlanningController extends AbstractController
 
     }
 
-    public function eventFeed(ManagerRegistry $doctrine, Request $request): Response
+    public function eventFeed(ManagerRegistry $doctrine, Request $request,$id): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
         $eventTypeRepository = $doctrine->getRepository(EventType::class);
         $eventTypes = $eventTypeRepository->findAll();
-        $eventCollection = $this->getUser()->getPlanning()->getEvents();
+        $user = $doctrine->getRepository(User::class)->findOneBy(['id' => $id]);
+        $user = $user ?? $this->getUser();
+        $eventCollection = $user ->getPlanning()->getEvents();
         $events = [];
         
         foreach($eventCollection as $event){ //for each events we get, we transform it into an array with some extra infos
@@ -189,5 +196,24 @@ class PlanningController extends AbstractController
             
         }
         return new JsonResponse($events);
+    }
+
+    public function show(ManagerRegistry $doctrine, $id): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
+        $eventTypeRepository = $doctrine->getRepository(EventType::class);
+        $eventTypes = $eventTypeRepository->findAll();
+        $user = $doctrine->getRepository(User::class)->findOneBy(['id' => $id]);
+        if(!$user){
+            return $this->render('planning/index.html.twig', [
+                "user" => $this->getUser(),
+                "eventTypes" => $eventTypes,
+            ]);
+        }
+        return $this->render('planning/index.html.twig', [
+            "user" => $user,
+            "eventTypes" => $eventTypes,
+        ]);
     }
 }

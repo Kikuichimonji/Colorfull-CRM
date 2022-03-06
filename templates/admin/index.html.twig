@@ -20,13 +20,16 @@
 				<a class="nav-link" data-bs-toggle="tab" href="#tab3">Contact Types</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" data-bs-toggle="tab" href="#tab4">Edition utilisateurs</a>
+				<a class="nav-link" data-bs-toggle="tab" href="#usersList">Edition utilisateurs</a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" data-bs-toggle="tab" href="#newUser">Ajout utilisateur</a>
 			</li>
 		</ul>
 		<div id="extrafieldsTab" class="tab-content">
+			{# 
+				EXTRAFIELDS PART
+			#}
 			<div class="tab-pane fade active show mt-2" id="tab1">
 				<form action="{{path('admin-extrafields-save')}}" method="post" id="formTab1">
 					<div>
@@ -73,14 +76,41 @@
 			</div>
 
 			<div class="tab-pane fade" id="tab2">
-				<p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit.</p>
+				<img src="{{asset('assets/img/under-construction-transparent.png')}}" alt="">
 			</div>
 			<div class="tab-pane fade" id="tab3">
-				<p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony. Leggings gentrify squid 8-bit cred pitchfork.</p>
+				<img src="{{asset('assets/img/under-construction-transparent.png')}}" alt="">
 			</div>
-			<div class="tab-pane fade" id="tab4">
-				<p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony. Leggings gentrify squid 8-bit cred pitchfork.</p>
+			{# 
+				USER LIST PART
+			#}
+			<div class="tab-pane fade table-responsive" id="usersList">
+				<table class="table table-hover table-striped">
+					<thead>
+						<tr>
+							<th scope="col">Prénom</th>
+							<th scope="col">Nom</th>
+							<th scope="col">Email Pro</th>
+							<th scope="col">Téléphone Pro</th>
+							<th scope="col">Role</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for user in users %}
+							<tr onclick="document.location = '{{path('user-show', {'id': user.id})}}';">
+								<td scope="col">{{ user.firstName }}</td>
+								<td scope="col">{{ user.lastName }}</td>
+								<td scope="col">{{ user.email }}</td>
+								<td scope="col">{{ user.phone }}</td>
+								<td scope="col">{{ user.roles|first}}</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
 			</div>
+			{# 
+				NEW USER PART
+			#}
 			<div class="tab-pane fade" id="newUser">
 				<h2>Nouvel utilisateur</h2>
 				<form action="{{path('admin-register')}}" method="post">

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\ContactExtrafields;
+use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,10 +24,12 @@ class AdminController extends AbstractController
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $extrafieldsRepository = $doctrine->getRepository(ContactExtrafields::class);
         $extrafields = $extrafieldsRepository->findAll();
+        $users =  $doctrine->getRepository(User::class)->findAll();
 
         return $this->render('admin/index.html.twig', [
             'user' => $this->getUser(),
             'extrafields' => $extrafields,
+            'users' => $users
         ]);
     }
 
@@ -87,4 +90,12 @@ class AdminController extends AbstractController
         $this->addFlash('success', "Les extrafields ont bien été modifiés");
         return $this->redirectToRoute('admin-index');
     }
+
+    // public function error404(): Response
+    // {
+
+    //     return $this->render('test/404.html.twig', [
+
+    //     ]);
+    // }
 }

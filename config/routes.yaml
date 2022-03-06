@@ -12,8 +12,12 @@ planning-index:
     path: /calendar
     controller: App\Controller\PlanningController::index
     methods: GET
+planning-show:
+    path: /calendar/{id}
+    controller: App\Controller\PlanningController::show
+    methods: GET
 event-feed:
-    path: /calendar/feed
+    path: /calendar/{id}/feed
     controller: App\Controller\PlanningController::eventFeed
     methods: GET
 event-save:
@@ -84,3 +88,8 @@ admin-register:
     path: /admin/register
     controller: App\Controller\LoginController::register
     methods: POST
+
+test-404:
+    path: /test/404
+    controller: App\Controller\AdminController::error404
+    methods: GET
