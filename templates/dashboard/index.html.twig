@@ -40,7 +40,7 @@
                                 {% set eventHour = event.dateStart|date("H") %}
                                 {% if eventDay == todayDate %}
                                     {% if today == 0 %}
-                                        <tr ><td colspan="6" class="tableDay"><h3 >Aujourd'hui :</h3></td></tr>
+                                        <tr ><td colspan="6" class="tableDay"><legend >Aujourd'hui :</legend></td></tr>
                                         {% set today = 1 %}
                                     {% endif %}
                                     {% if todayHour + 1 == eventHour %}
@@ -50,7 +50,7 @@
                                     {% endif %}
                                 {% endif %}
                                 {% if eventDay == todayDate + 1 and tommorow == 0 %}
-                                    <tr ><td colspan="6" class="tableDay"><h3 >Demain :</h3></td></tr>
+                                    <tr ><td colspan="6" class="tableDay"><legend >Demain :</legend></td></tr>
                                     {% set tommorow = 1 %}
                                 {% else %}
                                     {% if eventDay == todayDate + 1 %}
@@ -58,7 +58,7 @@
                                     {% endif %}
                                 {% endif %}
                                 {% if eventDay > todayDate + 1 and later == 0 %}
-                                    <tr><td colspan="6" class="tableDay"><h3 >Plus tard :</h3></td></tr>
+                                    <tr><td colspan="6" class="tableDay"><legend >Plus tard :</legend></td></tr>
                                     {% set later = 1 %}
                                 {% else %}
                                     {% if eventDay > todayDate + 1 %}
