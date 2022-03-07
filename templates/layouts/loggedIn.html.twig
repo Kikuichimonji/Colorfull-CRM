@@ -35,10 +35,33 @@
 				</ul>
 			</div>
 			<div id="sidePlanningContainer">
-				{% if app.user.planning.events|length > 0 %}
+				{# {% set todayDate = "now"|date("d") %}
+				{% set todayHour = "now"|date("H") %}
+				{% set eventDay = event.dateStart ? event.dateStart|date("d") : null %}
+				{% set eventHour = event.dateStart|date("H") %}
+				{% if eventDay == todayDate %}
+					{% if today == 0 %}
+						<tr ><td colspan="6" class="tableDay"><legend >Aujourd'hui :</legend></td></tr>
+						{% set today = 1 %}
+					{% endif %}
+					{% if todayHour + 1 == eventHour %}
+						<tr class="table-danger">
+					{% else %}
+						<tr class="table-active">
+					{% endif %}
+				{% endif %} #}
+				{% set eventsTab = [] %}
+				{% set count = 0 %}
+				{% for event in app.user.planning.events %}
+					{% if event.dateStart > date('now') %}
+						{% set eventsTab = eventsTab|merge([event]) %}
+						{% set count = count + 1 %}
+					{% endif %}
+				{% endfor %}
+				{% if eventsTab|length > 0 %}
 					<p class='navbar-brand'>Planning</p>
-					{% set event = app.user.planning.events|first %}
-					<div style="border-color:{{ event.eventtype.color }}"><p>{{ event.eventtype.label }}</p><p>{{ event.datestart|date("H:i") }}</p><p>{{ event.dateend|date("H:i") }}</p></div>
+					{% set event = eventsTab|first %}
+					<div style="border-color:{{ event.color }}"><p>{{ event.eventtype.label }}</p><p>{{ event.datestart|date("H:i") }}</p><p>{{ event.dateend|date("H:i") }}</p></div>
 				{% endif %}
 			</div>
 			

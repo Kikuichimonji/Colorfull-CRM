@@ -8,7 +8,7 @@
 
 {% block content %}
 	<div id="mainPlanningBlock" {% if user.planning is not null %}data-id="{{ user.id }}"{% endif %}>
-		<h1>Calendrier</h1>
+		<h1>Calendrier de {{user.firstName}} {{user.lastName}}</h1>
 		<div id="calendarBox">
 			<div id="externalEvents">
 				<h2>Events</h2>
@@ -81,6 +81,21 @@
 				</div>
 			</div>
 		</div>
+	</div>
+	<div id="toastContainer">
+		{% for message in app.flashes('error') %}
+			<div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+				<div class="toast-header error">
+					<strong class="me-auto">Erreur</strong>
+					<button type="button" class="btn-close ms-2 mb-1" data-bs-dismiss="toast" aria-label="Close">
+						<span aria-hidden="true"></span>
+					</button>
+				</div>
+				<div class="toast-body">
+					{{message}}
+				</div>
+			</div>
+		{% endfor %}
 	</div>
 {% endblock %}
 

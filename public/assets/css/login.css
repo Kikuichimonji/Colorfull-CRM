@@ -17,11 +17,11 @@ body{
     box-shadow: var(--box-shadow);
 }
 #login h1{
-    /* background-color: #FFFFFF; */
+    background-color: #FFFFFF75;
     width: fit-content;
     margin: 0 auto;
-    padding: 0.5em 1em;
-    border-radius: 5px;
+    padding: 0.2em 0.2em;
+    border-radius: 10px;
     margin-bottom: -65px;
     margin-top: -20px;
 }
