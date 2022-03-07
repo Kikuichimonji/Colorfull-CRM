@@ -102,6 +102,7 @@ class UserController extends AbstractController
                 'image/jpeg',
                 'image/gif',
                 'image/svg+xml',
+                'image/webp',
             ];
             $maxFileSize = 512000;
             $maxWidth = 500;
