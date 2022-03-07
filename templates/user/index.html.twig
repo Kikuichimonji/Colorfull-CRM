@@ -45,29 +45,40 @@
 					<input type="password" {% if not is_granted('ROLE_MANAGER') and app.user.id != user.id %} disabled {% endif %} class="form-control" name="password" id="password">
 				</div>
 			</div>
-			{% if is_granted('ROLE_MANAGER') %}
+			{% if (is_granted('ROLE_MANAGER') and user.roles|first == "ROLE_USER") or 
+				(is_granted('ROLE_ADMIN') and user.roles|first == "ROLE_MANAGER") or 
+				is_granted('ROLE_SUPER_ADMIN')
+			 %}
 				<div class="form-group" id="roleBoxContainer">
 					<label class="form-check-label">Roles</label>
 					<div id="roleBox">
 						<div class="form-check">
 							<label class="form-check-label">
-								<input type="radio" class="form-check-input" name="roles" id="role1" value="user" checked="">
+								<input type="radio" class="form-check-input" name="roles" id="role1" value="user"  {% if user.roles|first == "ROLE_USER" %}checked{% endif %}>
 								Utilisateur
 							</label>
 						</div>
 						<div class="form-check">
 							<label class="form-check-label">
-								<input type="radio" class="form-check-input" name="roles" id="role2" value="manager">
+								<input type="radio" class="form-check-input" name="roles" id="role2" value="manager" {% if user.roles|first == "ROLE_MANAGER" %}checked{% endif %}>
 								Manager
 							</label>
 						</div>
 						{% if is_granted('ROLE_ADMIN') %}
 						<div class="form-check">
 							<label class="form-check-label">
-								<input type="radio" class="form-check-input" name="roles" id="role3" value="admin">
+								<input type="radio" class="form-check-input" name="roles" id="role3" value="admin" {% if user.roles|first == "ROLE_ADMIN" %}checked{% endif %}>
 								Administrateur
 							</label>
 						</div>
+						{% endif %}
+						{% if is_granted('ROLE_SUPER_ADMIN') %}	
+							<div class="form-check">
+								<label class="form-check-label">
+									<input type="radio" class="form-check-input" name="roles" id="role4" value="super_admin" {% if user.roles|first == "ROLE_SUPER_ADMIN" %}checked{% endif %}>
+									Super Admin
+								</label>
+							</div>
 						{% endif %}
 					</div>
 				</div>
