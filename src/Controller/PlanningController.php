@@ -68,7 +68,7 @@ class PlanningController extends AbstractController
                     $value = $eventTypeRepository->findOneBy(["id" => "$value"]);
                 }
                 if($method == "setPlanning"){
-                    $value = $planningRepository->findOneBy(["planning_owner" => "$value"]);
+                    $value = $planningRepository->findOneBy(["id" => "$value"]);
                 }
                 $value = $value === "null" ? null : $value; //when we get the value, NULL and UNDEFINED are in a string form
                 $value = $value === "undefined" ? null : $value;
@@ -121,7 +121,7 @@ class PlanningController extends AbstractController
                     $value = $eventTypeRepository->findOneBy(["id" => "$value"]);
                 }
                 if($method == "setPlanning"){
-                    $value = $planningRepository->findOneBy(["planning_owner" => "$value"]);
+                    $value = $planningRepository->findOneBy(["id" => "$value"]);
                 }
                 if($method == "setIsImportant"){
                     $value = $value == 'true' ? 1 : 0;
