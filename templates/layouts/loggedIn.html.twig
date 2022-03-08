@@ -60,7 +60,7 @@
 				{% endfor %}
 				{% if eventsTab|length > 0 %}
 					<p class='navbar-brand'>Planning</p>
-					{% set event = eventsTab|first %}
+					{% set event = eventsTab|sort((a, b) => a.dateStart <=> b.dateStart)|first %}
 					<div style="border-color:{{ event.color }}"><p>{{ event.eventtype.label }}</p><p>{{ event.datestart|date("H:i") }}</p><p>{{ event.dateend|date("H:i") }}</p></div>
 				{% endif %}
 			</div>
