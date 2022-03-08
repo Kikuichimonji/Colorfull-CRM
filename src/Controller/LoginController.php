@@ -73,7 +73,7 @@ class LoginController extends AbstractController
         }
         $userRepository = $doctrine->getRepository(User::class);
         $user = $userRepository->findOneBy(["email" => $request->request->get("email")]);
-        if( $user){
+        if( $user){ //if a user exist with this mail, we return an error
             $this->addFlash('error', "Cet email est déjà utilisé");
             return $this->render('admin/index.html.twig', [
                 'extrafields' => $extrafields,

@@ -50,7 +50,7 @@ class UserController extends AbstractController
         $user = $userRepository->findOneBy(["email" => $request->get('mailOri')]);
         $userPath = 'assets/img/'.$user->getEmail();
 
-        if($user->getId() != $userSession->getId()){ //If the user in session is different than the profil they are looking, they need to be admin to update
+        if($user->getId() != $userSession->getId()){ //If the user in session is different than the profile they are looking, they need to be admin to update
             $this->denyAccessUnlessGranted('ROLE_MANAGER');
         }
         $session = $request->getSession();

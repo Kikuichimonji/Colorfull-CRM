@@ -98,14 +98,13 @@ class PlanningController extends AbstractController
         $form = $this->createForm(EventFormType::class);
         $form->submit($post);
         
-        if (!$form->isValid()) {
+        if (!$form->isValid()) { //Form validation
             $errors = $form->getErrors(true); // Array of Error
             return new JsonResponse($errors[0]->getMessage());
         }
 
-        
-        $eventRepository = $doctrine->getRepository(Event::class);
-        $event = $eventRepository->find($request->request->get("id"));
+
+        $event = $doctrine->getRepository(Event::class)->find($request->request->get("id"));
 
         $eventTypeRepository = $doctrine->getRepository(EventType::class);
         $planningRepository = $doctrine->getRepository(Planning::class);
@@ -126,8 +125,9 @@ class PlanningController extends AbstractController
                 if($method == "setIsImportant"){
                     $value = $value == 'true' ? 1 : 0;
                 }
-                $event->$method($value === "null" ? null : $value);
                 $value = $value === "undefined" ? null : $value;
+                $event->$method($value === "null" ? null : $value);
+
             }
         }
         
@@ -145,7 +145,7 @@ class PlanningController extends AbstractController
      */
     public function deleteEvent(Request $request,ManagerRegistry $doctrine): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_USER'); //if the user do not have the basic role he get redirect to the login
+        $this->denyAccessUnlessGranted('ROLE_USER'); //if the user do not have the basic role he gets redirect to the login
         if(!$this->isCsrfTokenValid("event_delete",$request->request->get("_token"))){ //we verify if the token is valid
             return new JsonResponse("Problem CSRF");
         }
@@ -165,11 +165,18 @@ class PlanningController extends AbstractController
 
     }
 
-    public function eventFeed(ManagerRegistry $doctrine, Request $request,$id): Response
+    /**
+     * Send a json with all the events from a user ID
+     *
+     * @param ManagerRegistry $doctrine
+     * @param Request $request
+     * @param $id //user id
+     * @return Response
+     * @throws \Exception
+     */
+    public function eventFeed(ManagerRegistry $doctrine, Request $request, $id): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
-        $eventTypeRepository = $doctrine->getRepository(EventType::class);
-        $eventTypes = $eventTypeRepository->findAll();
         $user = $doctrine->getRepository(User::class)->findOneBy(['id' => $id]);
         $user = $user ?? $this->getUser();
         $eventCollection = $user ->getPlanning()->getEvents();
@@ -198,6 +205,13 @@ class PlanningController extends AbstractController
         return new JsonResponse($events);
     }
 
+    /**
+     * Show a user planning only if the one looking have the right to access it
+     *
+     * @param ManagerRegistry $doctrine
+     * @param $id
+     * @return Response
+     */
     public function show(ManagerRegistry $doctrine, $id): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
