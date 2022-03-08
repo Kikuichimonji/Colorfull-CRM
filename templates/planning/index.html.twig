@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block content %}
-	<div id="mainPlanningBlock" {% if user.planning is not null %}data-id="{{ user.id }}"{% endif %}>
+	<div id="mainPlanningBlock" {% if user.planning is not null %}data-id="{{ user.planning.id }}"{% endif %}>
 		<h1>Calendrier de {{user.firstName}} {{user.lastName}}</h1>
 		<div id="calendarBox">
 			<div id="externalEvents">

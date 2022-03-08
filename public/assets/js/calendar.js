@@ -135,7 +135,7 @@ function saveEvent(info,calendar)
         "isImportant" : info.event.extendedProps.isImportant,
     };
     link = "/calendar"
-    //console.log(args)
+    console.log(args)
     goFetch(args,calendar,link);
 }
 
