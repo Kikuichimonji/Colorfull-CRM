@@ -40,8 +40,7 @@ class DashboardController extends AbstractController
         $query = $doctrine->getRepository(Event::class)->createQueryBuilder('e');
         $events = $query
             ->where("e.planning = :planning")
-            ->andWhere("e.date_end >= :now")
-            ->orWhere("e.date_start >= :now")
+            ->andWhere("e.date_end >= :now or e.date_start >= :now")
             ->orderBy('e.date_start', 'ASC')
             ->setParameter('planning', $this->getUser()->getPlanning()->getId())
             ->setParameter('now', new \Datetime())

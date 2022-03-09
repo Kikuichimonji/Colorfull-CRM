@@ -182,6 +182,7 @@ h2,h3,legend{
     position: absolute;
     transform: translate(50%,50%);
     right: 50%;
+    width: fit-content;
 }
 .important{
     color: red;

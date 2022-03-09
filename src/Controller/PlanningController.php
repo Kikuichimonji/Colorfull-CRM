@@ -177,7 +177,7 @@ class PlanningController extends AbstractController
     public function eventFeed(ManagerRegistry $doctrine, Request $request, $id): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
-        $user = $doctrine->getRepository(User::class)->findOneBy(['id' => $id]);
+        $user = $doctrine->getRepository(Planning::class)->findOneBy(['id' => $id])->getPlanningOwner();
         $user = $user ?? $this->getUser();
         $eventCollection = $user ->getPlanning()->getEvents();
         $events = [];
