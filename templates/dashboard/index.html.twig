@@ -123,7 +123,7 @@
                 <div class='teamBlock' >
                     <h3>{{ team.label }}</h3>
                     {% for user in team.users %}
-                        <div style="border-color:{{ team.color }}" onclick="location.href = 'calendar/{{user.id}}';"> <p>{{ user.firstname}}</p> <p>{{ user.lastName}}</p></div>
+                        <div style="border-color:{{ team.color }}" onclick="location.href = 'calendar/{{user.planning.id}}';"> <p>{{ user.firstname}}</p> <p>{{ user.lastName}}</p></div>
                     {% endfor %}
                 </div>
                 {% endfor %}
@@ -131,7 +131,7 @@
                     <div class='invitedBlock'>
                     <h3>Invité</h3>
                         {% for planning in user.plannings %}
-                            <div> <p>{{ planning.planningowner.firstname}}</p> <p>{{ planning.planningowner.lastName}}</p></div>
+                            <div onclick="location.href = 'calendar/{{planning.id}}';"> <p>{{ planning.planningowner.firstname}}</p> <p>{{ planning.planningowner.lastName}}</p></div>
                         {% endfor %}
                     </div>
                 {% else %}

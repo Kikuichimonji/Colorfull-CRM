@@ -219,7 +219,7 @@ class PlanningController extends AbstractController
         $eventTypeRepository = $doctrine->getRepository(EventType::class);
         $eventTypes = $eventTypeRepository->findAll();
 
-        $user = $doctrine->getRepository(User::class)->findOneBy(['id' => $id]);
+        $user = $doctrine->getRepository(Planning::class)->findOneBy(['id' => $id])->getPlanningOwner();
         if(!$user){
             return $this->render('planning/index.html.twig', [
                 "user" => $this->getUser(),
