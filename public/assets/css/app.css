@@ -63,12 +63,13 @@ nav{
     border-radius: 5px;
     text-align: center;
     background-color: #FFFFFF99;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
 }
 #sidePlanningContainer p{
     text-align: center;
-}
-#sidePlanningContainer div p{
-    margin-bottom: 0.5em
+    margin-bottom: 0;
 }
 #loggoutLink{
     margin-bottom: 30%;
